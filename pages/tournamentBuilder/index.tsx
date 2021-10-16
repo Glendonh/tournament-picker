@@ -2,24 +2,50 @@ import Link from 'next/link'
 import { useState } from 'react'
 import FormatForm from './FormatForm'
 import ScheduleForm from './ScheduleForm'
+import ParticipantsForm from './ParticipantsForm'
 import { Forms } from '../../constants'
+
+export type Format = {
+  perBlock: string
+  firstBlock: string
+  secondBlock: string
+}
+export type Participants = {
+  firstBlockParticipants: string[]
+  secondBlockParticipants: string[]
+}
+
+const initialFormat: Format = null
+const initialParticipants: Participants = null
 
 const TourmanentBuilder = (): JSX.Element => {
   const [activeForm, setActiveForm] = useState(Forms.Format)
+  const [tournamentFormat, setTournamentFormat] = useState(initialFormat)
+  const [tournamentParticipants, setTournamentParticipants] = useState(initialParticipants)
+  const handleFormatSubmit = (format: Format) => {
+    setTournamentFormat(format)
+    setActiveForm(Forms.Participants)
+  }
+  const handleParticipantsSubmit = (participants: Participants) => {
+    setTournamentParticipants(participants)
+    setActiveForm(Forms.Schedule)
+  }
   return (
     <div>
       <Link href="/">Go Home, Dipshit</Link>
       <p>Only worry about G1 format for now, here are requirements</p>
       <div>
         <button onClick={() => setActiveForm(Forms.Format)}>Format</button>
+        <button onClick={() => setActiveForm(Forms.Participants)} disabled={!tournamentFormat}>
+          Participants
+        </button>
         <button onClick={() => setActiveForm(Forms.Schedule)}>Schedule</button>
       </div>
-      <FormatForm activeForm={activeForm} />
-      <ScheduleForm activeForm={activeForm} />
+      <FormatForm activeForm={activeForm} handleSubmit={handleFormatSubmit} />
+      <ParticipantsForm activeForm={activeForm} format={tournamentFormat} handleSubmit={handleParticipantsSubmit} />
+      <ScheduleForm activeForm={activeForm} participants={tournamentParticipants} format={tournamentFormat} />
     </div>
   )
 }
 
-// I'm thinking the two forms are sub components on this page that can share some state
-// State management by composition kinda thing
 export default TourmanentBuilder
