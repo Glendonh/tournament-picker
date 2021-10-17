@@ -15,6 +15,8 @@ export type Participants = {
   secondBlockParticipants: string[]
 }
 
+export type Night = { block: string; matches: { wrestler1: string; wrestler2: string }[] }
+
 const initialFormat: Format = null
 const initialParticipants: Participants = null
 
@@ -30,6 +32,10 @@ const TourmanentBuilder = (): JSX.Element => {
     setTournamentParticipants(participants)
     setActiveForm(Forms.Schedule)
   }
+  const handleFinalSubmit = ({ nights }: { nights: Night[] }) => {
+    const tournament = { format: tournamentFormat, participants: tournamentParticipants, nights }
+    console.log(JSON.stringify(tournament, null, 2))
+  }
   return (
     <div>
       <Link href="/">Go Home, Dipshit</Link>
@@ -43,7 +49,12 @@ const TourmanentBuilder = (): JSX.Element => {
       </div>
       <FormatForm activeForm={activeForm} handleSubmit={handleFormatSubmit} />
       <ParticipantsForm activeForm={activeForm} format={tournamentFormat} handleSubmit={handleParticipantsSubmit} />
-      <ScheduleForm activeForm={activeForm} participants={tournamentParticipants} format={tournamentFormat} />
+      <ScheduleForm
+        activeForm={activeForm}
+        participants={tournamentParticipants}
+        format={tournamentFormat}
+        handleSubmit={handleFinalSubmit}
+      />
     </div>
   )
 }
