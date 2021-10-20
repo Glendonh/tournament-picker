@@ -13,11 +13,9 @@ export const Home = (): JSX.Element => (
       <h1 className="title">
         Welcome to <a href="https://nextjs.org">Next.js!</a>
       </h1>
-
       <p className="description">
         Get started by editing <code>pages/index.tsx</code>
       </p>
-
       <button
         onClick={() => {
           window.alert('With typescript and Jest')
@@ -25,7 +23,12 @@ export const Home = (): JSX.Element => (
       >
         Test Button
       </button>
-
+      Functionality
+      <ul>
+        <li>{`Pick 'em form`}</li>
+        <li>Create/Manage Group</li>
+        <li>Track Group Results</li>
+      </ul>
       <div className="grid">
         <Link href="/tournamentBuilder">
           <div className="card">

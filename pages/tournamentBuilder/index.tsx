@@ -34,7 +34,7 @@ const TourmanentBuilder = (): JSX.Element => {
   }
   const handleFinalSubmit = ({ nights }: { nights: Night[] }) => {
     const tournament = { format: tournamentFormat, participants: tournamentParticipants, nights }
-    console.log(JSON.stringify(tournament, null, 2))
+    console.log(tournament)
   }
   return (
     <div>

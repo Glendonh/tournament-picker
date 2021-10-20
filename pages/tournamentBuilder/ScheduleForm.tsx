@@ -1,4 +1,5 @@
 import { Formik, Form, Field, FieldArray } from 'formik'
+import * as yup from 'yup'
 import { Forms } from '../../constants'
 import { Participants, Format, Night } from './index'
 
@@ -10,7 +11,7 @@ type Props = {
 }
 
 // TODO: this can probably be hoisted to the tournamentBuilder page
-const generateNights = (participants: Participants, format: Format) => {
+const generateNights = (participants: Participants, format: Format): Night[] => {
   if (!participants || !format) {
     return []
   }
@@ -68,6 +69,21 @@ const getOptionsForMatch = (
   return availableOptions
 }
 
+const ScheduleSchema = yup.object().shape({
+  nights: yup.array().of(
+    yup.object().shape({
+      block: yup.string().required('Required'),
+      matches: yup
+        .array()
+        .of(
+          yup
+            .object()
+            .shape({ wrestler1: yup.string().required('Required'), wrestler2: yup.string().required('Required') })
+        ),
+    })
+  ),
+})
+
 const ScheduleForm = (props: Props): JSX.Element => {
   if (props.activeForm !== Forms.Schedule || !props.participants) return null
   const { participants, format, handleSubmit } = props
@@ -76,8 +92,8 @@ const ScheduleForm = (props: Props): JSX.Element => {
     <div>
       <p>Schedule Form</p>
       Number of Nights: {nights.length}
-      <Formik onSubmit={handleSubmit} initialValues={{ nights }}>
-        {({ values }) => (
+      <Formik onSubmit={handleSubmit} validationSchema={ScheduleSchema} initialValues={{ nights }}>
+        {({ values, errors, touched }) => (
           <Form>
             <FieldArray
               name="schedule"
@@ -90,7 +106,7 @@ const ScheduleForm = (props: Props): JSX.Element => {
                           Night {nightIndex + 1}
                           <br />
                           <label htmlFor={`nights.${nightIndex}.block`}>Active Block</label>
-                          <Field as="select" name={`nights.${nightIndex}.block`}>
+                          <Field as="select" name={`nights.${nightIndex}.block`} disabled>
                             {format ? (
                               <>
                                 <option key={format.firstBlock} value={format.firstBlock}>
@@ -102,6 +118,9 @@ const ScheduleForm = (props: Props): JSX.Element => {
                               </>
                             ) : null}
                           </Field>
+                          {errors.nights?.[nightIndex]?.block && touched.nights[nightIndex]?.block ? (
+                            <div className="text-red-700 text-sm">{errors.nights?.[nightIndex]?.block}</div>
+                          ) : null}
                           {night.matches.map((match, matchIndex) => (
                             <div key={`${nightIndex - matchIndex}`}>
                               <label htmlFor={`nights.${nightIndex}.matches.${matchIndex}.wrestler1`}>Wrestler 1</label>
@@ -115,6 +134,12 @@ const ScheduleForm = (props: Props): JSX.Element => {
                                   )
                                 )}
                               </Field>
+                              {errors.nights?.[nightIndex].matches?.[matchIndex]?.wrestler1 &&
+                              touched.nights?.[nightIndex]?.matches?.[matchIndex]?.wrestler1 ? (
+                                <div className="text-red-700 text-sm">
+                                  {errors.nights?.[nightIndex]?.matches?.[matchIndex]?.wrestler1}
+                                </div>
+                              ) : null}
                               <label htmlFor={`nights.${nightIndex}.matches.${matchIndex}.wrestler2`}>Wrestler 2</label>
                               <Field as="select" name={`nights.${nightIndex}.matches.${matchIndex}.wrestler2`}>
                                 <option />
@@ -126,6 +151,12 @@ const ScheduleForm = (props: Props): JSX.Element => {
                                   )
                                 )}
                               </Field>
+                              {errors.nights?.[nightIndex].matches?.[matchIndex]?.wrestler2 &&
+                              touched.nights?.[nightIndex]?.matches?.[matchIndex]?.wrestler2 ? (
+                                <div className="text-red-700 text-sm">
+                                  {errors.nights?.[nightIndex]?.matches?.[matchIndex]?.wrestler2}
+                                </div>
+                              ) : null}
                             </div>
                           ))}
                           <hr />
@@ -136,7 +167,9 @@ const ScheduleForm = (props: Props): JSX.Element => {
                 </div>
               )}
             />
-            <button type="submit">Submit</button>
+            <button className="border-2" type="submit">
+              Submit
+            </button>
           </Form>
         )}
       </Formik>
