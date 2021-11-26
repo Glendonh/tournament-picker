@@ -134,7 +134,7 @@ const ScheduleForm = (props: Props): JSX.Element => {
                                   )
                                 )}
                               </Field>
-                              {errors.nights?.[nightIndex].matches?.[matchIndex]?.wrestler1 &&
+                              {errors.nights?.[nightIndex]?.matches?.[matchIndex]?.wrestler1 &&
                               touched.nights?.[nightIndex]?.matches?.[matchIndex]?.wrestler1 ? (
                                 <div className="text-red-700 text-sm">
                                   {errors.nights?.[nightIndex]?.matches?.[matchIndex]?.wrestler1}
@@ -151,7 +151,7 @@ const ScheduleForm = (props: Props): JSX.Element => {
                                   )
                                 )}
                               </Field>
-                              {errors.nights?.[nightIndex].matches?.[matchIndex]?.wrestler2 &&
+                              {errors.nights?.[nightIndex]?.matches?.[matchIndex]?.wrestler2 &&
                               touched.nights?.[nightIndex]?.matches?.[matchIndex]?.wrestler2 ? (
                                 <div className="text-red-700 text-sm">
                                   {errors.nights?.[nightIndex]?.matches?.[matchIndex]?.wrestler2}

@@ -34,12 +34,12 @@ const TourmanentBuilder = (): JSX.Element => {
   }
   const handleFinalSubmit = ({ nights }: { nights: Night[] }) => {
     const tournament = { format: tournamentFormat, participants: tournamentParticipants, nights }
-    console.log(tournament)
+    console.log(JSON.stringify(tournament, null, 2))
   }
   return (
     <div>
       <Link href="/">Go Home, Dipshit</Link>
-      <p>Only worry about G1 format for now, here are requirements</p>
+      <p>Only handles G1 format for now</p>
       <div>
         <button onClick={() => setActiveForm(Forms.Format)}>Format</button>
         <button onClick={() => setActiveForm(Forms.Participants)} disabled={!tournamentFormat}>

@@ -37,12 +37,14 @@ export const Home = (): JSX.Element => (
           </div>
         </Link>
 
-        <a href="https://nextjs.org/learn" className="card">
-          <h3>Learn &rarr;</h3>
-          <p>Learn about Next.js in an interactive course with quizzes!</p>
-        </a>
+        <Link href="/pickEm">
+          <div className="card">
+            <h3>{`Pick 'em Form`} &rarr;</h3>
+            <p>For users to pick the outcomes of matches</p>
+          </div>
+        </Link>
 
-        <a href="https://github.com/vercel/next.js/tree/master/examples" className="card">
+        {/* <a href="https://github.com/vercel/next.js/tree/master/examples" className="card">
           <h3>Examples &rarr;</h3>
           <p>Discover and deploy boilerplate example Next.js projects.</p>
         </a>
@@ -53,7 +55,7 @@ export const Home = (): JSX.Element => (
         >
           <h3>Deploy &rarr;</h3>
           <p>Instantly deploy your Next.js site to a public URL with Vercel.</p>
-        </a>
+        </a> */}
       </div>
     </main>
 
