@@ -31,7 +31,7 @@ const FormatSchema = yup.object().shape({
 const FormatForm = (props: Props): JSX.Element => {
   if (props.activeForm !== Forms.Format) return null
   return (
-    <div>
+    <div className="px-8">
       <p>Format Form</p>
       <Formik
         initialValues={{ perBlock: '', firstBlock: '', secondBlock: '' }}
@@ -63,7 +63,9 @@ const FormatForm = (props: Props): JSX.Element => {
               <div className="text-red-700 text-sm">{errors.secondBlock}</div>
             ) : null}
             <br />
-            <button type="submit">Save</button>
+            <button className="border p-1 px-2" type="submit">
+              Save
+            </button>
           </Form>
         )}
       </Formik>

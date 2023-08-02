@@ -1,4 +1,6 @@
-export const exampleTournament = {
+import { Tournament } from '../constants'
+
+export const exampleTournament: Tournament = {
   format: {
     perBlock: '4',
     firstBlock: 'A Block',

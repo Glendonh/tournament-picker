@@ -4,7 +4,31 @@ export enum Forms {
   Schedule = 'SCHEDULE',
 }
 
-export const exampleTournament = {
+export interface Format {
+  perBlock: string
+  firstBlock: string
+  secondBlock: string
+}
+
+export interface Participants {
+  firstBlockParticipants: string[]
+  secondBlockParticipants: string[]
+}
+
+export interface Night {
+  block: string
+  matches: {
+    wrestler1: string
+    wrestler2: string
+  }[]
+}
+export interface Tournament {
+  format: Format
+  participants: Participants
+  nights: Night[]
+}
+
+export const exampleTournament: Tournament = {
   format: {
     perBlock: '4',
     firstBlock: 'A Block',
