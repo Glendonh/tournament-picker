@@ -1,74 +1,68 @@
-//import Select from 'react-select' TODO: hook up React Select to Formik
-import { Formik, Form, Field } from 'formik'
-import * as yup from 'yup'
+import { useEffect } from 'react'
 import { Forms } from '../../constants'
-import { Format } from './'
+import { useForm, useFieldArray, useWatch } from 'react-hook-form'
+import ControlledSelect from '../../components/ControlledSelect'
+import { FormatValues } from '../../types'
 
-type Props = {
+const numberOfParticipantsOptions: { value: string; label: string }[] = [
+  { value: '3', label: '3' },
+  { value: '4', label: '4' },
+  { value: '5', label: '5' },
+  { value: '6', label: '6' },
+  { value: '7', label: '7' },
+  { value: '8', label: '8' },
+  { value: '9', label: '9' },
+  { value: '10', label: '10' },
+  { value: '11', label: '11' },
+  { value: '12', label: '12' },
+]
+const numberOfBlocksOptions: { value: string; label: string }[] = [
+  { value: '2', label: '2' },
+  { value: '4', label: '4' },
+]
+interface Props {
   activeForm: Forms
-  handleSubmit: (format: Format) => void
+  saveFormat: (vals: FormatValues) => void
+  currentFormat?: FormatValues
 }
 
-const numberOfParticipantsOptions: { value: number; label: string }[] = [
-  { value: 3, label: '3' },
-  { value: 4, label: '4' },
-  { value: 5, label: '5' },
-  { value: 6, label: '6' },
-  { value: 7, label: '7' },
-  { value: 8, label: '8' },
-  { value: 9, label: '9' },
-  { value: 10, label: '10' },
-  { value: 11, label: '11' },
-  { value: 12, label: '12' },
-]
+const initialFormat: FormatValues = {
+  numberOfBlocks: '2',
+  blockNames: [{ name: '' }, { name: '' }],
+  participantsPer: '',
+}
 
-const FormatSchema = yup.object().shape({
-  perBlock: yup.string().required('Wrestlers per Block is required'),
-  firstBlock: yup.string().required('1st Block Name is required'),
-  secondBlock: yup.string().required('2nd Block Name is required'),
-})
-
-const FormatForm = (props: Props): JSX.Element => {
-  if (props.activeForm !== Forms.Format) return null
+const FormatForm = ({ activeForm, saveFormat, currentFormat }: Props) => {
+  if (activeForm !== Forms.Format) return null
+  const { control, register, handleSubmit } = useForm({ defaultValues: currentFormat ?? initialFormat })
+  const { fields, append, remove } = useFieldArray({ control, name: 'blockNames' })
+  const currentBlockQty = useWatch({ control, name: 'numberOfBlocks' })
+  const blockNames = useWatch({ control, name: 'blockNames' })
+  useEffect(() => {
+    const numberOfBlocks = Number(currentBlockQty)
+    if (numberOfBlocks !== blockNames.length) {
+      if (numberOfBlocks === 4) {
+        append([{ name: '' }, { name: '' }])
+      }
+      if (numberOfBlocks === 2) {
+        remove([2, 3])
+      }
+    }
+  }, [currentBlockQty])
   return (
-    <div className="px-8">
-      <p>Format Form</p>
-      <Formik
-        initialValues={{ perBlock: '', firstBlock: '', secondBlock: '' }}
-        validationSchema={FormatSchema}
-        onSubmit={props.handleSubmit}
-      >
-        {({ errors, touched }) => (
-          <Form>
-            <label htmlFor="perBlock">Wrestlers per block:</label>
-            <Field as="select" name="perBlock">
-              <option></option>
-              {numberOfParticipantsOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </Field>
-            {errors.perBlock && touched.perBlock ? <div className="text-red-700 text-sm">{errors.perBlock}</div> : null}
-            <br />
-            <label htmlFor="firstBlock">1st Block Name:</label>
-            <Field name="firstBlock" type="text" />
-            {errors.firstBlock && touched.firstBlock ? (
-              <div className="text-red-700 text-sm">{errors.firstBlock}</div>
-            ) : null}
-            <br />
-            <label htmlFor="secondBlock">2nd Block Name:</label>
-            <Field name="secondBlock" type="text" />
-            {errors.secondBlock && touched.secondBlock ? (
-              <div className="text-red-700 text-sm">{errors.secondBlock}</div>
-            ) : null}
-            <br />
-            <button className="border p-1 px-2" type="submit">
-              Save
-            </button>
-          </Form>
-        )}
-      </Formik>
+    <div className="px-4">
+      <form onSubmit={handleSubmit(saveFormat)}>
+        <label htmlFor="numberOfBlocks">Number of blocks</label>
+        <ControlledSelect name="numberOfBlocks" control={control} options={numberOfBlocksOptions} required />
+        <label htmlFor="participantsPer">Participants per block</label>
+        <ControlledSelect name="participantsPer" control={control} options={numberOfParticipantsOptions} required />
+        {fields.map((item, index) => (
+          <input key={item.id} {...register(`blockNames.${index}.name`)} />
+        ))}
+        <button className="border p-1 px-2" type="submit">
+          Save
+        </button>
+      </form>
     </div>
   )
 }

@@ -1,88 +1,74 @@
-import { Formik, Form, Field, FieldArray } from 'formik'
-import * as yup from 'yup'
-import { Forms } from '../../constants'
-import { Format } from './index'
+import { FormatValues, Forms, ParticipantsFormVals } from '../../types'
+import { useForm, useFieldArray, Control, UseFormRegister } from 'react-hook-form'
+import { useEffect } from 'react'
 
-type Props = {
+interface Props {
   activeForm: Forms
-  format: Format | null
-  handleSubmit: (participants: ParticipantsFormVals) => void
+  format?: FormatValues
+  saveParticipants: (vals: ParticipantsFormVals) => void
 }
 
-type ParticipantsFormVals = {
-  firstBlockParticipants: string[]
-  secondBlockParticipants: string[]
+const getInitialVals = (format?: FormatValues): ParticipantsFormVals => {
+  if (!format) return { allParticipants: [] }
+  const allParticipants = format.blockNames.map((blockName) => {
+    return {
+      blockName: blockName.name,
+      blockParticipants: Array(Number(format.participantsPer)).fill({ name: '' }),
+    }
+  })
+  return { allParticipants }
 }
 
-const getInitialVals = (format?: Format): ParticipantsFormVals => {
-  const vals = { firstBlockParticipants: [], secondBlockParticipants: [] }
-  const numberPerBlock = Number(format.perBlock)
-  if (format.perBlock && !isNaN(numberPerBlock)) {
-    vals.firstBlockParticipants = Array(numberPerBlock).fill('')
-    vals.secondBlockParticipants = Array(numberPerBlock).fill('')
-  }
-  return vals
+interface SectionProps {
+  control: Control<ParticipantsFormVals>
+  register: UseFormRegister<ParticipantsFormVals>
+  sectionIndex: number
+  blockName: string
 }
-const ParticipantsSchema = yup.object().shape({
-  firstBlockParticipants: yup.array().of(yup.string().required('Required')),
-  secondBlockParticipants: yup.array().of(yup.string().required('Required')),
-})
 
-const ParticipantsForm = (props: Props): JSX.Element => {
-  const { format, handleSubmit } = props
-  if (props.activeForm !== Forms.Participants || !format?.perBlock) return null
+const BlockSection = ({ control, register, sectionIndex, blockName }: SectionProps) => {
+  const { fields } = useFieldArray({ control, name: `allParticipants.${sectionIndex}.blockParticipants` })
   return (
     <div>
-      <p>Participants Form</p>
-      <Formik onSubmit={handleSubmit} validationSchema={ParticipantsSchema} initialValues={getInitialVals(format)}>
-        {({ values, errors, touched }) => (
-          <Form>
-            <div>
-              <h3>{format?.firstBlock}</h3>
-              <FieldArray
-                name="firstBlock"
-                render={() => (
-                  <>
-                    {values?.firstBlockParticipants?.length
-                      ? values.firstBlockParticipants.map((participant, index) => (
-                          <div key={'firstBlock' + index}>
-                            <Field name={`firstBlockParticipants.${index}`} />
-                            {errors.firstBlockParticipants?.[index] && touched.firstBlockParticipants?.[index] ? (
-                              <div className="text-red-700 text-sm">{errors.firstBlockParticipants?.[index]}</div>
-                            ) : null}
-                            <br />
-                          </div>
-                        ))
-                      : null}
-                  </>
-                )}
-              />
-            </div>
-            <div>
-              <h3>{format?.secondBlock}</h3>
-              <FieldArray
-                name="secondBlock"
-                render={() => (
-                  <div key="xyz">
-                    {values?.secondBlockParticipants?.length
-                      ? values.secondBlockParticipants.map((participant, index) => (
-                          <div key={'secondBlock' + index}>
-                            <Field name={`secondBlockParticipants.${index}`} />
-                            {errors.secondBlockParticipants?.[index] && touched.secondBlockParticipants?.[index] ? (
-                              <div className="text-red-700 text-sm">{errors.secondBlockParticipants?.[index]}</div>
-                            ) : null}
-                            <br />
-                          </div>
-                        ))
-                      : null}
-                  </div>
-                )}
-              />
-            </div>
-            <button type="submit">Submit</button>
-          </Form>
-        )}
-      </Formik>
+      <h2>{blockName}</h2>
+      <label>Participants</label>
+      {fields.map((participant, pIndex) => (
+        <div key={participant.id}>
+          <input {...register(`allParticipants.${sectionIndex}.blockParticipants.${pIndex}.name`)} />
+        </div>
+      ))}
+    </div>
+  )
+}
+
+const ParticipantsForm = ({ activeForm, format, saveParticipants }: Props) => {
+  const { register, handleSubmit, control } = useForm({ defaultValues: getInitialVals(format) })
+  const { fields, replace } = useFieldArray({ control, name: 'allParticipants' })
+  useEffect(() => {
+    if (format?.numberOfBlocks) {
+      replace(getInitialVals(format).allParticipants)
+    }
+  }, [format?.numberOfBlocks])
+
+  if (activeForm !== Forms.Participants || !format) return null
+  return (
+    <div className="px-4">
+      <form onSubmit={handleSubmit(saveParticipants)}>
+        {fields.map((block, index) => {
+          return (
+            <BlockSection
+              key={block.id}
+              sectionIndex={index}
+              blockName={block.blockName}
+              control={control}
+              register={register}
+            />
+          )
+        })}
+        <button className="border p-1 px-2" type="submit">
+          Save
+        </button>
+      </form>
     </div>
   )
 }

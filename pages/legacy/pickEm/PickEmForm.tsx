@@ -1,8 +1,7 @@
-import { useEffect } from 'react'
-import { useForm, Controller, Control, useWatch } from 'react-hook-form'
-import Select from 'react-select'
-import { exampleTournament } from '../../utils'
-import { Tournament } from '../../constants'
+import { useForm, useWatch } from 'react-hook-form'
+import ControlledSelect from '../../../components/ControlledSelect'
+import { exampleTournament } from '../../../utils'
+import { Tournament } from '../../../constants'
 
 const generateInitialValues = (tournament: Tournament) => {
   const finals = {
@@ -22,44 +21,6 @@ const generateInitialValues = (tournament: Tournament) => {
 
 const createOptions = (vals: string[]): { value: string; label: string }[] => {
   return vals.map((v) => ({ value: v, label: v }))
-}
-
-interface ControlledSelectProps {
-  control: Control<any>
-  name: string
-  options: { label: string; value: string }[]
-  required?: boolean
-  disabled?: boolean
-  errorMessage?: string
-}
-
-const ControlledSelect = ({ control, name, options, required, disabled, errorMessage }: ControlledSelectProps) => {
-  return (
-    <>
-      <Controller
-        control={control}
-        defaultValue=""
-        name={name}
-        rules={{ required }}
-        render={({ field: { onChange, value } }) => (
-          <Select
-            name="firstBlockWinner"
-            options={options}
-            isDisabled={disabled}
-            value={options.find((o) => o.value === value)}
-            onChange={(v) => onChange(v.value)}
-            styles={{
-              control: (baseStyles) => ({
-                ...baseStyles,
-                borderColor: errorMessage ? 'red' : null,
-              }),
-            }}
-          />
-        )}
-      />
-      {errorMessage ? <div className="text-red-700 text-sm">{errorMessage}</div> : null}
-    </>
-  )
 }
 
 const logVals = (data) => console.log(data)

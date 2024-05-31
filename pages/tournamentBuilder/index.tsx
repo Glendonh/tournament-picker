@@ -1,60 +1,36 @@
-import Link from 'next/link'
 import { useState } from 'react'
-import FormatForm from './FormatForm'
-import ScheduleForm from './ScheduleForm'
-import ParticipantsForm from './ParticipantsForm'
 import { Forms } from '../../constants'
-
-export type Format = {
-  perBlock: string
-  firstBlock: string
-  secondBlock: string
-}
-export type Participants = {
-  firstBlockParticipants: string[]
-  secondBlockParticipants: string[]
-}
-
-export type Night = { block: string; matches: { wrestler1: string; wrestler2: string }[] }
-
-const initialFormat: Format = null
-const initialParticipants: Participants = null
+import FormatForm from './FormatForm'
+import ParticipantsForm from './ParticipantsForm'
+import { FormatValues, ParticipantsFormVals } from '../../types'
 
 const TourmanentBuilder = (): JSX.Element => {
   const [activeForm, setActiveForm] = useState(Forms.Format)
-  const [tournamentFormat, setTournamentFormat] = useState(initialFormat)
-  const [tournamentParticipants, setTournamentParticipants] = useState(initialParticipants)
-  const handleFormatSubmit = (format: Format) => {
-    setTournamentFormat(format)
+  const [format, setFormat] = useState<FormatValues>()
+  const [participants, setParticipants] = useState<ParticipantsFormVals>()
+  const setFormSection = (section: Forms) => () => {
+    setActiveForm(section)
+  }
+  const saveFormat = (vals: FormatValues) => {
+    setFormat(vals)
     setActiveForm(Forms.Participants)
   }
-  const handleParticipantsSubmit = (participants: Participants) => {
-    setTournamentParticipants(participants)
+
+  const saveParticipants = (vals: ParticipantsFormVals) => {
+    setParticipants(vals)
     setActiveForm(Forms.Schedule)
   }
-  const handleFinalSubmit = ({ nights }: { nights: Night[] }) => {
-    const tournament = { format: tournamentFormat, participants: tournamentParticipants, nights }
-    console.log(JSON.stringify(tournament, null, 2))
-  }
+
   return (
     <div>
-      <Link href="/">Go Home, Dipshit</Link>
-      <p>Only handles G1 format for now</p>
-      <div>
-        <button onClick={() => setActiveForm(Forms.Format)}>Format</button>
-        <button onClick={() => setActiveForm(Forms.Participants)} disabled={!tournamentFormat}>
-          Participants
-        </button>
-        <button onClick={() => setActiveForm(Forms.Schedule)}>Schedule</button>
-      </div>
-      <FormatForm activeForm={activeForm} handleSubmit={handleFormatSubmit} />
-      <ParticipantsForm activeForm={activeForm} format={tournamentFormat} handleSubmit={handleParticipantsSubmit} />
-      <ScheduleForm
-        activeForm={activeForm}
-        participants={tournamentParticipants}
-        format={tournamentFormat}
-        handleSubmit={handleFinalSubmit}
-      />
+      <button onClick={setFormSection(Forms.Format)}>Format</button>
+      <button disabled={!format} onClick={setFormSection(Forms.Participants)}>
+        Participants
+      </button>
+      <button onClick={setFormSection(Forms.Schedule)}>Schedule</button>
+      <h1>{activeForm}</h1>
+      <FormatForm activeForm={activeForm} currentFormat={format} saveFormat={saveFormat} />
+      <ParticipantsForm activeForm={activeForm} format={format} saveParticipants={saveParticipants} />
     </div>
   )
 }

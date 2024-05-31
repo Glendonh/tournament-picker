@@ -5,7 +5,7 @@ import Link from 'next/link'
 export const Home = (): JSX.Element => (
   <div className="container">
     <Head>
-      <title>Create Next App</title>
+      <title>Tournament Thing</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
 
@@ -32,15 +32,21 @@ export const Home = (): JSX.Element => (
       <div className="grid">
         <Link href="/tournamentBuilder">
           <div className="card">
-            <h3>Build a Tournament &rarr;</h3>
+            <h3>{`V2 Builder`} &rarr;</h3>
+            <p>For legacy tournament format</p>
+          </div>
+        </Link>
+        <Link href="/legacy/tournamentBuilder">
+          <div className="card">
+            <h3>Legacy Build a Tournament &rarr;</h3>
             <p>Form for putting together a G1 style tourney</p>
           </div>
         </Link>
 
-        <Link href="/pickEm">
+        <Link href="/legacy/pickEm">
           <div className="card">
-            <h3>{`Pick 'em Form`} &rarr;</h3>
-            <p>For users to pick the outcomes of matches</p>
+            <h3>{`Legacy Pick 'em Form`} &rarr;</h3>
+            <p>For legacy tournament format</p>
           </div>
         </Link>
 
