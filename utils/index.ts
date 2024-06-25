@@ -1,5 +1,18 @@
 import { Tournament } from '../constants'
 
+export const generateNumberOptions = (min: number, max: number): { value: string; label: string }[] => {
+  if (!min || !max) return []
+  const options: { value: string; label: string }[] = []
+  for (let n = min; n <= max; n++) {
+    options.push({ value: n.toString(), label: n.toString() })
+  }
+  return options
+}
+
+export const matchesPerBlock = (count: number): number => {
+  return ((count - 1) * count) / 2
+}
+
 export const exampleTournament: Tournament = {
   format: {
     perBlock: '4',
