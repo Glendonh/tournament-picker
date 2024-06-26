@@ -1,27 +1,7 @@
-# NextJS Typescript Boilerplate
+# Professional Wrestling Round Robin Tournament Picker
 
-Bootstrap a developer-friendly NextJS app configured with:
+A number of internet communities that I'm a part of have pick 'em contest for the G1 wrestling tournament in Japan. Because the format of the tournament is based on round robin play within pools, there are not good web tools to build or manage such a contest. As a result the hosts are often left scheduling out the entire tournament as a Google Form and then manually tracking user scores in Sheets.
 
-- [Typescript](https://www.typescriptlang.org/)
-- Linting with [ESLint](https://eslint.org/)
-- Formatting with [Prettier](https://prettier.io/)
-- Linting, typechecking and formatting on by default using [`husky`](https://github.com/typicode/husky) for commit hooks
-- Testing with [Jest](https://jestjs.io/) and [`react-testing-library`](https://testing-library.com/docs/react-testing-library/intro)
+I wanted to create a system that would allow for easily creating the pick 'em form and tracking the results. If the pick 'ems were easier to organize, I believe that there may be increased interest in doing something similar for other Japanese wrestling round robin tournaments.
 
-## Deploy your own
-
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-typescript-eslint-jest&project-name=with-typescript-eslint-jest&repository-name=with-typescript-eslint-jest)
-
-## How to use
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
-
-```bash
-npx create-next-app --example with-typescript-eslint-jest with-typescript-eslint-jest-app
-# or
-yarn create next-app --example with-typescript-eslint-jest with-typescript-eslint-jest-app
-```
-
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+This is the front end for the potential application.
