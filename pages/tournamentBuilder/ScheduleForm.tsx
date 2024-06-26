@@ -2,7 +2,7 @@ import { useForm, useFieldArray, Control, FieldArrayWithId } from 'react-hook-fo
 import { useEffect, useState } from 'react'
 import Select from 'react-select'
 import ControlledSelect from '../../components/ControlledSelect'
-import { Forms, ParticipantsFormVals, FormatValues, NightValues } from '../../types'
+import { Forms, ParticipantsFormVals, FormatValues, NightValues, Night } from '../../types'
 // import { matchesPerBlock } from '../../utils'
 
 interface ScheduleFormProps {
@@ -16,6 +16,58 @@ const getInitialVals = (format?: FormatValues): NightValues => {
   if (!format || !format.numberOfNights) return { nights: [] }
   return { nights: Array(Number(format.numberOfNights)).fill({ matches: [{ wrestler1: '', wrestler2: '' }] }) }
 }
+
+const getOptionsFromNights =
+  ({ nights, participants }: { nights: Night[]; participants: ParticipantsFormVals }) =>
+  ({
+    nightIndex,
+    matchIndex,
+    blockName,
+  }: {
+    nightIndex: number
+    matchIndex: number
+    blockName: string
+  }): { value: string; label: string }[] => {
+    if (!nights.length || !blockName) {
+      return []
+    }
+    const activeBlockWrestlers =
+      participants.allParticipants
+        .find((block) => block.blockName === blockName)
+        ?.blockParticipants.map((w) => w.name) ?? []
+    const activeNight = nights[nightIndex]
+    const wrestlingTonight = activeNight.matches.reduce((acc, match) => {
+      if (match.wrestler1 || match.wrestler2) {
+        if (match.wrestler1) {
+          acc.push(match.wrestler1)
+        }
+        if (match.wrestler2) {
+          acc.push(match.wrestler2)
+        }
+      }
+      return acc
+    }, [])
+    const notWrestlingTonight = activeBlockWrestlers.filter((wrestler) => !wrestlingTonight.includes(wrestler))
+    const activeMatch = nights[nightIndex].matches[matchIndex]
+    if ((!activeMatch.wrestler1 && !activeMatch.wrestler2) || (activeMatch.wrestler1 && activeMatch.wrestler2)) {
+      return notWrestlingTonight.map((name) => ({ value: name, label: name }))
+    }
+    const filteredWrestler = activeMatch.wrestler1 || activeMatch.wrestler2
+    const alreadyBookedAgainst = nights.reduce((acc, night) => {
+      night.matches.forEach((match) => {
+        if (match.wrestler1 === filteredWrestler && match.wrestler2) {
+          acc.push(match.wrestler2)
+        }
+        if (match.wrestler2 === filteredWrestler && match.wrestler1) {
+          acc.push(match.wrestler1)
+        }
+      })
+      return acc
+    }, [])
+    return notWrestlingTonight.filter((w) => !alreadyBookedAgainst.includes(w)).map((n) => ({ value: n, label: n }))
+
+    return []
+  }
 
 // Saving for validation
 
@@ -33,37 +85,30 @@ interface ParticipantsInputProps {
   matchIndex: number
   control: Control<NightValues>
   blockValues: { value: string; label: string }[]
-  participants: ParticipantsFormVals
   showRemove: boolean
   removeMatch: (index: number) => void
+  getOptionsForMatch: (vals: {
+    nightIndex: number
+    matchIndex: number
+    blockName: string
+  }) => { value: string; label: string }[]
 }
 
-// TODO: should add logic here to restrict to valid options
-// there is a version of this in the legacy version
-const getParticipantValuesForBlock = ({
-  blockName,
-  participants,
-}: {
-  blockName: string
-  participants: ParticipantsFormVals
-}): { value: string; label: string }[] => {
-  const selectedBlock = participants.allParticipants.find((block) => block.blockName === blockName)
-  return selectedBlock?.blockParticipants.map((w) => ({ value: w.name, label: w.name })) ?? []
-}
+// TODO: should finish logic here to restrict to valid options
 
 const ParticipantsInput = ({
   nightIndex,
   matchIndex,
   control,
   blockValues,
-  participants,
   removeMatch,
   showRemove,
+  getOptionsForMatch,
 }: ParticipantsInputProps) => {
   const wrestler1Label = `nights.${nightIndex}.matches.${matchIndex}.wrestler1`
   const wrestler2Label = `nights.${nightIndex}.matches.${matchIndex}.wrestler2`
   const [selectedBlock, setSelectedBlock] = useState('')
-  const wrasslers = getParticipantValuesForBlock({ blockName: selectedBlock, participants })
+  const wrasslers = getOptionsForMatch({ nightIndex, matchIndex, blockName: selectedBlock })
   return (
     <div className="mx-4">
       <p>{`Match ${matchIndex + 1}`}</p>
@@ -95,9 +140,14 @@ interface NightSectionProps {
   night: FieldArrayWithId<NightValues, 'nights', 'id'>
   control: Control<NightValues>
   participants: ParticipantsFormVals
+  getOptionsForMatch: (vals: {
+    nightIndex: number
+    matchIndex: number
+    blockName: string
+  }) => { value: string; label: string }[]
 }
 
-const NightSection = ({ nightIndex, control, participants }: NightSectionProps) => {
+const NightSection = ({ nightIndex, control, participants, getOptionsForMatch }: NightSectionProps) => {
   const { fields, append, remove } = useFieldArray({ control, name: `nights.${nightIndex}.matches` })
   const blockValues = participants.allParticipants.map((pool) => ({ value: pool.blockName, label: pool.blockName }))
   const addMatch = () => append({ wrestler1: '', wrestler2: '' })
@@ -111,10 +161,10 @@ const NightSection = ({ nightIndex, control, participants }: NightSectionProps) 
               nightIndex={nightIndex}
               matchIndex={mIndex}
               control={control}
-              participants={participants}
               blockValues={blockValues}
               showRemove={fields.length > 1}
               removeMatch={remove}
+              getOptionsForMatch={getOptionsForMatch}
             />
           </div>
         )
@@ -127,8 +177,10 @@ const NightSection = ({ nightIndex, control, participants }: NightSectionProps) 
 }
 
 const ScheduleForm = ({ activeForm, participants, format, saveSchedule }: ScheduleFormProps) => {
-  const { handleSubmit, control } = useForm<NightValues>({ defaultValues: getInitialVals(format) })
+  const { handleSubmit, control, watch } = useForm<NightValues>({ defaultValues: getInitialVals(format) })
   const { fields, replace } = useFieldArray({ control, name: 'nights' })
+  const currentNights = watch('nights')
+  const getOptionsForMatch = getOptionsFromNights({ nights: currentNights, participants })
   useEffect(() => {
     if (format?.numberOfNights) {
       replace(getInitialVals(format).nights)
@@ -146,6 +198,7 @@ const ScheduleForm = ({ activeForm, participants, format, saveSchedule }: Schedu
               nightIndex={nightIndex}
               control={control}
               participants={participants}
+              getOptionsForMatch={getOptionsForMatch}
             />
           )
         })}
