@@ -1,9 +1,3 @@
-export enum Forms {
-  Format = 'FORMAT',
-  Participants = 'PARTICIPANTS',
-  Schedule = 'SCHEDULE',
-}
-
 export interface Format {
   perBlock: string
   firstBlock: string

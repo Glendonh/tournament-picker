@@ -1,6 +1,6 @@
 import { Formik, Form, Field, FieldArray } from 'formik'
 import * as yup from 'yup'
-import { Forms } from '../../../constants'
+import { Forms } from '../../../types'
 import { Format } from './index'
 
 type Props = {

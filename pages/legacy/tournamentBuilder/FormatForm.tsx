@@ -1,7 +1,7 @@
 //import Select from 'react-select' TODO: hook up React Select to Formik
 import { Formik, Form, Field } from 'formik'
 import * as yup from 'yup'
-import { Forms } from '../../../constants'
+import { Forms } from '../../../types'
 import { Format } from '.'
 
 type Props = {

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import Select from 'react-select'
 import ControlledSelect from '../../components/ControlledSelect'
 import { Forms, ParticipantsFormVals, FormatValues, NightValues, Night } from '../../types'
-// import { matchesPerBlock } from '../../utils'
+import { stringToOption } from '../../utils'
 
 interface ScheduleFormProps {
   activeForm: Forms
@@ -50,7 +50,7 @@ const getOptionsFromNights =
     const notWrestlingTonight = activeBlockWrestlers.filter((wrestler) => !wrestlingTonight.includes(wrestler))
     const activeMatch = nights[nightIndex].matches[matchIndex]
     if ((!activeMatch.wrestler1 && !activeMatch.wrestler2) || (activeMatch.wrestler1 && activeMatch.wrestler2)) {
-      return notWrestlingTonight.map((name) => ({ value: name, label: name }))
+      return notWrestlingTonight.map(stringToOption)
     }
     const filteredWrestler = activeMatch.wrestler1 || activeMatch.wrestler2
     const alreadyBookedAgainst = nights.reduce((acc, night) => {
@@ -149,7 +149,7 @@ interface NightSectionProps {
 
 const NightSection = ({ nightIndex, control, participants, getOptionsForMatch }: NightSectionProps) => {
   const { fields, append, remove } = useFieldArray({ control, name: `nights.${nightIndex}.matches` })
-  const blockValues = participants.allParticipants.map((pool) => ({ value: pool.blockName, label: pool.blockName }))
+  const blockValues = participants.allParticipants.map((pool) => stringToOption(pool.blockName))
   const addMatch = () => append({ wrestler1: '', wrestler2: '' })
   return (
     <div className="mx-4 border">
@@ -169,7 +169,7 @@ const NightSection = ({ nightIndex, control, participants, getOptionsForMatch }:
           </div>
         )
       })}
-      <button className="border p-1 px-2 m-1" onClick={addMatch}>
+      <button className="border p-1 px-2 m-1" type="button" onClick={addMatch}>
         +
       </button>
     </div>

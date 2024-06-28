@@ -1,8 +1,10 @@
 export interface FormatValues {
+  tournamentName: string
   numberOfBlocks: string
   blockNames: { name: string }[]
   participantsPer: string
   numberOfNights: string
+  numberAdvancing: string
 }
 
 export interface ParticipantsFormVals {
@@ -13,6 +15,8 @@ export enum Forms {
   Format = 'FORMAT',
   Participants = 'PARTICIPANTS',
   Schedule = 'SCHEDULE',
+  Bracket = 'BRACKET',
+  Review = 'REVIEW',
 }
 
 export interface Night {

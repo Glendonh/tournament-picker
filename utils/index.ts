@@ -1,10 +1,14 @@
 import { Tournament } from '../constants'
 
+export const stringToOption = (str: string) => ({ value: str, label: str })
+
+export const stringsToOptions = (strings: string[]) => strings.map(stringToOption)
+
 export const generateNumberOptions = (min: number, max: number): { value: string; label: string }[] => {
   if (!min || !max) return []
   const options: { value: string; label: string }[] = []
   for (let n = min; n <= max; n++) {
-    options.push({ value: n.toString(), label: n.toString() })
+    options.push(stringToOption(n.toString()))
   }
   return options
 }

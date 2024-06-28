@@ -1,14 +1,11 @@
 import { useEffect } from 'react'
-import { Forms } from '../../constants'
 import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import ControlledSelect from '../../components/ControlledSelect'
-import { FormatValues } from '../../types'
-import { generateNumberOptions, matchesPerBlock } from '../../utils'
+import { FormatValues, Forms } from '../../types'
+import { generateNumberOptions, matchesPerBlock, stringsToOptions } from '../../utils'
 
-const numberOfBlocksOptions: { value: string; label: string }[] = [
-  { value: '2', label: '2' },
-  { value: '4', label: '4' },
-]
+const numberOfBlocksOptions = stringsToOptions(['2', '4'])
+
 interface Props {
   activeForm: Forms
   saveFormat: (vals: FormatValues) => void
@@ -16,10 +13,12 @@ interface Props {
 }
 
 const initialFormat: FormatValues = {
+  tournamentName: '',
   numberOfBlocks: '2',
   blockNames: [{ name: '' }, { name: '' }],
   participantsPer: '',
   numberOfNights: '',
+  numberAdvancing: '',
 }
 
 const FormatForm = ({ activeForm, saveFormat, currentFormat }: Props) => {
@@ -44,6 +43,8 @@ const FormatForm = ({ activeForm, saveFormat, currentFormat }: Props) => {
   return (
     <div className="px-4">
       <form onSubmit={handleSubmit(saveFormat)}>
+        <label htmlFor="tournamentName">Tournament Name</label>
+        <input type="text" {...register('tournamentName')} />
         <label htmlFor="numberOfBlocks">Number of blocks</label>
         <ControlledSelect name="numberOfBlocks" control={control} options={numberOfBlocksOptions} required />
         <label htmlFor="participantsPer">Participants per block</label>
@@ -63,6 +64,18 @@ const FormatForm = ({ activeForm, saveFormat, currentFormat }: Props) => {
                 Number(qtyPerBlock) - 1,
                 matchesPerBlock(Number(qtyPerBlock)) * Number(currentBlockQty)
               )}
+            />
+          </>
+        ) : null}
+        {!isNaN(Number(currentBlockQty)) ? (
+          <>
+            <p />
+            <label htmlFor="numberAdvancing">Number of wrestlers in knockout stage</label>
+            <ControlledSelect
+              name="numberAdvancing"
+              required
+              control={control}
+              options={currentBlockQty === '4' ? stringsToOptions(['4', '8']) : stringsToOptions(['2', '4', '6'])}
             />
           </>
         ) : null}
