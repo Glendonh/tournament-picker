@@ -42,7 +42,7 @@ const BlockSection = ({ control, register, sectionIndex, blockName }: SectionPro
 }
 
 const ParticipantsForm = ({ activeForm, format, saveParticipants }: Props) => {
-  const { register, handleSubmit, control } = useForm({ defaultValues: getInitialVals(format) })
+  const { register, handleSubmit, control } = useForm<ParticipantsFormVals>({ defaultValues: getInitialVals(format) })
   const { fields, replace } = useFieldArray({ control, name: 'allParticipants' })
   useEffect(() => {
     if (format?.numberOfBlocks) {

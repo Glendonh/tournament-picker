@@ -2,6 +2,7 @@ import { useState } from 'react'
 import FormatForm from './FormatForm'
 import ParticipantsForm from './ParticipantsForm'
 import ScheduleForm from './ScheduleForm'
+import BracketForm from './BracketForm'
 import { FormatValues, ParticipantsFormVals, NightValues, Forms } from '../../types'
 
 const TourmanentBuilder = (): JSX.Element => {
@@ -24,7 +25,7 @@ const TourmanentBuilder = (): JSX.Element => {
 
   const saveSchedule = (vals: NightValues) => {
     setSchedule(vals)
-    setActiveForm(Forms.Review)
+    setActiveForm(Forms.Bracket)
   }
 
   return (
@@ -43,6 +44,7 @@ const TourmanentBuilder = (): JSX.Element => {
       <FormatForm activeForm={activeForm} currentFormat={format} saveFormat={saveFormat} />
       <ParticipantsForm activeForm={activeForm} format={format} saveParticipants={saveParticipants} />
       <ScheduleForm activeForm={activeForm} participants={participants} format={format} saveSchedule={saveSchedule} />
+      <BracketForm activeForm={activeForm} format={format} />
       {activeForm === Forms.Review ? (
         <div>
           <h2>Blocks</h2>

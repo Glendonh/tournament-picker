@@ -23,7 +23,7 @@ const initialFormat: FormatValues = {
 
 const FormatForm = ({ activeForm, saveFormat, currentFormat }: Props) => {
   if (activeForm !== Forms.Format) return null
-  const { control, register, handleSubmit } = useForm({ defaultValues: currentFormat ?? initialFormat })
+  const { control, register, handleSubmit } = useForm<FormatValues>({ defaultValues: currentFormat ?? initialFormat })
   const { fields, append, remove } = useFieldArray({ control, name: 'blockNames' })
   const currentBlockQty = useWatch({ control, name: 'numberOfBlocks' })
   const blockNames = useWatch({ control, name: 'blockNames' })
