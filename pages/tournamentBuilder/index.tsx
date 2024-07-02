@@ -3,13 +3,14 @@ import FormatForm from './FormatForm'
 import ParticipantsForm from './ParticipantsForm'
 import ScheduleForm from './ScheduleForm'
 import BracketForm from './BracketForm'
-import { FormatValues, ParticipantsFormVals, NightValues, Forms } from '../../types'
+import { FormatValues, ParticipantsFormVals, NightValues, Forms, BracketFormVals } from '../../types'
 
 const TourmanentBuilder = (): JSX.Element => {
   const [activeForm, setActiveForm] = useState(Forms.Format)
   const [format, setFormat] = useState<FormatValues>()
   const [participants, setParticipants] = useState<ParticipantsFormVals>()
   const [schedule, setSchedule] = useState<NightValues>()
+  const [bracket, setBracket] = useState<BracketFormVals>()
   const setFormSection = (section: Forms) => () => {
     setActiveForm(section)
   }
@@ -26,6 +27,11 @@ const TourmanentBuilder = (): JSX.Element => {
   const saveSchedule = (vals: NightValues) => {
     setSchedule(vals)
     setActiveForm(Forms.Bracket)
+  }
+
+  const saveBracket = (vals: BracketFormVals) => {
+    setBracket(vals)
+    setActiveForm(Forms.Review)
   }
 
   return (
@@ -47,7 +53,7 @@ const TourmanentBuilder = (): JSX.Element => {
       <FormatForm activeForm={activeForm} currentFormat={format} saveFormat={saveFormat} />
       <ParticipantsForm activeForm={activeForm} format={format} saveParticipants={saveParticipants} />
       <ScheduleForm activeForm={activeForm} participants={participants} format={format} saveSchedule={saveSchedule} />
-      <BracketForm activeForm={activeForm} format={format} />
+      <BracketForm activeForm={activeForm} format={format} saveBracket={saveBracket} />
       {activeForm === Forms.Review ? (
         <div>
           <h2>Blocks</h2>
@@ -68,6 +74,13 @@ const TourmanentBuilder = (): JSX.Element => {
               {night.matches.map(({ wrestler1, wrestler2 }) => (
                 <div key={`${wrestler1}${wrestler2}`} className="p-1">{`${wrestler1} vs ${wrestler2}`}</div>
               ))}
+            </div>
+          ))}
+          <h2>Bracket</h2>
+          {bracket?.bracketMatches.map((match) => (
+            <div key={`${match.matchNumber}`}>
+              <p>{`${match.round} round match ${match.matchNumber}`}</p>
+              <p>{`${match.wrestler1} - ${match.wrestler2}`}</p>
             </div>
           ))}
         </div>

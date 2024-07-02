@@ -1,27 +1,14 @@
 import { useEffect } from 'react'
-import { useForm, useFieldArray, useWatch } from 'react-hook-form'
+import { useForm, useFieldArray } from 'react-hook-form'
 import ControlledSelect from '../../components/ControlledSelect'
 import { FormatValues, Forms } from '../../types'
 import { stringsToOptions, stringToOption } from '../../utils'
-import { Option } from '../../types'
+import { Option, RoundMatch, BracketMatch, BracketFormVals } from '../../types'
 
 interface BracketFormProps {
   format: FormatValues
   activeForm: Forms
-}
-
-interface RoundMatch {
-  round: string
-  matchNumber: number
-}
-
-interface BracketMatch extends RoundMatch {
-  wrestler1: string
-  wrestler2: string
-}
-
-interface BracketFormVals {
-  bracketMatches: BracketMatch[]
+  saveBracket: (bracket: BracketFormVals) => void
 }
 
 const getInitialBracket = (format: FormatValues): BracketMatch[] => {
@@ -61,6 +48,17 @@ const getOptionsByRound = (format: FormatValues): { first: Option[]; second: Opt
       third: [],
     }
   }
+  if (numberAdvancing === '4') {
+    const first =
+      numberOfBlocks === '4'
+        ? blockNames.map((block) => stringToOption(block.name))
+        : blockNames.reduce<Option[]>((acc, block) => {
+            const blockSeeds = [1, 2].map((seed) => stringToOption(`${block.name} Seed: ${seed}`))
+            return acc.concat(blockSeeds)
+          }, [])
+    const second = stringsToOptions(['Winner of Match 1', 'Winner of Match 2'])
+    return { first, second, third: [] }
+  }
   if (numberAdvancing === '6') {
     const r1Seeds = [2, 3]
     const first = blockNames.reduce<Option[]>((acc, block) => {
@@ -73,12 +71,24 @@ const getOptionsByRound = (format: FormatValues): { first: Option[]; second: Opt
     const third = stringsToOptions(['Winner of Match 3', 'Winner of Match 4'])
     return { first, second, third }
   }
+  if (numberAdvancing === '8') {
+    const seeds = [1, 2]
+    const first = blockNames.reduce<Option[]>((acc, block) => {
+      const blockSeeds = seeds.map((seed) => stringToOption(`${block.name} Seed: ${seed}`))
+      return acc.concat(blockSeeds)
+    }, [])
+    const firstRoundMatches = [1, 2, 3, 4]
+    const second = firstRoundMatches.map((matchNumber) => stringToOption(`Winner of Match ${matchNumber}`))
+    const secondRoundMatches = [5, 6]
+    const third = secondRoundMatches.map((matchNumber) => stringToOption(`Winner of Match ${matchNumber}`))
+    return { first, second, third }
+  }
   return { first: [], second: [], third: [] }
 }
 
-const BracketForm = ({ format, activeForm }: BracketFormProps) => {
+const BracketForm = ({ format, activeForm, saveBracket }: BracketFormProps) => {
   if (!format || activeForm !== Forms.Bracket) return null
-  const { control, register, handleSubmit, watch } = useForm<BracketFormVals>({
+  const { control, handleSubmit } = useForm<BracketFormVals>({
     defaultValues: { bracketMatches: getInitialBracket(format) },
   })
   const { fields, replace } = useFieldArray({ control, name: 'bracketMatches' })
@@ -86,11 +96,9 @@ const BracketForm = ({ format, activeForm }: BracketFormProps) => {
     replace(getInitialBracket(format))
   }, [format.numberAdvancing, replace])
   const optionsByRound = getOptionsByRound(format)
-  const vals = watch()
-  console.log(vals)
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit(saveBracket)}>
         {fields.map((f, i) => {
           return (
             <div key={f.id}>
@@ -108,6 +116,9 @@ const BracketForm = ({ format, activeForm }: BracketFormProps) => {
             </div>
           )
         })}
+        <button className="border p-1 px-2" type="submit">
+          Save
+        </button>
       </form>
     </div>
   )

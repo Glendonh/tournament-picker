@@ -1,10 +1,11 @@
 import { Controller, Control } from 'react-hook-form'
 import Select from 'react-select'
+import { Option } from '../types'
 
 interface ControlledSelectProps {
   control: Control<any>
   name: string
-  options: { label: string; value: string }[]
+  options: Option[]
   required?: boolean
   disabled?: boolean
   errorMessage?: string

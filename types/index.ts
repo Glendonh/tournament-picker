@@ -32,3 +32,17 @@ export interface Option {
   value: string
   label: string
 }
+
+export interface RoundMatch {
+  round: string
+  matchNumber: number
+}
+
+export interface BracketMatch extends RoundMatch {
+  wrestler1: string
+  wrestler2: string
+}
+
+export interface BracketFormVals {
+  bracketMatches: BracketMatch[]
+}
