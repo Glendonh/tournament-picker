@@ -37,6 +37,9 @@ const TourmanentBuilder = (): JSX.Element => {
       <button disabled={!participants} onClick={setFormSection(Forms.Schedule)}>
         Schedule
       </button>
+      <button disabled={!format} onClick={setFormSection(Forms.Bracket)}>
+        Bracket
+      </button>
       <button disabled={!schedule} onClick={setFormSection(Forms.Review)}>
         Review
       </button>
