@@ -1,12 +1,13 @@
 import { Tournament } from '../constants'
+import { Option } from '../types'
 
-export const stringToOption = (str: string) => ({ value: str, label: str })
+export const stringToOption = (str: string): Option => ({ value: str, label: str })
 
-export const stringsToOptions = (strings: string[]) => strings.map(stringToOption)
+export const stringsToOptions = (strings: string[]): Option[] => strings.map(stringToOption)
 
-export const generateNumberOptions = (min: number, max: number): { value: string; label: string }[] => {
+export const generateNumberOptions = (min: number, max: number): Option[] => {
   if (!min || !max) return []
-  const options: { value: string; label: string }[] = []
+  const options: Option[] = []
   for (let n = min; n <= max; n++) {
     options.push(stringToOption(n.toString()))
   }

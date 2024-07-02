@@ -2,7 +2,7 @@ import { useForm, useFieldArray, Control, FieldArrayWithId } from 'react-hook-fo
 import { useEffect, useState } from 'react'
 import Select from 'react-select'
 import ControlledSelect from '../../components/ControlledSelect'
-import { Forms, ParticipantsFormVals, FormatValues, NightValues, Night } from '../../types'
+import { Forms, ParticipantsFormVals, FormatValues, NightValues, Night, Option } from '../../types'
 import { stringToOption } from '../../utils'
 
 interface ScheduleFormProps {
@@ -19,15 +19,7 @@ const getInitialVals = (format?: FormatValues): NightValues => {
 
 const getOptionsFromNights =
   ({ nights, participants }: { nights: Night[]; participants: ParticipantsFormVals }) =>
-  ({
-    nightIndex,
-    matchIndex,
-    blockName,
-  }: {
-    nightIndex: number
-    matchIndex: number
-    blockName: string
-  }): { value: string; label: string }[] => {
+  ({ nightIndex, matchIndex, blockName }: { nightIndex: number; matchIndex: number; blockName: string }): Option[] => {
     if (!nights.length || !blockName) {
       return []
     }
@@ -64,7 +56,7 @@ const getOptionsFromNights =
       })
       return acc
     }, [])
-    return notWrestlingTonight.filter((w) => !alreadyBookedAgainst.includes(w)).map((n) => ({ value: n, label: n }))
+    return notWrestlingTonight.filter((w) => !alreadyBookedAgainst.includes(w)).map(stringToOption)
 
     return []
   }
@@ -84,14 +76,10 @@ interface ParticipantsInputProps {
   nightIndex: number
   matchIndex: number
   control: Control<NightValues>
-  blockValues: { value: string; label: string }[]
+  blockValues: Option[]
   showRemove: boolean
   removeMatch: (index: number) => void
-  getOptionsForMatch: (vals: {
-    nightIndex: number
-    matchIndex: number
-    blockName: string
-  }) => { value: string; label: string }[]
+  getOptionsForMatch: (vals: { nightIndex: number; matchIndex: number; blockName: string }) => Option[]
 }
 
 // TODO: should finish logic here to restrict to valid options
@@ -140,11 +128,7 @@ interface NightSectionProps {
   night: FieldArrayWithId<NightValues, 'nights', 'id'>
   control: Control<NightValues>
   participants: ParticipantsFormVals
-  getOptionsForMatch: (vals: {
-    nightIndex: number
-    matchIndex: number
-    blockName: string
-  }) => { value: string; label: string }[]
+  getOptionsForMatch: (vals: { nightIndex: number; matchIndex: number; blockName: string }) => Option[]
 }
 
 const NightSection = ({ nightIndex, control, participants, getOptionsForMatch }: NightSectionProps) => {

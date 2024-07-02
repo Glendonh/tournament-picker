@@ -27,3 +27,8 @@ export interface Night {
 export interface NightValues {
   nights: Night[]
 }
+
+export interface Option {
+  value: string
+  label: string
+}
