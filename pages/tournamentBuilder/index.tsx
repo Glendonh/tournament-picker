@@ -68,7 +68,7 @@ const TourmanentBuilder = (): JSX.Element => {
             </div>
           ))}
           <h2>Schedule</h2>
-          {schedule.nights.map((night, nIndex) => (
+          {schedule?.nights.map((night, nIndex) => (
             <div key={nIndex}>
               <p>{`Night ${nIndex + 1}`}</p>
               {night.matches.map(({ wrestler1, wrestler2 }) => (

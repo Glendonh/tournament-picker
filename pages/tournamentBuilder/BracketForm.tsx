@@ -88,7 +88,11 @@ const getOptionsByRound = (format: FormatValues): { first: Option[]; second: Opt
 
 const BracketForm = ({ format, activeForm, saveBracket }: BracketFormProps) => {
   if (!format || activeForm !== Forms.Bracket) return null
-  const { control, handleSubmit } = useForm<BracketFormVals>({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<BracketFormVals>({
     defaultValues: { bracketMatches: getInitialBracket(format) },
   })
   const { fields, replace } = useFieldArray({ control, name: 'bracketMatches' })
@@ -107,11 +111,15 @@ const BracketForm = ({ format, activeForm, saveBracket }: BracketFormProps) => {
                 name={`bracketMatches[${i}].wrestler1`}
                 control={control}
                 options={optionsByRound[f.round]}
+                required
+                errorMessage={errors.bracketMatches?.[i]?.wrestler1?.message}
               />
               <ControlledSelect
                 name={`bracketMatches[${i}].wrestler2`}
                 control={control}
                 options={optionsByRound[f.round]}
+                required
+                errorMessage={errors.bracketMatches?.[i]?.wrestler2?.message}
               />
             </div>
           )

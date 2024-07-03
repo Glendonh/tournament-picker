@@ -1,4 +1,4 @@
-import { useForm, useFieldArray, Control, FieldArrayWithId } from 'react-hook-form'
+import { useForm, useFieldArray, Control, FieldArrayWithId, FieldErrors } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 import Select from 'react-select'
 import ControlledSelect from '../../components/ControlledSelect'
@@ -80,6 +80,7 @@ interface ParticipantsInputProps {
   showRemove: boolean
   removeMatch: (index: number) => void
   getOptionsForMatch: (vals: { nightIndex: number; matchIndex: number; blockName: string }) => Option[]
+  errors: FieldErrors<NightValues>
 }
 
 // TODO: should finish logic here to restrict to valid options
@@ -92,6 +93,7 @@ const ParticipantsInput = ({
   removeMatch,
   showRemove,
   getOptionsForMatch,
+  errors,
 }: ParticipantsInputProps) => {
   const wrestler1Label = `nights.${nightIndex}.matches.${matchIndex}.wrestler1`
   const wrestler2Label = `nights.${nightIndex}.matches.${matchIndex}.wrestler2`
@@ -107,11 +109,23 @@ const ParticipantsInput = ({
         </div>
         <div className="w-1/4">
           <label htmlFor={wrestler1Label}>First Wrestler</label>
-          <ControlledSelect name={wrestler1Label} options={wrasslers} control={control} />
+          <ControlledSelect
+            name={wrestler1Label}
+            options={wrasslers}
+            control={control}
+            required
+            errorMessage={errors.nights?.[nightIndex]?.matches?.[matchIndex]?.wrestler1?.message}
+          />
         </div>
         <div className="w-1/4">
           <label htmlFor={wrestler2Label}>Second Wrestler</label>
-          <ControlledSelect name={wrestler2Label} options={wrasslers} control={control} />
+          <ControlledSelect
+            name={wrestler2Label}
+            options={wrasslers}
+            control={control}
+            required
+            errorMessage={errors.nights?.[nightIndex]?.matches?.[matchIndex]?.wrestler2?.message}
+          />
         </div>
         {showRemove ? (
           <button className="border border-red-600 p-1 px-2 m-1" onClick={() => removeMatch(matchIndex)}>
@@ -129,9 +143,10 @@ interface NightSectionProps {
   control: Control<NightValues>
   participants: ParticipantsFormVals
   getOptionsForMatch: (vals: { nightIndex: number; matchIndex: number; blockName: string }) => Option[]
+  errors: FieldErrors<NightValues>
 }
 
-const NightSection = ({ nightIndex, control, participants, getOptionsForMatch }: NightSectionProps) => {
+const NightSection = ({ nightIndex, control, participants, getOptionsForMatch, errors }: NightSectionProps) => {
   const { fields, append, remove } = useFieldArray({ control, name: `nights.${nightIndex}.matches` })
   const blockValues = participants.allParticipants.map((pool) => stringToOption(pool.blockName))
   const addMatch = () => append({ wrestler1: '', wrestler2: '' })
@@ -149,6 +164,7 @@ const NightSection = ({ nightIndex, control, participants, getOptionsForMatch }:
               showRemove={fields.length > 1}
               removeMatch={remove}
               getOptionsForMatch={getOptionsForMatch}
+              errors={errors}
             />
           </div>
         )
@@ -161,7 +177,12 @@ const NightSection = ({ nightIndex, control, participants, getOptionsForMatch }:
 }
 
 const ScheduleForm = ({ activeForm, participants, format, saveSchedule }: ScheduleFormProps) => {
-  const { handleSubmit, control, watch } = useForm<NightValues>({ defaultValues: getInitialVals(format) })
+  const {
+    handleSubmit,
+    control,
+    watch,
+    formState: { errors },
+  } = useForm<NightValues>({ defaultValues: getInitialVals(format) })
   const { fields, replace } = useFieldArray({ control, name: 'nights' })
   const currentNights = watch('nights')
   const getOptionsForMatch = getOptionsFromNights({ nights: currentNights, participants })
@@ -183,6 +204,7 @@ const ScheduleForm = ({ activeForm, participants, format, saveSchedule }: Schedu
               control={control}
               participants={participants}
               getOptionsForMatch={getOptionsForMatch}
+              errors={errors}
             />
           )
         })}

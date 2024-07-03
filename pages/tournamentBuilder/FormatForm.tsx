@@ -23,7 +23,12 @@ const initialFormat: FormatValues = {
 
 const FormatForm = ({ activeForm, saveFormat, currentFormat }: Props) => {
   if (activeForm !== Forms.Format) return null
-  const { control, register, handleSubmit } = useForm<FormatValues>({ defaultValues: currentFormat ?? initialFormat })
+  const {
+    control,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormatValues>({ defaultValues: currentFormat ?? initialFormat })
   const { fields, append, remove } = useFieldArray({ control, name: 'blockNames' })
   const currentBlockQty = useWatch({ control, name: 'numberOfBlocks' })
   const blockNames = useWatch({ control, name: 'blockNames' })
@@ -44,13 +49,26 @@ const FormatForm = ({ activeForm, saveFormat, currentFormat }: Props) => {
     <div className="px-4">
       <form onSubmit={handleSubmit(saveFormat)}>
         <label htmlFor="tournamentName">Tournament Name</label>
-        <input type="text" {...register('tournamentName')} />
+        <input type="text" {...register('tournamentName', { required: 'Required' })} />
+        {errors.tournamentName ? <span className="text-red-700 text-sm">{errors.tournamentName.message}</span> : null}
+        <p />
         <label htmlFor="numberOfBlocks">Number of blocks</label>
         <ControlledSelect name="numberOfBlocks" control={control} options={numberOfBlocksOptions} required />
         <label htmlFor="participantsPer">Participants per block</label>
-        <ControlledSelect name="participantsPer" control={control} options={generateNumberOptions(3, 12)} required />
+        <ControlledSelect
+          name="participantsPer"
+          control={control}
+          options={generateNumberOptions(3, 12)}
+          errorMessage={errors.participantsPer?.message}
+          required
+        />
         {fields.map((item, index) => (
-          <input key={item.id} {...register(`blockNames.${index}.name`)} />
+          <>
+            <input key={item.id} {...register(`blockNames.${index}.name`, { required: 'Required' })} />
+            {errors.blockNames?.[index]?.name ? (
+              <span className="text-red-700 text-sm">{errors.blockNames?.[index]?.name.message}</span>
+            ) : null}
+          </>
         ))}
         {!isNaN(Number(qtyPerBlock)) ? (
           <>
@@ -64,6 +82,7 @@ const FormatForm = ({ activeForm, saveFormat, currentFormat }: Props) => {
                 Number(qtyPerBlock) - 1,
                 matchesPerBlock(Number(qtyPerBlock)) * Number(currentBlockQty)
               )}
+              errorMessage={errors.numberOfNights?.message}
             />
           </>
         ) : null}
@@ -76,6 +95,7 @@ const FormatForm = ({ activeForm, saveFormat, currentFormat }: Props) => {
               required
               control={control}
               options={currentBlockQty === '4' ? stringsToOptions(['4', '8']) : stringsToOptions(['2', '4', '6'])}
+              errorMessage={errors.numberAdvancing?.message}
             />
           </>
         ) : null}

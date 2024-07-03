@@ -18,7 +18,7 @@ const ControlledSelect = ({ control, name, options, required, disabled, errorMes
         control={control}
         defaultValue=""
         name={name}
-        rules={{ required }}
+        rules={{ required: required ? 'Required' : false }}
         render={({ field: { onChange, value } }) => (
           <Select
             name={name}
