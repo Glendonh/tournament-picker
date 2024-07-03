@@ -46,3 +46,15 @@ export interface BracketMatch extends RoundMatch {
 export interface BracketFormVals {
   bracketMatches: BracketMatch[]
 }
+
+export interface CompleteTournament {
+  format: FormatValues
+  participants: ParticipantsFormVals
+  schedule: NightValues
+  bracket: BracketFormVals
+}
+
+export interface PickemFormVals {
+  nights: { matches: { winner: string }[] }[]
+  bracket: { winner: string }[]
+}

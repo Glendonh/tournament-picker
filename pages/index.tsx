@@ -33,10 +33,16 @@ export const Home = (): JSX.Element => (
         <Link href="/tournamentBuilder">
           <div className="card">
             <h3>{`V2 Builder`} &rarr;</h3>
-            <p>For legacy tournament format</p>
+            <p>For multiple formats</p>
           </div>
         </Link>
-        <Link href="/legacy/tournamentBuilder">
+        <Link href="/pickem">
+          <div className="card">
+            <h3>{`V2 Builder`} &rarr;</h3>
+            <p>Pickem Form</p>
+          </div>
+        </Link>
+        {/* <Link href="/legacy/tournamentBuilder">
           <div className="card">
             <h3>Legacy Build a Tournament &rarr;</h3>
             <p>Form for putting together a G1 style tourney</p>
@@ -48,7 +54,7 @@ export const Home = (): JSX.Element => (
             <h3>{`Legacy Pick 'em Form`} &rarr;</h3>
             <p>For legacy tournament format</p>
           </div>
-        </Link>
+        </Link> */}
 
         {/* <a href="https://github.com/vercel/next.js/tree/master/examples" className="card">
           <h3>Examples &rarr;</h3>

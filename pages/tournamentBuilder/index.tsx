@@ -32,6 +32,7 @@ const TourmanentBuilder = (): JSX.Element => {
   const saveBracket = (vals: BracketFormVals) => {
     setBracket(vals)
     setActiveForm(Forms.Review)
+    console.log(JSON.stringify({ format, participants, schedule, bracket }))
   }
 
   return (
