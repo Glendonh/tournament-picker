@@ -61,3 +61,24 @@ export const snowPrix = {
   },
   bracket: { bracketMatches: [{ wrestler1: 'A block', wrestler2: 'B block', round: 'first', matchNumber: 1 }] },
 }
+
+const sixFormat = {
+  tournamentName: 'Snow Prix',
+  numberOfBlocks: '2',
+  blockNames: [{ name: 'A block' }, { name: 'B block' }],
+  participantsPer: '4',
+  numberOfNights: '6',
+  numberAdvancing: '6',
+}
+
+const sixBracket = {
+  bracketMatches: [
+    { wrestler1: 'A block Seed: 2', wrestler2: 'A block Seed: 3', round: 'first', matchNumber: 1 },
+    { wrestler1: 'B block Seed: 2', wrestler2: 'B block Seed: 3', round: 'first', matchNumber: 2 },
+    { wrestler1: 'A block Seed: 1', wrestler2: 'Winner of Match 1', round: 'second', matchNumber: 3 },
+    { wrestler1: 'Winner of Match 2', wrestler2: 'B block Seed: 1', round: 'second', matchNumber: 4 },
+    { wrestler1: 'Winner of Match 3', wrestler2: 'Winner of Match 4', round: 'third', matchNumber: 5 },
+  ],
+}
+
+export const snowPrixSix = { ...snowPrix, bracket: sixBracket, format: sixFormat }

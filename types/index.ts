@@ -56,5 +56,6 @@ export interface CompleteTournament {
 
 export interface PickemFormVals {
   nights: { matches: { winner: string }[] }[]
+  seeds: { blockName: string; seeds: string[] }[]
   bracket: { winner: string }[]
 }

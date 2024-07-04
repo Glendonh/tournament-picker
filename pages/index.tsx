@@ -38,7 +38,7 @@ export const Home = (): JSX.Element => (
         </Link>
         <Link href="/pickem">
           <div className="card">
-            <h3>{`V2 Builder`} &rarr;</h3>
+            <h3>{`Pick 'em`} &rarr;</h3>
             <p>Pickem Form</p>
           </div>
         </Link>
