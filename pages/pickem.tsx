@@ -98,6 +98,7 @@ const SeedsSection = ({ control, participants, currentSeeds }: SeedsSectionProps
   return (
     <>
       {participants.allParticipants.map((block, bIndex) => {
+        // @ts-expect-error not sure why it doesn't like the name of this fieldArray
         const { fields } = useFieldArray({ control, name: `seeds.${bIndex}.seeds` })
         return (
           <div key={block.blockName}>
@@ -136,6 +137,12 @@ const BracketSection = ({ control, bracket }: BracketSectionProps) => {
         return (
           <div key={field.id}>
             <p>{`${bracketMatch.round} round match# ${bracketMatch.matchNumber}`}</p>
+            <label>{`${bracketMatch.wrestler1} vs ${bracketMatch.wrestler2}`}</label>
+            <ControlledSelect
+              control={control}
+              name={`bracket.${index}.winner`}
+              options={stringsToOptions([bracketMatch.wrestler1, bracketMatch.wrestler2])}
+            />
           </div>
         )
       })}
@@ -143,13 +150,29 @@ const BracketSection = ({ control, bracket }: BracketSectionProps) => {
   )
 }
 
+const getOptionsForMatches = ({
+  seeds,
+  bracketPicks,
+  bracket,
+}: {
+  seeds: { blockName: string; seeds: string[] }[]
+  bracketPicks: { winner: string }[]
+  bracket: BracketFormVals
+}) => {
+  console.log({ seeds, bracketPicks, bracket })
+  // This is making me rethink some of the basic structure of how I'm doing this
+  // I can reverser engineer everything I need out of the data I have,
+  // but it would be garbage, more or less
+}
+
 const PickEmPage = () => {
   // Placeholder until fetching logic is decided
   const activeTournament = snowPrixSix
-  const { control, watch } = useForm({ defaultValues: getInitalVals(activeTournament) })
+  const { control, watch } = useForm<PickemFormVals>({ defaultValues: getInitalVals(activeTournament) })
   const bracketPicks = watch('bracket')
   const currentSeeds = watch('seeds')
   const lowestSeed = getLowestSeed(activeTournament.format)
+  getOptionsForMatches({ seeds: currentSeeds, bracketPicks, bracket: activeTournament.bracket })
   return (
     <div className="container mx-3 mb-4">
       <form>
