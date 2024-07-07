@@ -32,7 +32,7 @@ const TourmanentBuilder = (): JSX.Element => {
   const saveBracket = (vals: BracketFormVals) => {
     setBracket(vals)
     setActiveForm(Forms.Review)
-    console.log(JSON.stringify({ bracket }))
+    console.log(JSON.stringify({ vals }))
   }
 
   return (
@@ -75,13 +75,6 @@ const TourmanentBuilder = (): JSX.Element => {
               {night.matches.map(({ wrestler1, wrestler2 }) => (
                 <div key={`${wrestler1}${wrestler2}`} className="p-1">{`${wrestler1} vs ${wrestler2}`}</div>
               ))}
-            </div>
-          ))}
-          <h2>Bracket</h2>
-          {bracket?.bracketMatches.map((match) => (
-            <div key={`${match.matchNumber}`}>
-              <p>{`${match.round} round match ${match.matchNumber}`}</p>
-              <p>{`${match.wrestler1} - ${match.wrestler2}`}</p>
             </div>
           ))}
         </div>

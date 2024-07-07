@@ -28,9 +28,9 @@ export interface NightValues {
   nights: Night[]
 }
 
-export interface Option {
-  value: string
+export interface Option<Type> {
   label: string
+  value: Type
 }
 
 export interface RoundMatch {
@@ -38,9 +38,15 @@ export interface RoundMatch {
   matchNumber: number
 }
 
+export interface BracketWrestler {
+  winnerOf?: number
+  blockIndex?: number
+  seedIndex?: number
+}
+
 export interface BracketMatch extends RoundMatch {
-  wrestler1: string
-  wrestler2: string
+  p1: BracketWrestler
+  p2: BracketWrestler
 }
 
 export interface BracketFormVals {

@@ -19,7 +19,15 @@ const getInitialVals = (format?: FormatValues): NightValues => {
 
 const getOptionsFromNights =
   ({ nights, participants }: { nights: Night[]; participants: ParticipantsFormVals }) =>
-  ({ nightIndex, matchIndex, blockName }: { nightIndex: number; matchIndex: number; blockName: string }): Option[] => {
+  ({
+    nightIndex,
+    matchIndex,
+    blockName,
+  }: {
+    nightIndex: number
+    matchIndex: number
+    blockName: string
+  }): Option<string>[] => {
     if (!nights.length || !blockName) {
       return []
     }
@@ -76,10 +84,10 @@ interface ParticipantsInputProps {
   nightIndex: number
   matchIndex: number
   control: Control<NightValues>
-  blockValues: Option[]
+  blockValues: Option<string>[]
   showRemove: boolean
   removeMatch: (index: number) => void
-  getOptionsForMatch: (vals: { nightIndex: number; matchIndex: number; blockName: string }) => Option[]
+  getOptionsForMatch: (vals: { nightIndex: number; matchIndex: number; blockName: string }) => Option<string>[]
   errors: FieldErrors<NightValues>
 }
 
@@ -142,7 +150,7 @@ interface NightSectionProps {
   night: FieldArrayWithId<NightValues, 'nights', 'id'>
   control: Control<NightValues>
   participants: ParticipantsFormVals
-  getOptionsForMatch: (vals: { nightIndex: number; matchIndex: number; blockName: string }) => Option[]
+  getOptionsForMatch: (vals: { nightIndex: number; matchIndex: number; blockName: string }) => Option<string>[]
   errors: FieldErrors<NightValues>
 }
 

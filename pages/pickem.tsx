@@ -10,6 +10,7 @@ import {
   Option,
 } from '../types'
 import { stringsToOptions, stringToOption } from '../utils'
+import Select from 'react-select'
 
 import { snowPrixSix } from '../test/__mocks__/tournaments'
 

@@ -2,8 +2,7 @@ import { useEffect } from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
 import ControlledSelect from '../../components/ControlledSelect'
 import { FormatValues, Forms } from '../../types'
-import { stringsToOptions, stringToOption } from '../../utils'
-import { Option, RoundMatch, BracketMatch, BracketFormVals } from '../../types'
+import { Option, RoundMatch, BracketMatch, BracketFormVals, BracketWrestler } from '../../types'
 
 interface BracketFormProps {
   format: FormatValues
@@ -36,14 +35,20 @@ const getInitialBracket = (format: FormatValues): BracketMatch[] => {
       { round: 'third', matchNumber: 7 }
     )
   }
-  return roundsAndMatches.map((partial) => ({ wrestler1: '', wrestler2: '', ...partial }))
+  return roundsAndMatches.map((partial) => ({ p1: {}, p2: {}, ...partial }))
 }
 
-const getOptionsByRound = (format: FormatValues): { first: Option[]; second: Option[]; third: Option[] } => {
+const getOptionsByRound = (
+  format: FormatValues
+): {
+  first: Option<BracketWrestler>[]
+  second: Option<BracketWrestler>[]
+  third: Option<BracketWrestler>[]
+} => {
   const { numberAdvancing, numberOfBlocks, blockNames } = format
   if (numberAdvancing === '2') {
     return {
-      first: blockNames.map((block) => stringToOption(block.name)),
+      first: blockNames.map((block, i) => ({ label: block.name, value: { blockIndex: i, seedIndex: 0 } })),
       second: [],
       third: [],
     }
@@ -51,36 +56,63 @@ const getOptionsByRound = (format: FormatValues): { first: Option[]; second: Opt
   if (numberAdvancing === '4') {
     const first =
       numberOfBlocks === '4'
-        ? blockNames.map((block) => stringToOption(block.name))
-        : blockNames.reduce<Option[]>((acc, block) => {
-            const blockSeeds = [1, 2].map((seed) => stringToOption(`${block.name} Seed: ${seed}`))
+        ? blockNames.map((block, blockIndex) => ({ label: block.name, value: { blockIndex, seedIndex: 0 } }))
+        : blockNames.reduce<Option<BracketWrestler>[]>((acc, block, blockIndex) => {
+            const blockSeeds = [0, 1].map((seed) => ({
+              label: `${block.name} Seed: ${seed + 1}`,
+              value: { blockIndex, seedIndex: seed },
+            }))
             return acc.concat(blockSeeds)
           }, [])
-    const second = stringsToOptions(['Winner of Match 1', 'Winner of Match 2'])
+    const second = [
+      { label: 'Winner of Match 1', value: { winnerOf: 1 } },
+      { label: 'Winner of Match 2', value: { winnerOf: 2 } },
+    ]
     return { first, second, third: [] }
   }
   if (numberAdvancing === '6') {
-    const r1Seeds = [2, 3]
-    const first = blockNames.reduce<Option[]>((acc, block) => {
-      const blockSeeds = r1Seeds.map((seed) => stringToOption(`${block.name} Seed: ${seed}`))
+    const r1Seeds = [1, 2]
+    const first = blockNames.reduce((acc, block, blockIndex) => {
+      const blockSeeds = r1Seeds.map((seed) => ({
+        label: `${block.name} Seed: ${seed + 1}`,
+        value: { blockIndex, seedIndex: seed },
+      }))
       return acc.concat(blockSeeds)
     }, [])
-    const topSeeds = blockNames.map((block) => stringToOption(`${block.name} Seed: 1`))
-    const r1Winners = stringsToOptions(['Winner of Match 1', 'Winner of Match 2'])
+    const topSeeds: Option<BracketWrestler>[] = blockNames.map((block, blockIndex) => ({
+      label: `${block.name} Seed: 1`,
+      value: { blockIndex, seedIndex: 0 },
+    }))
+    const r1Winners = [
+      { label: 'Winner of Match 1', value: { winnerOf: 1 } },
+      { label: 'Winner of Match 2', value: { winnerOf: 2 } },
+    ]
     const second = topSeeds.concat(r1Winners)
-    const third = stringsToOptions(['Winner of Match 3', 'Winner of Match 4'])
+    const third = [
+      { label: 'Winner of Match 3', value: { winnerOf: 3 } },
+      { label: 'Winner of Match 4', value: { winnerOf: 4 } },
+    ]
     return { first, second, third }
   }
   if (numberAdvancing === '8') {
     const seeds = [1, 2]
-    const first = blockNames.reduce<Option[]>((acc, block) => {
-      const blockSeeds = seeds.map((seed) => stringToOption(`${block.name} Seed: ${seed}`))
+    const first = blockNames.reduce<Option<BracketWrestler>[]>((acc, block, blockIndex) => {
+      const blockSeeds = seeds.map((seed) => ({
+        label: `${block.name} Seed: ${seed + 1}`,
+        value: { blockIndex, seedIndex: seed },
+      }))
       return acc.concat(blockSeeds)
     }, [])
     const firstRoundMatches = [1, 2, 3, 4]
-    const second = firstRoundMatches.map((matchNumber) => stringToOption(`Winner of Match ${matchNumber}`))
+    const second = firstRoundMatches.map((matchNumber) => ({
+      label: `Winner of Match ${matchNumber}`,
+      value: { winnerOf: matchNumber },
+    }))
     const secondRoundMatches = [5, 6]
-    const third = secondRoundMatches.map((matchNumber) => stringToOption(`Winner of Match ${matchNumber}`))
+    const third = secondRoundMatches.map((matchNumber) => ({
+      label: `Winner of Match ${matchNumber}`,
+      value: { winnerOf: matchNumber },
+    }))
     return { first, second, third }
   }
   return { first: [], second: [], third: [] }
@@ -108,18 +140,18 @@ const BracketForm = ({ format, activeForm, saveBracket }: BracketFormProps) => {
             <div key={f.id}>
               <p>{`${f.round} round match #${f.matchNumber}`}</p>
               <ControlledSelect
-                name={`bracketMatches[${i}].wrestler1`}
+                name={`bracketMatches[${i}].p1`}
                 control={control}
                 options={optionsByRound[f.round]}
                 required
-                errorMessage={errors.bracketMatches?.[i]?.wrestler1?.message}
+                errorMessage={errors.bracketMatches?.[i]?.p1?.message}
               />
               <ControlledSelect
-                name={`bracketMatches[${i}].wrestler2`}
+                name={`bracketMatches[${i}].p2`}
                 control={control}
                 options={optionsByRound[f.round]}
                 required
-                errorMessage={errors.bracketMatches?.[i]?.wrestler2?.message}
+                errorMessage={errors.bracketMatches?.[i]?.p2?.message}
               />
             </div>
           )

@@ -59,7 +59,7 @@ export const snowPrix = {
       },
     ],
   },
-  bracket: { bracketMatches: [{ wrestler1: 'A block', wrestler2: 'B block', round: 'first', matchNumber: 1 }] },
+  bracket: { bracketMatches: [{ p1: { blockIndex: 0, seedIndex: 0 }, p2: { blockIndex: 1, seedIndex: 0 } }] },
 }
 
 const sixFormat = {
@@ -73,11 +73,11 @@ const sixFormat = {
 
 const sixBracket = {
   bracketMatches: [
-    { wrestler1: 'A block Seed: 2', wrestler2: 'A block Seed: 3', round: 'first', matchNumber: 1 },
-    { wrestler1: 'B block Seed: 2', wrestler2: 'B block Seed: 3', round: 'first', matchNumber: 2 },
-    { wrestler1: 'A block Seed: 1', wrestler2: 'Winner of Match 1', round: 'second', matchNumber: 3 },
-    { wrestler1: 'Winner of Match 2', wrestler2: 'B block Seed: 1', round: 'second', matchNumber: 4 },
-    { wrestler1: 'Winner of Match 3', wrestler2: 'Winner of Match 4', round: 'third', matchNumber: 5 },
+    { p1: { blockIndex: 0, seedIndex: 1 }, p2: { blockIndex: 0, seedIndex: 2 }, round: 'first', matchNumber: 1 },
+    { p1: { blockIndex: 1, seedIndex: 1 }, p2: { blockIndex: 1, seedIndex: 2 }, round: 'first', matchNumber: 2 },
+    { p1: { blockIndex: 0, seedIndex: 0 }, p2: { winnerOf: 1 }, round: 'second', matchNumber: 3 },
+    { p1: { blockIndex: 1, seedIndex: 0 }, p2: { winnerOf: 2 }, round: 'second', matchNumber: 4 },
+    { p1: { winnerOf: 3 }, p2: { winnerOf: 4 }, round: 'third', matchNumber: 5 },
   ],
 }
 
