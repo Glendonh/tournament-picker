@@ -8,9 +8,10 @@ import {
   FormatValues,
   ParticipantsFormVals,
   Option,
+  BracketWrestler,
+  Seed,
 } from '../types'
 import { stringsToOptions, stringToOption } from '../utils'
-import Select from 'react-select'
 
 import { snowPrixSix } from '../test/__mocks__/tournaments'
 
@@ -28,10 +29,10 @@ const getInitalVals = (tournament: CompleteTournament): PickemFormVals => {
   const nights = tournament.schedule.nights.map((n) => {
     return { matches: n.matches.map(() => ({ winner: '' })) }
   })
-  const bracket = tournament.bracket.bracketMatches.map(() => ({ winner: '' }))
+  const bracket = tournament.bracket.bracketMatches.map((m, i) => ({ winner: '', matchNumber: i + 1 }))
   const lowestSeed = getLowestSeed(tournament.format)
   const seeds = tournament.format.blockNames.map((block) => {
-    return { blockName: block.name, seeds: Array(lowestSeed).fill('') }
+    return { blockName: block.name, seeds: Array(lowestSeed).fill({ name: '' }) }
   })
   return { nights, bracket, seeds }
 }
@@ -74,7 +75,7 @@ const NightMatches = ({ control, nightIndex, schedule }: NightMatchesProps) => {
 interface SeedsSectionProps {
   control: Control<PickemFormVals>
   participants: ParticipantsFormVals
-  currentSeeds: { blockName: string; seeds: string[] }[]
+  currentSeeds: Seed[]
 }
 
 const getAvailableBlockOptions = ({
@@ -82,12 +83,12 @@ const getAvailableBlockOptions = ({
   blockIndex,
   currentSeeds,
 }: {
-  currentSeeds: { blockName: string; seeds: string[] }[]
+  currentSeeds: Seed[]
   blockIndex: number
   participants: ParticipantsFormVals
-}): Option[] => {
-  const selectedBlockParticipants = currentSeeds[blockIndex].seeds
-  return participants.allParticipants[blockIndex].blockParticipants.reduce<Option[]>((acc, participant) => {
+}): Option<string>[] => {
+  const selectedBlockParticipants = currentSeeds[blockIndex].seeds.map((p) => p.name)
+  return participants.allParticipants[blockIndex].blockParticipants.reduce<Option<string>[]>((acc, participant) => {
     if (selectedBlockParticipants.includes(participant.name)) {
       return acc
     }
@@ -99,7 +100,6 @@ const SeedsSection = ({ control, participants, currentSeeds }: SeedsSectionProps
   return (
     <>
       {participants.allParticipants.map((block, bIndex) => {
-        // @ts-expect-error not sure why it doesn't like the name of this fieldArray
         const { fields } = useFieldArray({ control, name: `seeds.${bIndex}.seeds` })
         return (
           <div key={block.blockName}>
@@ -110,7 +110,7 @@ const SeedsSection = ({ control, participants, currentSeeds }: SeedsSectionProps
                 <ControlledSelect
                   control={control}
                   options={getAvailableBlockOptions({ currentSeeds, blockIndex: bIndex, participants })}
-                  name={`seeds.${bIndex}.seeds.${sIndex}`}
+                  name={`seeds.${bIndex}.seeds.${sIndex}.name`}
                 />
               </div>
             ))}
@@ -125,11 +125,11 @@ interface BracketSectionProps {
   control: Control<PickemFormVals>
   bracket: BracketFormVals
   picks: { winner: string }[]
-  lowestSeed: number
+  matchDetails: { label: string; options: any[] }[]
 }
 
 // Bracket logic is slightly more complicated than I had anticipated and will need to be adjusted a little
-const BracketSection = ({ control, bracket }: BracketSectionProps) => {
+const BracketSection = ({ control, bracket, matchDetails }: BracketSectionProps) => {
   const { fields } = useFieldArray({ control, name: 'bracket' })
   return (
     <div>
@@ -138,11 +138,11 @@ const BracketSection = ({ control, bracket }: BracketSectionProps) => {
         return (
           <div key={field.id}>
             <p>{`${bracketMatch.round} round match# ${bracketMatch.matchNumber}`}</p>
-            <label>{`${bracketMatch.wrestler1} vs ${bracketMatch.wrestler2}`}</label>
+            <label>{matchDetails[index].label}</label>
             <ControlledSelect
               control={control}
               name={`bracket.${index}.winner`}
-              options={stringsToOptions([bracketMatch.wrestler1, bracketMatch.wrestler2])}
+              options={matchDetails[index].options}
             />
           </div>
         )
@@ -151,19 +151,44 @@ const BracketSection = ({ control, bracket }: BracketSectionProps) => {
   )
 }
 
-const getOptionsForMatches = ({
+const getWrestlerLabel = (wrestler: BracketWrestler, seeds: Seed[]): string => {
+  const { winnerOf, blockIndex, seedIndex } = wrestler
+  if (winnerOf) {
+    return `Winner of match #${winnerOf}`
+  }
+  if (!isNaN(blockIndex) && !isNaN(seedIndex)) {
+    const block = seeds[blockIndex]
+    return `${block.blockName} ${seedIndex + 1} seed`
+  }
+}
+
+// TODO: Prevent blank options
+const getBracketMatchDetails = ({
   seeds,
   bracketPicks,
   bracket,
 }: {
-  seeds: { blockName: string; seeds: string[] }[]
-  bracketPicks: { winner: string }[]
+  seeds: Seed[]
+  bracketPicks: { winner: string; matchNumber: number }[]
   bracket: BracketFormVals
 }) => {
-  console.log({ seeds, bracketPicks, bracket })
-  // This is making me rethink some of the basic structure of how I'm doing this
-  // I can reverser engineer everything I need out of the data I have,
-  // but it would be garbage, more or less
+  const rVal = bracket.bracketMatches.map((match) => {
+    const { p1, p2 } = match
+    const p1Label = getWrestlerLabel(p1, seeds)
+    const p2Label = getWrestlerLabel(p2, seeds)
+    const label = `${p1Label} vs ${p2Label}`
+    const options = [p1, p2].map((wrestler) => {
+      const { winnerOf, blockIndex, seedIndex } = wrestler
+      if (winnerOf) {
+        return stringToOption(bracketPicks.find((m) => m.matchNumber === winnerOf).winner)
+      }
+      if (!isNaN(blockIndex) && !isNaN(seedIndex)) {
+        return stringToOption(seeds[blockIndex].seeds[seedIndex].name)
+      }
+    })
+    return { label, options }
+  })
+  return rVal
 }
 
 const PickEmPage = () => {
@@ -172,8 +197,7 @@ const PickEmPage = () => {
   const { control, watch } = useForm<PickemFormVals>({ defaultValues: getInitalVals(activeTournament) })
   const bracketPicks = watch('bracket')
   const currentSeeds = watch('seeds')
-  const lowestSeed = getLowestSeed(activeTournament.format)
-  getOptionsForMatches({ seeds: currentSeeds, bracketPicks, bracket: activeTournament.bracket })
+  const matchDetails = getBracketMatchDetails({ seeds: currentSeeds, bracketPicks, bracket: activeTournament.bracket })
   return (
     <div className="container mx-3 mb-4">
       <form>
@@ -188,7 +212,7 @@ const PickEmPage = () => {
           control={control}
           bracket={activeTournament.bracket}
           picks={bracketPicks}
-          lowestSeed={lowestSeed}
+          matchDetails={matchDetails}
         />
       </form>
     </div>

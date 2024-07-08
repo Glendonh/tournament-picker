@@ -60,8 +60,13 @@ export interface CompleteTournament {
   bracket: BracketFormVals
 }
 
+export interface Seed {
+  blockName: string
+  seeds: { name: string }[]
+}
+
 export interface PickemFormVals {
-  nights: { matches: { winner: string }[] }[]
-  seeds: { blockName: string; seeds: string[] }[]
+  nights: { matches: { winner: string; matchNumber: number }[] }[]
+  seeds: Seed[]
   bracket: { winner: string }[]
 }
