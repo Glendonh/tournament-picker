@@ -66,7 +66,7 @@ export interface Seed {
 }
 
 export interface PickemFormVals {
-  nights: { matches: { winner: string; matchNumber: number }[] }[]
+  nights: { matches: { winner: string }[] }[]
   seeds: Seed[]
-  bracket: { winner: string }[]
+  bracket: { winner: string; matchNumber: number }[]
 }

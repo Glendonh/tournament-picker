@@ -151,15 +151,25 @@ const BracketSection = ({ control, bracket, matchDetails }: BracketSectionProps)
   )
 }
 
-const getWrestlerLabel = (wrestler: BracketWrestler, seeds: Seed[]): string => {
+const getWrestlerLabel = ({
+  wrestler,
+  seeds,
+  bracketPicks,
+}: {
+  wrestler: BracketWrestler
+  seeds: Seed[]
+  bracketPicks: { winner: string; matchNumber: number }[]
+}): string => {
   const { winnerOf, blockIndex, seedIndex } = wrestler
   if (winnerOf) {
-    return `Winner of match #${winnerOf}`
+    const selectedWinner = bracketPicks.find((m) => m.matchNumber === winnerOf)?.winner
+    return selectedWinner || `Winner of match #${winnerOf}`
   }
   if (!isNaN(blockIndex) && !isNaN(seedIndex)) {
-    const block = seeds[blockIndex]
-    return `${block.blockName} ${seedIndex + 1} seed`
+    const selectedSeed = seeds[blockIndex].seeds[seedIndex]?.name
+    return selectedSeed || `${seeds[blockIndex].blockName} ${seedIndex + 1} seed`
   }
+  return ''
 }
 
 // TODO: Prevent blank options
@@ -174,18 +184,10 @@ const getBracketMatchDetails = ({
 }) => {
   const rVal = bracket.bracketMatches.map((match) => {
     const { p1, p2 } = match
-    const p1Label = getWrestlerLabel(p1, seeds)
-    const p2Label = getWrestlerLabel(p2, seeds)
+    const p1Label = getWrestlerLabel({ wrestler: p1, seeds, bracketPicks })
+    const p2Label = getWrestlerLabel({ wrestler: p2, seeds, bracketPicks })
     const label = `${p1Label} vs ${p2Label}`
-    const options = [p1, p2].map((wrestler) => {
-      const { winnerOf, blockIndex, seedIndex } = wrestler
-      if (winnerOf) {
-        return stringToOption(bracketPicks.find((m) => m.matchNumber === winnerOf).winner)
-      }
-      if (!isNaN(blockIndex) && !isNaN(seedIndex)) {
-        return stringToOption(seeds[blockIndex].seeds[seedIndex].name)
-      }
-    })
+    const options = stringsToOptions([p1Label, p2Label])
     return { label, options }
   })
   return rVal
