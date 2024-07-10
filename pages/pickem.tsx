@@ -1,5 +1,6 @@
 import { useForm, useFieldArray, Control } from 'react-hook-form'
 import ControlledSelect from '../components/ControlledSelect'
+import PickerButtons from '../components/PickerButtons'
 import {
   PickemFormVals,
   CompleteTournament,
@@ -13,7 +14,7 @@ import {
 } from '../types'
 import { stringsToOptions, stringToOption } from '../utils'
 
-import { snowPrix } from '../test/__mocks__/tournaments'
+import { snowPrixSix } from '../test/__mocks__/tournaments'
 
 const getLowestSeed = (format: FormatValues): number => {
   const { numberAdvancing, numberOfBlocks } = format
@@ -56,12 +57,17 @@ const getRoundRobinMatchOptions = (schedule: NightValues, nightIndex: number, ma
 const NightMatches = ({ control, nightIndex, schedule }: NightMatchesProps) => {
   const { fields } = useFieldArray({ control, name: `nights.${nightIndex}.matches` })
   return (
-    <div className="ml-2">
+    <div className="ml-4">
       {fields.map((match, mIndex) => (
-        <div key={match.id}>
+        <div className="max-w-md" key={match.id}>
           <p>{`Match ${mIndex + 1}`}</p>
           <label>{getMatchLabel(schedule, nightIndex, mIndex)}</label>
-          <ControlledSelect
+          {/* <ControlledSelect
+            control={control}
+            name={`nights.${nightIndex}.matches.${mIndex}.winner`}
+            options={getRoundRobinMatchOptions(schedule, nightIndex, mIndex)}
+          /> */}
+          <PickerButtons
             control={control}
             name={`nights.${nightIndex}.matches.${mIndex}.winner`}
             options={getRoundRobinMatchOptions(schedule, nightIndex, mIndex)}
@@ -139,11 +145,7 @@ const BracketSection = ({ control, bracket, matchDetails }: BracketSectionProps)
           <div key={field.id}>
             <p>{`${bracketMatch.round} round match# ${bracketMatch.matchNumber}`}</p>
             <label>{matchDetails[index].label}</label>
-            <ControlledSelect
-              control={control}
-              name={`bracket.${index}.winner`}
-              options={matchDetails[index].options}
-            />
+            <PickerButtons control={control} name={`bracket.${index}.winner`} options={matchDetails[index].options} />
           </div>
         )
       })}
@@ -182,7 +184,7 @@ const getBracketMatchDetails = ({
   bracketPicks: { winner: string; matchNumber: number }[]
   bracket: BracketFormVals
 }) => {
-  const rVal = bracket.bracketMatches.map((match) => {
+  return bracket.bracketMatches.map((match) => {
     const { p1, p2 } = match
     const p1Label = getWrestlerLabel({ wrestler: p1, seeds, bracketPicks })
     const p2Label = getWrestlerLabel({ wrestler: p2, seeds, bracketPicks })
@@ -190,12 +192,11 @@ const getBracketMatchDetails = ({
     const options = stringsToOptions([p1Label, p2Label])
     return { label, options }
   })
-  return rVal
 }
 
 const PickEmPage = () => {
   // Placeholder until fetching logic is decided
-  const activeTournament = snowPrix
+  const activeTournament = snowPrixSix
   const { control, watch } = useForm<PickemFormVals>({ defaultValues: getInitalVals(activeTournament) })
   const bracketPicks = watch('bracket')
   const currentSeeds = watch('seeds')
@@ -205,7 +206,7 @@ const PickEmPage = () => {
       <form>
         {activeTournament.schedule.nights.map((night, nIndex) => (
           <div key={`night${nIndex + 1}`}>
-            <p>{`Night ${nIndex + 1}`}</p>
+            <p className="text-lg">{`Night ${nIndex + 1}`}</p>
             <NightMatches control={control} nightIndex={nIndex} schedule={activeTournament.schedule} />
           </div>
         ))}
