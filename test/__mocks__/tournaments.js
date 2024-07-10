@@ -59,7 +59,11 @@ export const snowPrix = {
       },
     ],
   },
-  bracket: { bracketMatches: [{ p1: { blockIndex: 0, seedIndex: 0 }, p2: { blockIndex: 1, seedIndex: 0 } }] },
+  bracket: {
+    bracketMatches: [
+      { p1: { blockIndex: 0, seedIndex: 0 }, p2: { blockIndex: 1, seedIndex: 0 }, round: 'first', matchNumber: 1 },
+    ],
+  },
 }
 
 const sixFormat = {

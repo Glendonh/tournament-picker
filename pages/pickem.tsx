@@ -13,7 +13,7 @@ import {
 } from '../types'
 import { stringsToOptions, stringToOption } from '../utils'
 
-import { snowPrixSix } from '../test/__mocks__/tournaments'
+import { snowPrix } from '../test/__mocks__/tournaments'
 
 const getLowestSeed = (format: FormatValues): number => {
   const { numberAdvancing, numberOfBlocks } = format
@@ -195,7 +195,7 @@ const getBracketMatchDetails = ({
 
 const PickEmPage = () => {
   // Placeholder until fetching logic is decided
-  const activeTournament = snowPrixSix
+  const activeTournament = snowPrix
   const { control, watch } = useForm<PickemFormVals>({ defaultValues: getInitalVals(activeTournament) })
   const bracketPicks = watch('bracket')
   const currentSeeds = watch('seeds')
