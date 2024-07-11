@@ -1,6 +1,6 @@
 import { useForm, useFieldArray, Control } from 'react-hook-form'
-import ControlledSelect from '../components/ControlledSelect'
-import PickerButtons from '../components/PickerButtons'
+import ControlledSelect from '../components/inputs/ControlledSelect'
+import PickerButtons from '../components/inputs/PickerButtons'
 import {
   PickemFormVals,
   CompleteTournament,

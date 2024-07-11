@@ -20,7 +20,7 @@ const PickerButtons = ({ control, name, options, required, errorMessage }: Picke
         defaultValue=""
         rules={{ required: required ? 'Required' : false }}
         render={({ field: { onChange, value } }) => (
-          <div>
+          <div role="radiogroup">
             {options.map((opt) => {
               const bgActive = value === opt.value ? 'bg-emerald-800 text-white' : 'border-black'
               return (
@@ -29,6 +29,7 @@ const PickerButtons = ({ control, name, options, required, errorMessage }: Picke
                   key={opt.label}
                   className={`p-2 border rounded-md mr-1 ${bgActive}`}
                   onClick={() => onChange(opt.value)}
+                  role="radio"
                 >
                   {opt.label}
                 </button>

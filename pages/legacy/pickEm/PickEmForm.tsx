@@ -1,5 +1,5 @@
 import { useForm, useWatch } from 'react-hook-form'
-import ControlledSelect from '../../../components/ControlledSelect'
+import ControlledSelect from '../../../components/inputs/ControlledSelect'
 import { exampleTournament } from '../../../utils'
 import { Tournament } from '../../../constants'
 
