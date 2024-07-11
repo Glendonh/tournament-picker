@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import FormatForm from './FormatForm'
-import ParticipantsForm from './ParticipantsForm'
-import ScheduleForm from './ScheduleForm'
-import BracketForm from './BracketForm'
+import FormatForm from '../../components/tournamentBuilder/FormatForm'
+import ParticipantsForm from '../../components/tournamentBuilder/ParticipantsForm'
+import ScheduleForm from '../../components/tournamentBuilder/ScheduleForm'
+import BracketForm from '../../components/tournamentBuilder/BracketForm'
 import { FormatValues, ParticipantsFormVals, NightValues, Forms, BracketFormVals } from '../../types'
 
 const TourmanentBuilder = (): JSX.Element => {

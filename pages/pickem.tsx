@@ -62,11 +62,6 @@ const NightMatches = ({ control, nightIndex, schedule }: NightMatchesProps) => {
         <div className="max-w-md" key={match.id}>
           <p>{`Match ${mIndex + 1}`}</p>
           <label>{getMatchLabel(schedule, nightIndex, mIndex)}</label>
-          {/* <ControlledSelect
-            control={control}
-            name={`nights.${nightIndex}.matches.${mIndex}.winner`}
-            options={getRoundRobinMatchOptions(schedule, nightIndex, mIndex)}
-          /> */}
           <PickerButtons
             control={control}
             name={`nights.${nightIndex}.matches.${mIndex}.winner`}
@@ -104,26 +99,29 @@ const getAvailableBlockOptions = ({
 
 const SeedsSection = ({ control, participants, currentSeeds }: SeedsSectionProps) => {
   return (
-    <>
-      {participants.allParticipants.map((block, bIndex) => {
-        const { fields } = useFieldArray({ control, name: `seeds.${bIndex}.seeds` })
-        return (
-          <div key={block.blockName}>
-            <p>{block.blockName}</p>
-            {fields.map((seed, sIndex) => (
-              <div key={seed.id}>
-                <label htmlFor={`seeds.${bIndex}.seeds.${sIndex}`}>{`${block.blockName} #${sIndex + 1}`}</label>
-                <ControlledSelect
-                  control={control}
-                  options={getAvailableBlockOptions({ currentSeeds, blockIndex: bIndex, participants })}
-                  name={`seeds.${bIndex}.seeds.${sIndex}.name`}
-                />
-              </div>
-            ))}
-          </div>
-        )
-      })}
-    </>
+    <div className="border-t border-b pb-4 mt-2">
+      <p className="text-lg">Seeds</p>
+      <div className="flex md:flex-row flex-col">
+        {participants.allParticipants.map((block, bIndex) => {
+          const { fields } = useFieldArray({ control, name: `seeds.${bIndex}.seeds` })
+          return (
+            <div key={block.blockName} className="md:w-1/4 w-full px-6">
+              <p>{block.blockName}</p>
+              {fields.map((seed, sIndex) => (
+                <div key={seed.id}>
+                  <label htmlFor={`seeds.${bIndex}.seeds.${sIndex}`}>{`${block.blockName} #${sIndex + 1}`}</label>
+                  <ControlledSelect
+                    control={control}
+                    options={getAvailableBlockOptions({ currentSeeds, blockIndex: bIndex, participants })}
+                    name={`seeds.${bIndex}.seeds.${sIndex}.name`}
+                  />
+                </div>
+              ))}
+            </div>
+          )
+        })}
+      </div>
+    </div>
   )
 }
 

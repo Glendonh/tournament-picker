@@ -15,7 +15,7 @@ export const snowPrix = {
       },
       {
         blockName: 'B block',
-        blockParticipants: [{ name: 'dopey' }, { name: 'grumpy' }, { name: 'doc' }, { name: 'snow white' }],
+        blockParticipants: [{ name: 'dopey' }, { name: 'grumpy' }, { name: 'doc' }, { name: '"Hangman" Adam Page' }],
       },
     ],
   },
@@ -30,7 +30,7 @@ export const snowPrix = {
       {
         matches: [
           { wrestler1: 'dopey', wrestler2: 'grumpy' },
-          { wrestler1: 'doc', wrestler2: 'snow white' },
+          { wrestler1: 'doc', wrestler2: '"Hangman" Adam Page' },
         ],
       },
       {
@@ -42,7 +42,7 @@ export const snowPrix = {
       {
         matches: [
           { wrestler1: 'dopey', wrestler2: 'doc' },
-          { wrestler1: 'grumpy', wrestler2: 'snow white' },
+          { wrestler1: 'grumpy', wrestler2: '"Hangman" Adam Page' },
         ],
       },
       {
@@ -53,7 +53,7 @@ export const snowPrix = {
       },
       {
         matches: [
-          { wrestler1: 'dopey', wrestler2: 'snow white' },
+          { wrestler1: 'dopey', wrestler2: '"Hangman" Adam Page' },
           { wrestler1: 'grumpy', wrestler2: 'doc' },
         ],
       },
