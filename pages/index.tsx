@@ -10,64 +10,23 @@ export const Home = (): JSX.Element => (
     </Head>
 
     <main>
-      <h1 className="title">
-        Welcome to <a href="https://nextjs.org">Next.js!</a>
-      </h1>
-      <p className="description">
-        Get started by editing <code>pages/index.tsx</code>
-      </p>
-      <button
-        onClick={() => {
-          window.alert('With typescript and Jest')
-        }}
-      >
-        Test Button
-      </button>
-      Functionality
-      <ul>
-        <li>{`Pick 'em form`}</li>
-        <li>Create/Manage Group</li>
-        <li>Track Group Results</li>
-      </ul>
-      <div className="grid">
-        <Link href="/tournamentBuilder">
-          <div className="card">
-            <h3>{`V2 Builder`} &rarr;</h3>
-            <p>For multiple formats</p>
-          </div>
-        </Link>
-        <Link href="/pickem">
-          <div className="card">
-            <h3>{`Pick 'em`} &rarr;</h3>
-            <p>Pickem Form</p>
-          </div>
-        </Link>
-        {/* <Link href="/legacy/tournamentBuilder">
-          <div className="card">
-            <h3>Legacy Build a Tournament &rarr;</h3>
-            <p>Form for putting together a G1 style tourney</p>
-          </div>
-        </Link>
-
-        <Link href="/legacy/pickEm">
-          <div className="card">
-            <h3>{`Legacy Pick 'em Form`} &rarr;</h3>
-            <p>For legacy tournament format</p>
-          </div>
-        </Link> */}
-
-        {/* <a href="https://github.com/vercel/next.js/tree/master/examples" className="card">
-          <h3>Examples &rarr;</h3>
-          <p>Discover and deploy boilerplate example Next.js projects.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          className="card"
-        >
-          <h3>Deploy &rarr;</h3>
-          <p>Instantly deploy your Next.js site to a public URL with Vercel.</p>
-        </a> */}
+      <h1 className="title">{`Glendon's Tournament Picker Thing`}</h1>
+      <h3 className="text-xl">Functionality</h3>
+      <div className="flex flex-row">
+        <div className="flex-col mr-6">
+          <p className="text-lg">User</p>
+          <Link href="/pickem" className="text-sky-600 underline">{`Pick 'em form`}</Link>
+          <p>Create/Manage Group</p>
+          <p>Track Group Results</p>
+        </div>
+        <div className="flex-col">
+          <p className="text-lg">Admin</p>
+          <Link href="/tournamentBuilder" className="text-sky-600 underline">
+            Design Tournament
+          </Link>
+          <p>Enter Results</p>
+          <p>General Admin</p>
+        </div>
       </div>
     </main>
 
