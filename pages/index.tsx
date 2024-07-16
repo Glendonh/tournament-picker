@@ -7,13 +7,14 @@ export const Home = (): JSX.Element => (
       <title>Tournament Thing</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
-
     <main>
       <h1 className="title text-3xl text-center">{`Glendon's Tournament Picker Thing`}</h1>
       <h3 className="text-xl text-center">Functionality</h3>
       <div className="flex flex-row justify-center">
         <div className="flex-col mr-6">
-          <p className="text-lg">User</p>
+          <Link href="/user">
+            <p className="text-lg text-sky-600 underline">User</p>
+          </Link>
           <Link href="/pickem" className="text-sky-600 underline">{`Pick 'em form`}</Link>
           <p>Create/Manage Group</p>
           <p>Track Group Results</p>
