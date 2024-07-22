@@ -4,7 +4,7 @@ import PickerButtons from '../components/inputs/PickerButtons'
 import {
   PickemFormVals,
   CompleteTournament,
-  NightValues,
+  ScheduleValues,
   BracketFormVals,
   FormatValues,
   ParticipantsFormVals,
@@ -12,7 +12,7 @@ import {
   BracketWrestler,
   Seed,
 } from '../types'
-import { stringsToOptions, stringToOption } from '../utils'
+import { generateStringOptions, stringToOption } from '../utils'
 
 import { snowPrixSix } from '../test/__mocks__/tournaments'
 
@@ -41,17 +41,17 @@ const getInitalVals = (tournament: CompleteTournament): PickemFormVals => {
 interface NightMatchesProps {
   control: Control<PickemFormVals>
   nightIndex: number
-  schedule: NightValues
+  schedule: ScheduleValues
 }
 
-const getMatchLabel = (schedule: NightValues, nightIndex: number, matchIndex: number): string => {
+const getMatchLabel = (schedule: ScheduleValues, nightIndex: number, matchIndex: number): string => {
   const match = schedule.nights[nightIndex].matches[matchIndex]
   return `${match.wrestler1} vs ${match.wrestler2}`
 }
 
-const getRoundRobinMatchOptions = (schedule: NightValues, nightIndex: number, matchIndex: number) => {
+const getRoundRobinMatchOptions = (schedule: ScheduleValues, nightIndex: number, matchIndex: number) => {
   const { wrestler1, wrestler2 } = schedule.nights[nightIndex].matches[matchIndex]
-  return stringsToOptions([wrestler1, wrestler2, 'draw'])
+  return generateStringOptions([wrestler1, wrestler2, 'draw'])
 }
 
 const NightMatches = ({ control, nightIndex, schedule }: NightMatchesProps) => {
@@ -187,7 +187,7 @@ const getBracketMatchDetails = ({
     const p1Label = getWrestlerLabel({ wrestler: p1, seeds, bracketPicks })
     const p2Label = getWrestlerLabel({ wrestler: p2, seeds, bracketPicks })
     const label = `${p1Label} vs ${p2Label}`
-    const options = stringsToOptions([p1Label, p2Label])
+    const options = generateStringOptions([p1Label, p2Label])
     return { label, options }
   })
 }

@@ -24,7 +24,7 @@ export interface Night {
   matches: { wrestler1: string; wrestler2: string }[]
 }
 
-export interface NightValues {
+export interface ScheduleValues {
   nights: Night[]
 }
 
@@ -56,7 +56,7 @@ export interface BracketFormVals {
 export interface CompleteTournament {
   format: FormatValues
   participants: ParticipantsFormVals
-  schedule: NightValues
+  schedule: ScheduleValues
   bracket: BracketFormVals
 }
 

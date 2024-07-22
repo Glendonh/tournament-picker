@@ -2,9 +2,9 @@ import { useEffect } from 'react'
 import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import ControlledSelect from '../inputs/ControlledSelect'
 import { FormatValues, Forms } from '../../types'
-import { generateNumberOptions, matchesPerBlock, stringsToOptions } from '../../utils'
+import { generateNumberOptions, matchesPerBlock, generateStringOptions } from '../../utils'
 
-const numberOfBlocksOptions = stringsToOptions(['2', '4'])
+const numberOfBlocksOptions = generateStringOptions(['2', '4'])
 
 interface Props {
   activeForm: Forms
@@ -94,7 +94,9 @@ const FormatForm = ({ activeForm, saveFormat, currentFormat }: Props) => {
               name="numberAdvancing"
               required
               control={control}
-              options={currentBlockQty === '4' ? stringsToOptions(['4', '8']) : stringsToOptions(['2', '4', '6'])}
+              options={
+                currentBlockQty === '4' ? generateStringOptions(['4', '8']) : generateStringOptions(['2', '4', '6'])
+              }
               errorMessage={errors.numberAdvancing?.message}
             />
           </>

@@ -2,17 +2,17 @@ import { useForm, useFieldArray, Control, FieldArrayWithId, FieldErrors } from '
 import { useEffect, useState } from 'react'
 import Select from 'react-select'
 import ControlledSelect from '../inputs/ControlledSelect'
-import { Forms, ParticipantsFormVals, FormatValues, NightValues, Night, Option } from '../../types'
+import { Forms, ParticipantsFormVals, FormatValues, ScheduleValues, Night, Option } from '../../types'
 import { stringToOption } from '../../utils'
 
 interface ScheduleFormProps {
   activeForm: Forms
   participants: ParticipantsFormVals
   format: FormatValues
-  saveSchedule: (vals: NightValues) => void
+  saveSchedule: (vals: ScheduleValues) => void
 }
 
-const getInitialVals = (format?: FormatValues): NightValues => {
+const getInitialVals = (format?: FormatValues): ScheduleValues => {
   if (!format || !format.numberOfNights) return { nights: [] }
   return { nights: Array(Number(format.numberOfNights)).fill({ matches: [{ wrestler1: '', wrestler2: '' }] }) }
 }
@@ -83,12 +83,12 @@ const getOptionsFromNights =
 interface ParticipantsInputProps {
   nightIndex: number
   matchIndex: number
-  control: Control<NightValues>
+  control: Control<ScheduleValues>
   blockValues: Option<string>[]
   showRemove: boolean
   removeMatch: (index: number) => void
   getOptionsForMatch: (vals: { nightIndex: number; matchIndex: number; blockName: string }) => Option<string>[]
-  errors: FieldErrors<NightValues>
+  errors: FieldErrors<ScheduleValues>
 }
 
 // TODO: should finish logic here to restrict to valid options
@@ -147,11 +147,11 @@ const ParticipantsInput = ({
 
 interface NightSectionProps {
   nightIndex: number
-  night: FieldArrayWithId<NightValues, 'nights', 'id'>
-  control: Control<NightValues>
+  night: FieldArrayWithId<ScheduleValues, 'nights', 'id'>
+  control: Control<ScheduleValues>
   participants: ParticipantsFormVals
   getOptionsForMatch: (vals: { nightIndex: number; matchIndex: number; blockName: string }) => Option<string>[]
-  errors: FieldErrors<NightValues>
+  errors: FieldErrors<ScheduleValues>
 }
 
 const NightSection = ({ nightIndex, control, participants, getOptionsForMatch, errors }: NightSectionProps) => {
@@ -190,7 +190,7 @@ const ScheduleForm = ({ activeForm, participants, format, saveSchedule }: Schedu
     control,
     watch,
     formState: { errors },
-  } = useForm<NightValues>({ defaultValues: getInitialVals(format) })
+  } = useForm<ScheduleValues>({ defaultValues: getInitialVals(format) })
   const { fields, replace } = useFieldArray({ control, name: 'nights' })
   const currentNights = watch('nights')
   const getOptionsForMatch = getOptionsFromNights({ nights: currentNights, participants })

@@ -3,13 +3,13 @@ import FormatForm from '../../components/tournamentBuilder/FormatForm'
 import ParticipantsForm from '../../components/tournamentBuilder/ParticipantsForm'
 import ScheduleForm from '../../components/tournamentBuilder/ScheduleForm'
 import BracketForm from '../../components/tournamentBuilder/BracketForm'
-import { FormatValues, ParticipantsFormVals, NightValues, Forms, BracketFormVals } from '../../types'
+import { FormatValues, ParticipantsFormVals, ScheduleValues, Forms, BracketFormVals } from '../../types'
 
 const TourmanentBuilder = (): JSX.Element => {
   const [activeForm, setActiveForm] = useState(Forms.Format)
   const [format, setFormat] = useState<FormatValues>()
   const [participants, setParticipants] = useState<ParticipantsFormVals>()
-  const [schedule, setSchedule] = useState<NightValues>()
+  const [schedule, setSchedule] = useState<ScheduleValues>()
   const [bracket, setBracket] = useState<BracketFormVals>()
   const setFormSection = (section: Forms) => () => {
     setActiveForm(section)
@@ -24,7 +24,7 @@ const TourmanentBuilder = (): JSX.Element => {
     setActiveForm(Forms.Schedule)
   }
 
-  const saveSchedule = (vals: NightValues) => {
+  const saveSchedule = (vals: ScheduleValues) => {
     setSchedule(vals)
     setActiveForm(Forms.Bracket)
   }

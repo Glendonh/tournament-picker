@@ -3,7 +3,7 @@ import { Option } from '../types'
 
 export const stringToOption = (str: string): Option<string> => ({ value: str, label: str })
 
-export const stringsToOptions = (strings: string[]): Option<string>[] => strings.map(stringToOption)
+export const generateStringOptions = (strings: string[]): Option<string>[] => strings.map(stringToOption)
 
 export const generateNumberOptions = (min: number, max: number): Option<string>[] => {
   if (!min || !max) return []
