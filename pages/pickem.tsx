@@ -1,4 +1,4 @@
-import { useForm, useFieldArray, Control } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { PickemFormVals, CompleteTournament, BracketFormVals, FormatValues, BracketWrestler, Seed } from '../types'
 import { generateStringOptions } from '../utils'
 import NightMatches from '../components/pickForms/NightMatches'
@@ -17,7 +17,7 @@ const getLowestSeed = (format: FormatValues): number => {
   if (numberAdvancing === '8') return 2
 }
 
-const getInitalVals = (tournament: CompleteTournament): PickemFormVals => {
+const getInitialVals = (tournament: CompleteTournament): PickemFormVals => {
   const nights = tournament.schedule.nights.map((n) => {
     return { matches: n.matches.map(() => ({ winner: '' })) }
   })
@@ -73,7 +73,7 @@ const getBracketMatchDetails = ({
 const PickEmPage = () => {
   // Placeholder until fetching logic is decided
   const activeTournament = snowPrixSix
-  const { control, watch } = useForm<PickemFormVals>({ defaultValues: getInitalVals(activeTournament) })
+  const { control, watch } = useForm<PickemFormVals>({ defaultValues: getInitialVals(activeTournament) })
   const bracketPicks = watch('bracket')
   const currentSeeds = watch('seeds')
   const matchDetails = getBracketMatchDetails({ seeds: currentSeeds, bracketPicks, bracket: activeTournament.bracket })

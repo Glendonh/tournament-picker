@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Collapse } from 'react-collapse'
-import { CompleteTournament } from '../types'
+import { useForm } from 'react-hook-form'
+import { CompleteTournament, ScheduleValues, PickemFormVals } from '../types'
+import NightMatches from '../components/pickForms/NightMatches'
 
 import { snowPrixSix } from '../test/__mocks__/tournaments'
 
@@ -17,17 +19,35 @@ const CollapseSection = ({ title, children }: { title: string; children: any }) 
   )
 }
 
+const getInitialVals = (schedule: ScheduleValues): PickemFormVals => {
+  const nights = schedule.nights.map((n) => {
+    return { matches: n.matches.map(() => ({ winner: '' })) }
+  })
+  return { nights, bracket: [], seeds: [] }
+}
+
 const TournamentDetails = () => {
-  const { format, participants, schedule, bracket } = snowPrixSix as CompleteTournament
+  const { format, participants, schedule } = snowPrixSix as CompleteTournament
   const [showEdit, setShowEdit] = useState(false)
   const toggleShowEdit = () => setShowEdit((s) => !s)
+  const { control } = useForm<PickemFormVals>({ defaultValues: getInitialVals(schedule) })
+
   return (
     <div className="container px-3">
-      <p className="text-xl text-center">{format.tournamentName}</p>
-      <button onClick={toggleShowEdit}>{showEdit ? 'Hide' : 'Show'}</button>
+      <p className="text-3xl text-center">{format.tournamentName}</p>
+      <button className="p-3 border border-black rounded-md" onClick={toggleShowEdit}>
+        {showEdit ? 'Hide' : 'Show'}
+      </button>
       {showEdit ? (
         <div>
           <p className="text-xl">Update Results</p>
+          {schedule.nights.map((n, nIndex) => (
+            <div key={nIndex} className="mb-2">
+              <CollapseSection title={`Night ${nIndex + 1}`}>
+                <NightMatches control={control} nightIndex={nIndex} schedule={schedule} />
+              </CollapseSection>
+            </div>
+          ))}
           <ul>
             <li>update results on a nightly basis</li>
             <li>update seeds and brackets after nights are complete</li>
@@ -37,19 +57,19 @@ const TournamentDetails = () => {
         </div>
       ) : (
         <div>
-          <p className="text-l text-center">Summary</p>
-          <p>Participants</p>
+          <p className="text-xl text-center">Summary</p>
+          <p className="text-xl">Participants</p>
           <div className="flex flex-row">
             {participants.allParticipants.map((block) => (
               <div key={block.blockName} className="mx-2">
-                <p className="text-l">{block.blockName}</p>
+                <p className="text-xl">{block.blockName}</p>
                 {block.blockParticipants.map((p) => (
                   <p key={p.name}>{p.name}</p>
                 ))}
               </div>
             ))}
           </div>
-          <p className="text-l">Schedule</p>
+          <p className="text-xl">Schedule</p>
           {schedule.nights.map((n, nIndex) => (
             <div key={nIndex} className="ml-2 mb-4">
               <CollapseSection title={`Night ${nIndex + 1}`}>
@@ -62,6 +82,10 @@ const TournamentDetails = () => {
               </CollapseSection>
             </div>
           ))}
+          <div>
+            <p className="text-xl">Bracket</p>
+            {`${format.numberAdvancing} wrestler bracket`}
+          </div>
         </div>
       )}
     </div>
