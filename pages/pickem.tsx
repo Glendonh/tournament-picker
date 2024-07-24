@@ -1,18 +1,9 @@
 import { useForm, useFieldArray, Control } from 'react-hook-form'
-import ControlledSelect from '../components/inputs/ControlledSelect'
-import PickerButtons from '../components/inputs/PickerButtons'
-import {
-  PickemFormVals,
-  CompleteTournament,
-  ScheduleValues,
-  BracketFormVals,
-  FormatValues,
-  ParticipantsFormVals,
-  Option,
-  BracketWrestler,
-  Seed,
-} from '../types'
-import { generateStringOptions, stringToOption } from '../utils'
+import { PickemFormVals, CompleteTournament, BracketFormVals, FormatValues, BracketWrestler, Seed } from '../types'
+import { generateStringOptions } from '../utils'
+import NightMatches from '../components/pickForms/NightMatches'
+import SeedsSection from '../components/pickForms/SeedsSection'
+import BracketSection from '../components/pickForms/BracketSection'
 
 import { snowPrixSix } from '../test/__mocks__/tournaments'
 
@@ -36,119 +27,6 @@ const getInitalVals = (tournament: CompleteTournament): PickemFormVals => {
     return { blockName: block.name, seeds: Array(lowestSeed).fill({ name: '' }) }
   })
   return { nights, bracket, seeds }
-}
-
-interface NightMatchesProps {
-  control: Control<PickemFormVals>
-  nightIndex: number
-  schedule: ScheduleValues
-}
-
-const getMatchLabel = (schedule: ScheduleValues, nightIndex: number, matchIndex: number): string => {
-  const match = schedule.nights[nightIndex].matches[matchIndex]
-  return `${match.wrestler1} vs ${match.wrestler2}`
-}
-
-const getRoundRobinMatchOptions = (schedule: ScheduleValues, nightIndex: number, matchIndex: number) => {
-  const { wrestler1, wrestler2 } = schedule.nights[nightIndex].matches[matchIndex]
-  return generateStringOptions([wrestler1, wrestler2, 'draw'])
-}
-
-const NightMatches = ({ control, nightIndex, schedule }: NightMatchesProps) => {
-  const { fields } = useFieldArray({ control, name: `nights.${nightIndex}.matches` })
-  return (
-    <div className="ml-4">
-      {fields.map((match, mIndex) => (
-        <div className="max-w-md" key={match.id}>
-          <p>{`Match ${mIndex + 1}`}</p>
-          <label>{getMatchLabel(schedule, nightIndex, mIndex)}</label>
-          <PickerButtons
-            control={control}
-            name={`nights.${nightIndex}.matches.${mIndex}.winner`}
-            options={getRoundRobinMatchOptions(schedule, nightIndex, mIndex)}
-          />
-        </div>
-      ))}
-    </div>
-  )
-}
-
-interface SeedsSectionProps {
-  control: Control<PickemFormVals>
-  participants: ParticipantsFormVals
-  currentSeeds: Seed[]
-}
-
-const getAvailableBlockOptions = ({
-  participants,
-  blockIndex,
-  currentSeeds,
-}: {
-  currentSeeds: Seed[]
-  blockIndex: number
-  participants: ParticipantsFormVals
-}): Option<string>[] => {
-  const selectedBlockParticipants = currentSeeds[blockIndex].seeds.map((p) => p.name)
-  return participants.allParticipants[blockIndex].blockParticipants.reduce<Option<string>[]>((acc, participant) => {
-    if (selectedBlockParticipants.includes(participant.name)) {
-      return acc
-    }
-    return acc.concat(stringToOption(participant.name))
-  }, [])
-}
-
-const SeedsSection = ({ control, participants, currentSeeds }: SeedsSectionProps) => {
-  return (
-    <div className="border-t border-b pb-4 mt-2">
-      <p className="text-lg">Seeds</p>
-      <div className="flex md:flex-row flex-col">
-        {participants.allParticipants.map((block, bIndex) => {
-          const { fields } = useFieldArray({ control, name: `seeds.${bIndex}.seeds` })
-          return (
-            <div key={block.blockName} className="md:w-1/4 w-full px-6">
-              <p>{block.blockName}</p>
-              {fields.map((seed, sIndex) => (
-                <div key={seed.id}>
-                  <label htmlFor={`seeds.${bIndex}.seeds.${sIndex}`}>{`${block.blockName} #${sIndex + 1}`}</label>
-                  <ControlledSelect
-                    control={control}
-                    options={getAvailableBlockOptions({ currentSeeds, blockIndex: bIndex, participants })}
-                    name={`seeds.${bIndex}.seeds.${sIndex}.name`}
-                  />
-                </div>
-              ))}
-            </div>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
-
-interface BracketSectionProps {
-  control: Control<PickemFormVals>
-  bracket: BracketFormVals
-  picks: { winner: string }[]
-  matchDetails: { label: string; options: any[] }[]
-}
-
-// Bracket logic is slightly more complicated than I had anticipated and will need to be adjusted a little
-const BracketSection = ({ control, bracket, matchDetails }: BracketSectionProps) => {
-  const { fields } = useFieldArray({ control, name: 'bracket' })
-  return (
-    <div>
-      {fields.map((field, index) => {
-        const bracketMatch = bracket.bracketMatches[index]
-        return (
-          <div key={field.id}>
-            <p>{`${bracketMatch.round} round match# ${bracketMatch.matchNumber}`}</p>
-            <label>{matchDetails[index].label}</label>
-            <PickerButtons control={control} name={`bracket.${index}.winner`} options={matchDetails[index].options} />
-          </div>
-        )
-      })}
-    </div>
-  )
 }
 
 const getWrestlerLabel = ({
