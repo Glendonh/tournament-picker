@@ -7,3 +7,7 @@
     @apply border-2 border-gray-700 rounded;
   }
 }
+
+.ReactCollapse--collapse {
+  transition: height 500ms;
+}

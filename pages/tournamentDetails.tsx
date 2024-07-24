@@ -1,8 +1,11 @@
 import { useState } from 'react'
 import { Collapse } from 'react-collapse'
 import { useForm } from 'react-hook-form'
-import { CompleteTournament, ScheduleValues, PickemFormVals } from '../types'
+import { CompleteTournament, PickemFormVals } from '../types'
+import { getInitialPickEmVals, getBracketMatchDetails } from '../utils'
 import NightMatches from '../components/pickForms/NightMatches'
+import SeedsSection from '../components/pickForms/SeedsSection'
+import BracketSection from '../components/pickForms/BracketSection'
 
 import { snowPrixSix } from '../test/__mocks__/tournaments'
 
@@ -19,18 +22,15 @@ const CollapseSection = ({ title, children }: { title: string; children: any }) 
   )
 }
 
-const getInitialVals = (schedule: ScheduleValues): PickemFormVals => {
-  const nights = schedule.nights.map((n) => {
-    return { matches: n.matches.map(() => ({ winner: '' })) }
-  })
-  return { nights, bracket: [], seeds: [] }
-}
-
 const TournamentDetails = () => {
-  const { format, participants, schedule } = snowPrixSix as CompleteTournament
+  const { format, participants, schedule, bracket } = snowPrixSix as CompleteTournament
   const [showEdit, setShowEdit] = useState(false)
+  const [results, setResults] = useState<PickemFormVals>(getInitialPickEmVals(snowPrixSix))
   const toggleShowEdit = () => setShowEdit((s) => !s)
-  const { control } = useForm<PickemFormVals>({ defaultValues: getInitialVals(schedule) })
+  const { control, watch, handleSubmit } = useForm<PickemFormVals>({ defaultValues: getInitialPickEmVals(snowPrixSix) })
+  const bracketPicks = watch('bracket')
+  const currentSeeds = watch('seeds')
+  const matchDetails = getBracketMatchDetails({ seeds: currentSeeds, bracketPicks, bracket: bracket })
 
   return (
     <div className="container px-3">
@@ -41,13 +41,20 @@ const TournamentDetails = () => {
       {showEdit ? (
         <div>
           <p className="text-xl">Update Results</p>
-          {schedule.nights.map((n, nIndex) => (
-            <div key={nIndex} className="mb-2">
-              <CollapseSection title={`Night ${nIndex + 1}`}>
-                <NightMatches control={control} nightIndex={nIndex} schedule={schedule} />
-              </CollapseSection>
-            </div>
-          ))}
+          <form onSubmit={handleSubmit(setResults)}>
+            {schedule.nights.map((n, nIndex) => (
+              <div key={nIndex} className="mb-2">
+                <CollapseSection title={`Night ${nIndex + 1}`}>
+                  <NightMatches control={control} nightIndex={nIndex} schedule={schedule} />
+                </CollapseSection>
+              </div>
+            ))}
+            <SeedsSection control={control} participants={participants} currentSeeds={currentSeeds} />
+            <BracketSection control={control} bracket={bracket} matchDetails={matchDetails} picks={bracketPicks} />
+            <button className="border border-black rounded-md p-3" type="submit">
+              SUBMIT
+            </button>
+          </form>
           <ul>
             <li>update results on a nightly basis</li>
             <li>update seeds and brackets after nights are complete</li>
@@ -75,9 +82,17 @@ const TournamentDetails = () => {
               <CollapseSection title={`Night ${nIndex + 1}`}>
                 <p>Matches</p>
                 <div className="ml-2">
-                  {n.matches.map((match, mIndex) => (
-                    <div key={`N${nIndex}M${mIndex}`}>{`${mIndex + 1}. ${match.wrestler1} vs ${match.wrestler2}`}</div>
-                  ))}
+                  {n.matches.map((match, mIndex) => {
+                    const matchWinner = results?.nights[nIndex]?.matches[mIndex]?.winner
+                    return (
+                      <div key={`N${nIndex}M${mIndex}`}>
+                        {`${mIndex + 1}. `}
+                        <span className={match.wrestler1 === matchWinner ? 'bg-green-500' : ''}>{match.wrestler1}</span>
+                        {` vs `}
+                        <span className={match.wrestler2 === matchWinner ? 'bg-green-500' : ''}>{match.wrestler2}</span>
+                      </div>
+                    )
+                  })}
                 </div>
               </CollapseSection>
             </div>
