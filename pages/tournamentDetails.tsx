@@ -1,34 +1,24 @@
 import { useState } from 'react'
 import Head from 'next/head'
-import { Collapse } from 'react-collapse'
 import { useForm } from 'react-hook-form'
-import { CompleteTournament, PickemFormVals } from '../types'
+import { PickemFormVals } from '../types'
 import { getInitialPickEmVals, getBracketMatchDetails } from '../utils'
 import NightMatches from '../components/pickForms/NightMatches'
 import SeedsSection from '../components/pickForms/SeedsSection'
 import BracketSection from '../components/pickForms/BracketSection'
+import CollapseSection from '../components/CollapseSection'
 
-import { snowPrixSix } from '../test/__mocks__/tournaments'
-
-const CollapseSection = ({ title, children }: { title: string; children: any }) => {
-  const [isOpened, setIsOpened] = useState(false)
-  const toggleIsOpened = () => setIsOpened((s) => !s)
-  return (
-    <div>
-      <div className="w-40 border border-black p-1" onClick={toggleIsOpened}>
-        {title}
-      </div>
-      <Collapse isOpened={isOpened}>{children}</Collapse>
-    </div>
-  )
-}
+// import { snowPrixSix } from '../test/__mocks__/tournaments'
+import { G1Climax2024 } from '../types/dummyData'
 
 const TournamentDetails = () => {
-  const { format, participants, schedule, bracket } = snowPrixSix as CompleteTournament
+  const { format, participants, schedule, bracket } = G1Climax2024
   const [showEdit, setShowEdit] = useState(false)
-  const [results, setResults] = useState<PickemFormVals>(getInitialPickEmVals(snowPrixSix))
+  const [results, setResults] = useState<PickemFormVals>(getInitialPickEmVals(G1Climax2024))
   const toggleShowEdit = () => setShowEdit((s) => !s)
-  const { control, watch, handleSubmit } = useForm<PickemFormVals>({ defaultValues: getInitialPickEmVals(snowPrixSix) })
+  const { control, watch, handleSubmit } = useForm<PickemFormVals>({
+    defaultValues: getInitialPickEmVals(G1Climax2024),
+  })
   const bracketPicks = watch('bracket')
   const currentSeeds = watch('seeds')
   const matchDetails = getBracketMatchDetails({ seeds: currentSeeds, bracketPicks, bracket: bracket })
