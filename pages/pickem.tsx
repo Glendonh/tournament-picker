@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { PickemFormVals } from '../types'
 import { getBracketMatchDetails, getInitialPickEmVals } from '../utils'
@@ -12,13 +13,21 @@ import { G1Climax2024 } from '../types/dummyData'
 const PickEmPage = () => {
   // Placeholder until fetching logic is decided
   const activeTournament = G1Climax2024
-  const { control, watch } = useForm<PickemFormVals>({ defaultValues: getInitialPickEmVals(activeTournament) })
+  const [picks, setPicks] = useState([])
+  const { control, watch, handleSubmit } = useForm<PickemFormVals>({
+    defaultValues: getInitialPickEmVals(activeTournament),
+  })
   const bracketPicks = watch('bracket')
   const currentSeeds = watch('seeds')
   const matchDetails = getBracketMatchDetails({ seeds: currentSeeds, bracketPicks, bracket: activeTournament.bracket })
+  const addPicksAndPrint = (vals) => {
+    const newVals = picks.concat(vals)
+    console.log(JSON.stringify(newVals))
+    setPicks(newVals)
+  }
   return (
     <div className="container mx-3 mb-4 pt-8">
-      <form>
+      <form onSubmit={handleSubmit(addPicksAndPrint)}>
         {activeTournament.schedule.nights.map((night, nIndex) => (
           <div key={`night${nIndex + 1}`}>
             <CollapseSection title={`Night ${nIndex + 1}`}>
@@ -37,6 +46,9 @@ const PickEmPage = () => {
             matchDetails={matchDetails}
           />
         </CollapseSection>
+        <button className="p-3 rounded-xl border border-blue-500 mt-3" type="submit">
+          Save
+        </button>
       </form>
     </div>
   )

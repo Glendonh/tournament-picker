@@ -211,3 +211,522 @@ export const G1Climax2024: CompleteTournament = {
     ],
   },
 }
+
+export const G1Picks24 = [
+  {
+    nights: [
+      {
+        matches: [
+          { winner: 'Tetsuya Naito' },
+          { winner: 'Shota Umino' },
+          { winner: 'Sanada' },
+          { winner: 'Gabe Kidd' },
+          { winner: 'Zack Sabre Jr.' },
+          { winner: 'Yota Tsuji' },
+          { winner: 'Hirooki Goto' },
+          { winner: 'El Phantasmo' },
+          { winner: 'Yuya Uemura' },
+          { winner: 'Ren Narita' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Tetsuya Naito' },
+          { winner: 'Shota Umino' },
+          { winner: 'Jake Lee' },
+          { winner: 'Great-O-Khan' },
+          { winner: 'Sanada' },
+          { winner: 'El Phantasmo' },
+          { winner: 'Yota Tsuji' },
+          { winner: 'Hirooki Goto' },
+          { winner: 'Henare' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Tetsuya Naito' },
+          { winner: 'Sanada' },
+          { winner: 'Shota Umino' },
+          { winner: 'Shingo Takagi' },
+          { winner: 'Zack Sabre Jr.' },
+          { winner: 'Jeff Cobb' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'El Phantasmo' },
+          { winner: 'Henare' },
+          { winner: 'Hirooki Goto' },
+          { winner: 'Yuya Uemura' },
+          { winner: 'Jeff Cobb' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Tetsuya Naito' },
+          { winner: 'Shota Umino' },
+          { winner: 'Sanada' },
+          { winner: 'Shingo Takagi' },
+          { winner: 'Zack Sabre Jr.' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Henare' },
+          { winner: 'El Phantasmo' },
+          { winner: 'Hirooki Goto' },
+          { winner: 'Yuya Uemura' },
+          { winner: 'David Finlay' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Shota Umino' },
+          { winner: 'Tetsuya Naito' },
+          { winner: 'Shingo Takagi' },
+          { winner: 'Great-O-Khan' },
+          { winner: 'Evil' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Yuya Uemura' },
+          { winner: 'El Phantasmo' },
+          { winner: 'Hirooki Goto' },
+          { winner: 'Yota Tsuji' },
+          { winner: 'Konosuke Takeshita' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Shingo Takagi' },
+          { winner: 'Shota Umino' },
+          { winner: 'Tetsuya Naito' },
+          { winner: 'Great-O-Khan' },
+          { winner: 'Jake Lee' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Jeff Cobb' },
+          { winner: 'El Phantasmo' },
+          { winner: 'Hirooki Goto' },
+          { winner: 'Yota Tsuji' },
+          { winner: 'David Finlay' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Zack Sabre Jr.' },
+          { winner: 'Shota Umino' },
+          { winner: 'Shingo Takagi' },
+          { winner: 'Great-O-Khan' },
+          { winner: 'Gabe Kidd' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Yuya Uemura' },
+          { winner: 'El Phantasmo' },
+          { winner: 'Hirooki Goto' },
+          { winner: 'Yota Tsuji' },
+          { winner: 'Jeff Cobb' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Zack Sabre Jr.' },
+          { winner: 'Shota Umino' },
+          { winner: 'Tetsuya Naito' },
+          { winner: 'Shingo Takagi' },
+          { winner: 'Sanada' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Yota Tsuji' },
+          { winner: 'Hirooki Goto' },
+          { winner: 'Jeff Cobb' },
+          { winner: 'Henare' },
+          { winner: 'Konosuke Takeshita' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Tetsuya Naito' },
+          { winner: 'Shota Umino' },
+          { winner: 'Shingo Takagi' },
+          { winner: 'Sanada' },
+          { winner: 'Gabe Kidd' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Yota Tsuji' },
+          { winner: 'El Phantasmo' },
+          { winner: 'Hirooki Goto' },
+          { winner: 'Yuya Uemura' },
+          { winner: 'Konosuke Takeshita' },
+        ],
+      },
+    ],
+    bracket: [
+      { winner: 'Zack Sabre Jr.', matchNumber: 1 },
+      { winner: 'Konosuke Takeshita', matchNumber: 2 },
+      { winner: 'Sanada', matchNumber: 3 },
+      { winner: 'Hirooki Goto', matchNumber: 4 },
+      { winner: 'Sanada', matchNumber: 5 },
+    ],
+    seeds: [
+      { blockName: 'A Block', seeds: [{ name: 'Sanada' }, { name: 'Zack Sabre Jr.' }, { name: 'Shingo Takagi' }] },
+      {
+        blockName: 'B Block',
+        seeds: [{ name: 'Hirooki Goto' }, { name: 'Yuya Uemura' }, { name: 'Konosuke Takeshita' }],
+      },
+    ],
+  },
+  {
+    nights: [
+      {
+        matches: [
+          { winner: 'Shingo Takagi' },
+          { winner: 'Callum Newman' },
+          { winner: 'Jake Lee' },
+          { winner: 'Evil' },
+          { winner: 'Great-O-Khan' },
+          { winner: 'Konosuke Takeshita' },
+          { winner: 'Jeff Cobb' },
+          { winner: 'Henare' },
+          { winner: 'David Finlay' },
+          { winner: 'Boltin Oleg' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Zack Sabre Jr.' },
+          { winner: 'Shingo Takagi' },
+          { winner: 'Evil' },
+          { winner: 'Gabe Kidd' },
+          { winner: 'Callum Newman' },
+          { winner: 'Ren Narita' },
+          { winner: 'David Finlay' },
+          { winner: 'Yuya Uemura' },
+          { winner: 'Boltin Oleg' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Jake Lee' },
+          { winner: 'Evil' },
+          { winner: 'Gabe Kidd' },
+          { winner: 'Great-O-Khan' },
+          { winner: 'Callum Newman' },
+          { winner: 'Konosuke Takeshita' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Yota Tsuji' },
+          { winner: 'David Finlay' },
+          { winner: 'Boltin Oleg' },
+          { winner: 'Konosuke Takeshita' },
+          { winner: 'Ren Narita' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Evil' },
+          { winner: 'Great-O-Khan' },
+          { winner: 'Gabe Kidd' },
+          { winner: 'Callum Newman' },
+          { winner: 'Jake Lee' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Konosuke Takeshita' },
+          { winner: 'Boltin Oleg' },
+          { winner: 'Yota Tsuji' },
+          { winner: 'Jeff Cobb' },
+          { winner: 'Ren Narita' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Zack Sabre Jr.' },
+          { winner: 'Sanada' },
+          { winner: 'Gabe Kidd' },
+          { winner: 'Jake Lee' },
+          { winner: 'Callum Newman' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Henare' },
+          { winner: 'Jeff Cobb' },
+          { winner: 'Ren Narita' },
+          { winner: 'Boltin Oleg' },
+          { winner: 'David Finlay' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Zack Sabre Jr.' },
+          { winner: 'Sanada' },
+          { winner: 'Gabe Kidd' },
+          { winner: 'Evil' },
+          { winner: 'Callum Newman' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Henare' },
+          { winner: 'Yuya Uemura' },
+          { winner: 'Konosuke Takeshita' },
+          { winner: 'Ren Narita' },
+          { winner: 'Boltin Oleg' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Evil' },
+          { winner: 'Tetsuya Naito' },
+          { winner: 'Sanada' },
+          { winner: 'Callum Newman' },
+          { winner: 'Jake Lee' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Ren Narita' },
+          { winner: 'Konosuke Takeshita' },
+          { winner: 'David Finlay' },
+          { winner: 'Henare' },
+          { winner: 'Boltin Oleg' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Gabe Kidd' },
+          { winner: 'Jake Lee' },
+          { winner: 'Callum Newman' },
+          { winner: 'Evil' },
+          { winner: 'Great-O-Khan' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Yuya Uemura' },
+          { winner: 'El Phantasmo' },
+          { winner: 'David Finlay' },
+          { winner: 'Ren Narita' },
+          { winner: 'Boltin Oleg' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Great-O-Khan' },
+          { winner: 'Evil' },
+          { winner: 'Jake Lee' },
+          { winner: 'Zack Sabre Jr.' },
+          { winner: 'Callum Newman' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Jeff Cobb' },
+          { winner: 'David Finlay' },
+          { winner: 'Henare' },
+          { winner: 'Boltin Oleg' },
+          { winner: 'Ren Narita' },
+        ],
+      },
+    ],
+    bracket: [
+      { winner: 'Shingo Takagi', matchNumber: 1 },
+      { winner: 'Yuya Uemura', matchNumber: 2 },
+      { winner: 'Shingo Takagi', matchNumber: 3 },
+      { winner: 'Hirooki Goto', matchNumber: 4 },
+      { winner: 'Hirooki Goto', matchNumber: 5 },
+    ],
+    seeds: [
+      { blockName: 'A Block', seeds: [{ name: 'Sanada' }, { name: 'Zack Sabre Jr.' }, { name: 'Shingo Takagi' }] },
+      {
+        blockName: 'B Block',
+        seeds: [{ name: 'Hirooki Goto' }, { name: 'Yuya Uemura' }, { name: 'Konosuke Takeshita' }],
+      },
+    ],
+  },
+  {
+    nights: [
+      {
+        matches: [
+          { winner: 'Tetsuya Naito' },
+          { winner: 'Callum Newman' },
+          { winner: 'Sanada' },
+          { winner: 'Evil' },
+          { winner: 'Zack Sabre Jr.' },
+          { winner: 'Konosuke Takeshita' },
+          { winner: 'Hirooki Goto' },
+          { winner: 'Henare' },
+          { winner: 'Yuya Uemura' },
+          { winner: 'Boltin Oleg' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Tetsuya Naito' },
+          { winner: 'Shingo Takagi' },
+          { winner: 'Jake Lee' },
+          { winner: 'Gabe Kidd' },
+          { winner: 'Sanada' },
+          { winner: 'Ren Narita' },
+          { winner: 'Yota Tsuji' },
+          { winner: 'Yuya Uemura' },
+          { winner: 'Henare' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Jake Lee' },
+          { winner: 'Sanada' },
+          { winner: 'Gabe Kidd' },
+          { winner: 'Shingo Takagi' },
+          { winner: 'Callum Newman' },
+          { winner: 'Jeff Cobb' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Yota Tsuji' },
+          { winner: 'Henare' },
+          { winner: 'Boltin Oleg' },
+          { winner: 'Yuya Uemura' },
+          { winner: 'Ren Narita' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Tetsuya Naito' },
+          { winner: 'Great-O-Khan' },
+          { winner: 'Sanada' },
+          { winner: 'Callum Newman' },
+          { winner: 'Zack Sabre Jr.' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Konosuke Takeshita' },
+          { winner: 'El Phantasmo' },
+          { winner: 'Yota Tsuji' },
+          { winner: 'Yuya Uemura' },
+          { winner: 'Ren Narita' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Zack Sabre Jr.' },
+          { winner: 'Tetsuya Naito' },
+          { winner: 'Gabe Kidd' },
+          { winner: 'Great-O-Khan' },
+          { winner: 'Callum Newman' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Yuya Uemura' },
+          { winner: 'Jeff Cobb' },
+          { winner: 'Hirooki Goto' },
+          { winner: 'Boltin Oleg' },
+          { winner: 'Konosuke Takeshita' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Zack Sabre Jr.' },
+          { winner: 'Shota Umino' },
+          { winner: 'Gabe Kidd' },
+          { winner: 'Great-O-Khan' },
+          { winner: 'Callum Newman' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Henare' },
+          { winner: 'El Phantasmo' },
+          { winner: 'Konosuke Takeshita' },
+          { winner: 'Yota Tsuji' },
+          { winner: 'Boltin Oleg' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Zack Sabre Jr.' },
+          { winner: 'Tetsuya Naito' },
+          { winner: 'Shingo Takagi' },
+          { winner: 'Callum Newman' },
+          { winner: 'Gabe Kidd' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Ren Narita' },
+          { winner: 'El Phantasmo' },
+          { winner: 'David Finlay' },
+          { winner: 'Yota Tsuji' },
+          { winner: 'Boltin Oleg' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Zack Sabre Jr.' },
+          { winner: 'Jake Lee' },
+          { winner: 'Tetsuya Naito' },
+          { winner: 'Evil' },
+          { winner: 'Sanada' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Yuya Uemura' },
+          { winner: 'Hirooki Goto' },
+          { winner: 'David Finlay' },
+          { winner: 'Henare' },
+          { winner: 'Boltin Oleg' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Tetsuya Naito' },
+          { winner: 'Evil' },
+          { winner: 'Shingo Takagi' },
+          { winner: 'Zack Sabre Jr.' },
+          { winner: 'Gabe Kidd' },
+        ],
+      },
+      {
+        matches: [
+          { winner: 'Jeff Cobb' },
+          { winner: 'El Phantasmo' },
+          { winner: 'Henare' },
+          { winner: 'Yuya Uemura' },
+          { winner: 'Ren Narita' },
+        ],
+      },
+    ],
+    bracket: [
+      { winner: 'Shingo Takagi', matchNumber: 1 },
+      { winner: 'Yuya Uemura', matchNumber: 2 },
+      { winner: 'Shingo Takagi', matchNumber: 3 },
+      { winner: 'Hirooki Goto', matchNumber: 4 },
+      { winner: 'Hirooki Goto', matchNumber: 5 },
+    ],
+    seeds: [
+      { blockName: 'A Block', seeds: [{ name: 'Sanada' }, { name: 'Zack Sabre Jr.' }, { name: 'Shingo Takagi' }] },
+      {
+        blockName: 'B Block',
+        seeds: [{ name: 'Hirooki Goto' }, { name: 'Yuya Uemura' }, { name: 'Konosuke Takeshita' }],
+      },
+    ],
+  },
+]
