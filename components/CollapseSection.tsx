@@ -6,7 +6,7 @@ const CollapseSection = ({ title, children }: { title: string; children: any }) 
   const toggleIsOpened = () => setIsOpened((s) => !s)
   return (
     <div>
-      <div className="w-1/2 border border-black p-1 my-1" onClick={toggleIsOpened}>
+      <div className="w-1/3 border border-black p-1 my-1" onClick={toggleIsOpened}>
         {title}
       </div>
       <Collapse isOpened={isOpened}>{children}</Collapse>

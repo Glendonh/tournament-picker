@@ -1,4 +1,4 @@
-import { CompleteTournament } from '.'
+import { CompleteTournament, Pick } from '.'
 
 export const G1Climax2024: CompleteTournament = {
   format: {
@@ -212,8 +212,10 @@ export const G1Climax2024: CompleteTournament = {
   },
 }
 
-export const G1Picks24 = [
+export const G1Picks24: Pick[] = [
   {
+    userName: 'Jim Dave',
+    id: '1',
     nights: [
       {
         matches: [
@@ -386,6 +388,8 @@ export const G1Picks24 = [
     ],
   },
   {
+    userName: 'Pippin Took',
+    id: '2',
     nights: [
       {
         matches: [
@@ -558,6 +562,8 @@ export const G1Picks24 = [
     ],
   },
   {
+    userName: 'Sebastian Shaw',
+    id: '3',
     nights: [
       {
         matches: [

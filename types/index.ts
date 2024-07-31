@@ -70,3 +70,8 @@ export interface PickemFormVals {
   seeds: Seed[]
   bracket: { winner: string; matchNumber: number }[]
 }
+
+export interface Pick extends PickemFormVals {
+  id: string
+  userName: string
+}

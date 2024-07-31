@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Head from 'next/head'
 import { useForm } from 'react-hook-form'
-import { PickemFormVals } from '../types'
+import { PickemFormVals, CompleteTournament } from '../types'
 import { getInitialPickEmVals, getBracketMatchDetails } from '../utils'
 import NightMatches from '../components/pickForms/NightMatches'
 import SeedsSection from '../components/pickForms/SeedsSection'
@@ -11,17 +11,50 @@ import CollapseSection from '../components/CollapseSection'
 // import { snowPrixSix } from '../test/__mocks__/tournaments'
 import { G1Climax2024 } from '../types/dummyData'
 
+interface UpdateFormProps {
+  onSubmit: (data: PickemFormVals) => void
+  tournament: CompleteTournament
+}
+
+export const UpdateForm = (props: UpdateFormProps) => {
+  const { schedule, participants, bracket } = props.tournament
+  const { control, watch, handleSubmit } = useForm<PickemFormVals>({
+    defaultValues: getInitialPickEmVals(props.tournament),
+  })
+  const bracketPicks = watch('bracket')
+  const currentSeeds = watch('seeds')
+  const matchDetails = getBracketMatchDetails({ seeds: currentSeeds, bracketPicks, bracket: bracket })
+  return (
+    <div>
+      <p className="text-xl">Update Results</p>
+      <form onSubmit={handleSubmit(props.onSubmit)}>
+        {schedule.nights.map((n, nIndex) => (
+          <div key={nIndex} className="mb-2">
+            <CollapseSection title={`Night ${nIndex + 1}`}>
+              <NightMatches control={control} nightIndex={nIndex} schedule={schedule} />
+            </CollapseSection>
+          </div>
+        ))}
+        <CollapseSection title="Seeds">
+          <SeedsSection control={control} participants={participants} currentSeeds={currentSeeds} />
+        </CollapseSection>
+        <CollapseSection title="Bracket">
+          <BracketSection control={control} bracket={bracket} matchDetails={matchDetails} picks={bracketPicks} />
+        </CollapseSection>
+        <button className="border border-black rounded-md p-3 mt-3" type="submit">
+          SUBMIT
+        </button>
+      </form>
+    </div>
+  )
+}
+
 const TournamentDetails = () => {
   const { format, participants, schedule, bracket } = G1Climax2024
   const [showEdit, setShowEdit] = useState(false)
   const [results, setResults] = useState<PickemFormVals>(getInitialPickEmVals(G1Climax2024))
   const toggleShowEdit = () => setShowEdit((s) => !s)
-  const { control, watch, handleSubmit } = useForm<PickemFormVals>({
-    defaultValues: getInitialPickEmVals(G1Climax2024),
-  })
-  const bracketPicks = watch('bracket')
-  const currentSeeds = watch('seeds')
-  const matchDetails = getBracketMatchDetails({ seeds: currentSeeds, bracketPicks, bracket: bracket })
+  const matchDetails = getBracketMatchDetails({ seeds: results.seeds, bracketPicks: results.bracket, bracket: bracket })
 
   return (
     <div className="container px-3">
@@ -35,25 +68,7 @@ const TournamentDetails = () => {
       </button>
       {showEdit ? (
         <div>
-          <p className="text-xl">Update Results</p>
-          <form onSubmit={handleSubmit(setResults)}>
-            {schedule.nights.map((n, nIndex) => (
-              <div key={nIndex} className="mb-2">
-                <CollapseSection title={`Night ${nIndex + 1}`}>
-                  <NightMatches control={control} nightIndex={nIndex} schedule={schedule} />
-                </CollapseSection>
-              </div>
-            ))}
-            <CollapseSection title="Seeds">
-              <SeedsSection control={control} participants={participants} currentSeeds={currentSeeds} />
-            </CollapseSection>
-            <CollapseSection title="Bracket">
-              <BracketSection control={control} bracket={bracket} matchDetails={matchDetails} picks={bracketPicks} />
-            </CollapseSection>
-            <button className="border border-black rounded-md p-3 mt-3" type="submit">
-              SUBMIT
-            </button>
-          </form>
+          <UpdateForm tournament={G1Climax2024} onSubmit={setResults} />
           <ul className="list-inside list-disc">
             <li>update results on a nightly basis</li>
             <li>update seeds and brackets after nights are complete</li>
@@ -99,7 +114,7 @@ const TournamentDetails = () => {
           <div>
             <p className="text-xl">Seeds</p>
             <div className="flex flex-row">
-              {currentSeeds.map((block) => (
+              {results.seeds.map((block) => (
                 <div key={block.blockName + 'seeds'} className="ml-3">
                   <p className="text-l font-semibold">{block.blockName}</p>
                   {block.seeds.map((seed, i) => (

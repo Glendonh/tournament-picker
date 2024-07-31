@@ -17,7 +17,9 @@ export const Home = (): JSX.Element => (
           </Link>
           <Link href="/pickem" className="text-sky-600 underline">{`Pick 'em form`}</Link>
           <p>Create/Manage Group</p>
-          <p>Track Group Results</p>
+          <Link href="/group">
+            <p className="text-lg text-sky-600 underline">Track Group Results</p>
+          </Link>
         </div>
         <div className="flex-col">
           <p className="text-lg">Admin</p>
