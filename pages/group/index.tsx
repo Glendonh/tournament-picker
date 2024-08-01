@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import Head from 'next/head'
 import { Collapse } from 'react-collapse'
+import CollapseSection from '../../components/CollapseSection'
 import { getInitialPickEmVals } from '../../utils'
-import { PickemFormVals, Pick } from '../../types'
+import { PickemFormVals, Pick, CompleteTournament } from '../../types'
 import { UpdateForm } from '../tournamentDetails'
 
 import { G1Climax2024, G1Picks24 } from '../../types/dummyData'
@@ -33,15 +34,16 @@ const getPickAccuracy = (pick: Pick, results: PickemFormVals) => {
 interface PickSummaryProps {
   entry: Pick
   results: PickemFormVals
+  tournament: CompleteTournament
 }
 
-const PickSummary = ({ entry, results }: PickSummaryProps) => {
+const PickSummary = ({ entry, results, tournament }: PickSummaryProps) => {
   const tracker = getPickAccuracy(entry, results)
   const [isOpened, setIsOpened] = useState(false)
   const toggleOpened = () => setIsOpened((s) => !s)
   return (
-    <div key={entry.id} className="mb-1" onClick={toggleOpened}>
-      <div className="p-2 w-1/2 border border-black rounded-lg flex flex-row justify-between">
+    <div key={entry.id} className="mb-1">
+      <div className="p-2 w-1/2 border border-black rounded-lg flex flex-row justify-between" onClick={toggleOpened}>
         <span>{entry.userName}</span>
         <span>{`${tracker.correct}/${tracker.completeMatches}`}</span>
       </div>
@@ -51,9 +53,25 @@ const PickSummary = ({ entry, results }: PickSummaryProps) => {
             const nightScore = tracker.nightScores[nightIndex]
             return (
               <div key={`night${nightIndex}`}>
-                <p className="font-semibold">{`Night ${nightIndex + 1}`}</p>
+                <span className="font-semibold">{`Night ${nightIndex + 1}`}</span>
                 {nightScore.complete ? (
-                  <p className="ml-1">{`${nightScore.correct} ouf of ${nightScore.complete}`}</p>
+                  <CollapseSection title={`${nightScore.correct} ouf of ${nightScore.complete}`}>
+                    {tournament.schedule.nights[nightIndex].matches.map((match, matchIndex) => {
+                      // TODO: handle draw
+                      const matchWinner = results.nights[nightIndex].matches[matchIndex].winner
+                      const loser = matchWinner === match.wrestler1 ? match.wrestler1 : match.wrestler2
+                      const fontColor =
+                        entry.nights[nightIndex].matches[matchIndex].winner === matchWinner
+                          ? 'text-green-600'
+                          : 'text-red-600'
+                      return (
+                        <p
+                          className={`${fontColor}`}
+                          key={`n${nightIndex}m${matchIndex}`}
+                        >{`${matchWinner} defeats ${loser}`}</p>
+                      )
+                    })}
+                  </CollapseSection>
                 ) : null}
               </div>
             )
@@ -84,7 +102,7 @@ const GroupPage = () => {
       ) : (
         <>
           {G1Picks24.map((entry) => {
-            return <PickSummary key={entry.id} results={results} entry={entry} />
+            return <PickSummary key={entry.id} results={results} entry={entry} tournament={tournament} />
           })}
         </>
       )}
