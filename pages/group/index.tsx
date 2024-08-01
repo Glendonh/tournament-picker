@@ -11,7 +11,7 @@ import { G1Climax2024, G1Picks24 } from '../../types/dummyData'
 const getPickAccuracy = (pick: Pick, results: PickemFormVals) => {
   let correct = 0
   let completeMatches = 0
-  const nightScores = []
+  const nightScores: Array<{ correct: number; complete: number }> = []
   pick.nights.forEach((night, nightIndex) => {
     let nightMatches = 0
     let nightCorrect = 0
@@ -32,13 +32,13 @@ const getPickAccuracy = (pick: Pick, results: PickemFormVals) => {
 }
 
 interface PickSummaryProps {
-  entry: Pick
+  entry: ScoredPick
   results: PickemFormVals
   tournament: CompleteTournament
 }
 
 const PickSummary = ({ entry, results, tournament }: PickSummaryProps) => {
-  const tracker = getPickAccuracy(entry, results)
+  const { tracker } = entry
   const [isOpened, setIsOpened] = useState(false)
   const toggleOpened = () => setIsOpened((s) => !s)
   return (
@@ -82,11 +82,28 @@ const PickSummary = ({ entry, results, tournament }: PickSummaryProps) => {
   )
 }
 
+interface ScoredPick extends Pick {
+  tracker: {
+    correct: number
+    completeMatches: number
+    nightScores: {
+      complete: number
+      correct: number
+    }[]
+  }
+}
+
+const sortedScoredPicks = (picks: Pick[], results: PickemFormVals): ScoredPick[] => {
+  const scoredPicks = picks.map((pick) => ({ ...pick, tracker: getPickAccuracy(pick, results) }))
+  return scoredPicks.sort((a, b) => b.tracker.correct - a.tracker.correct)
+}
+
 const GroupPage = () => {
   const tournament = G1Climax2024
   const [showEdit, setShowEdit] = useState(false)
   const [results, setResults] = useState<PickemFormVals>(getInitialPickEmVals(tournament))
   const toggleShowEdit = () => setShowEdit((s) => !s)
+  const sortedPicks = sortedScoredPicks(G1Picks24, results)
   return (
     <div className="container p-2">
       <Head>
@@ -101,7 +118,7 @@ const GroupPage = () => {
         <UpdateForm tournament={tournament} onSubmit={setResults} />
       ) : (
         <>
-          {G1Picks24.map((entry) => {
+          {sortedPicks.map((entry) => {
             return <PickSummary key={entry.id} results={results} entry={entry} tournament={tournament} />
           })}
         </>
