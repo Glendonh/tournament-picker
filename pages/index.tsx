@@ -26,7 +26,9 @@ export const Home = (): JSX.Element => (
           <Link href="/tournamentBuilder" className="text-sky-600 underline">
             Design Tournament
           </Link>
-          <p>Enter Results</p>
+          <Link href="/tournamentDetails" className="text-sky-600 underline">
+            <p>Enter Results</p>
+          </Link>
           <p>General Admin</p>
         </div>
       </div>

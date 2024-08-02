@@ -4,7 +4,7 @@ import { Collapse } from 'react-collapse'
 import CollapseSection from '../../components/CollapseSection'
 import { getInitialPickEmVals } from '../../utils'
 import { PickemFormVals, Pick, CompleteTournament } from '../../types'
-import { UpdateForm } from '../tournamentDetails'
+import UpdateForm from '../../components/UpdateForm'
 
 import { G1Climax2024, G1Picks24 } from '../../types/dummyData'
 
@@ -31,6 +31,22 @@ const getPickAccuracy = (pick: Pick, results: PickemFormVals) => {
   return { correct, completeMatches, nightScores }
 }
 
+interface ScoredPick extends Pick {
+  tracker: {
+    correct: number
+    completeMatches: number
+    nightScores: {
+      complete: number
+      correct: number
+    }[]
+  }
+}
+
+const sortedScoredPicks = (picks: Pick[], results: PickemFormVals): ScoredPick[] => {
+  const scoredPicks = picks.map((pick) => ({ ...pick, tracker: getPickAccuracy(pick, results) }))
+  return scoredPicks.sort((a, b) => b.tracker.correct - a.tracker.correct)
+}
+
 interface PickSummaryProps {
   entry: ScoredPick
   results: PickemFormVals
@@ -55,23 +71,25 @@ const PickSummary = ({ entry, results, tournament }: PickSummaryProps) => {
               <div key={`night${nightIndex}`}>
                 <span className="font-semibold">{`Night ${nightIndex + 1}`}</span>
                 {nightScore.complete ? (
-                  <CollapseSection title={`${nightScore.correct} ouf of ${nightScore.complete}`}>
-                    {tournament.schedule.nights[nightIndex].matches.map((match, matchIndex) => {
-                      // TODO: handle draw
-                      const matchWinner = results.nights[nightIndex].matches[matchIndex].winner
-                      const loser = matchWinner === match.wrestler1 ? match.wrestler1 : match.wrestler2
-                      const fontColor =
-                        entry.nights[nightIndex].matches[matchIndex].winner === matchWinner
-                          ? 'text-green-600'
-                          : 'text-red-600'
-                      return (
-                        <p
-                          className={`${fontColor}`}
-                          key={`n${nightIndex}m${matchIndex}`}
-                        >{`${matchWinner} defeats ${loser}`}</p>
-                      )
-                    })}
-                  </CollapseSection>
+                  <div className="ml-2">
+                    <CollapseSection title={`${nightScore.correct} ouf of ${nightScore.complete}`}>
+                      {tournament.schedule.nights[nightIndex].matches.map((match, matchIndex) => {
+                        // TODO: handle draw
+                        const matchWinner = results.nights[nightIndex].matches[matchIndex].winner
+                        const loser = matchWinner === match.wrestler1 ? match.wrestler1 : match.wrestler2
+                        const fontColor =
+                          entry.nights[nightIndex].matches[matchIndex].winner === matchWinner
+                            ? 'text-green-600'
+                            : 'text-red-600'
+                        return (
+                          <p
+                            className={`${fontColor}`}
+                            key={`n${nightIndex}m${matchIndex}`}
+                          >{`${matchWinner} defeats ${loser}`}</p>
+                        )
+                      })}
+                    </CollapseSection>
+                  </div>
                 ) : null}
               </div>
             )
@@ -80,22 +98,6 @@ const PickSummary = ({ entry, results, tournament }: PickSummaryProps) => {
       </Collapse>
     </div>
   )
-}
-
-interface ScoredPick extends Pick {
-  tracker: {
-    correct: number
-    completeMatches: number
-    nightScores: {
-      complete: number
-      correct: number
-    }[]
-  }
-}
-
-const sortedScoredPicks = (picks: Pick[], results: PickemFormVals): ScoredPick[] => {
-  const scoredPicks = picks.map((pick) => ({ ...pick, tracker: getPickAccuracy(pick, results) }))
-  return scoredPicks.sort((a, b) => b.tracker.correct - a.tracker.correct)
 }
 
 const GroupPage = () => {
@@ -115,7 +117,7 @@ const GroupPage = () => {
         Toggle Edit
       </button>
       {showEdit ? (
-        <UpdateForm tournament={tournament} onSubmit={setResults} />
+        <UpdateForm tournament={tournament} results={results} onSubmit={setResults} />
       ) : (
         <>
           {sortedPicks.map((entry) => {
