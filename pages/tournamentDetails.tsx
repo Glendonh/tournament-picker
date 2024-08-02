@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Head from 'next/head'
 import { PickemFormVals, ParticipantsFormVals } from '../types'
-import { getInitialPickEmVals, getBracketMatchDetails } from '../utils'
+import { getInitialPickEmVals, getBracketMatchDetails, getMatchResultString } from '../utils'
 import CollapseSection from '../components/CollapseSection'
 import UpdateForm from '../components/UpdateForm'
 
@@ -73,17 +73,9 @@ const TournamentDetails = () => {
                 <p>Matches</p>
                 <div className="ml-2">
                   {n.matches.map((match, mIndex) => {
-                    let matchString = ''
                     const matchWinner = results?.nights[nIndex]?.matches[mIndex]?.winner
-                    if (!matchWinner) {
-                      matchString = `${match.wrestler1} vs ${match.wrestler2}`
-                    } else if (matchWinner === 'draw') {
-                      matchString = `${match.wrestler1} draws ${match.wrestler2}`
-                    } else {
-                      const matchLoser = matchWinner === match.wrestler1 ? match.wrestler2 : match.wrestler1
-                      matchString = `${matchWinner} defeats ${matchLoser}`
-                    }
-                    return <div key={`N${nIndex}M${mIndex}`}>{`${mIndex + 1}. ${matchString}`}</div>
+                    const resultString = getMatchResultString(matchWinner, match)
+                    return <div key={`N${nIndex}M${mIndex}`}>{`${mIndex + 1}. ${resultString}`}</div>
                   })}
                 </div>
               </CollapseSection>

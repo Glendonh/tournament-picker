@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Head from 'next/head'
 import { Collapse } from 'react-collapse'
 import CollapseSection from '../../components/CollapseSection'
-import { getInitialPickEmVals } from '../../utils'
+import { getInitialPickEmVals, getMatchResultString } from '../../utils'
 import { PickemFormVals, Pick, CompleteTournament } from '../../types'
 import UpdateForm from '../../components/UpdateForm'
 
@@ -74,18 +74,16 @@ const PickSummary = ({ entry, results, tournament }: PickSummaryProps) => {
                   <div className="ml-2">
                     <CollapseSection title={`${nightScore.correct} ouf of ${nightScore.complete}`}>
                       {tournament.schedule.nights[nightIndex].matches.map((match, matchIndex) => {
-                        // TODO: handle draw
                         const matchWinner = results.nights[nightIndex].matches[matchIndex].winner
-                        const loser = matchWinner === match.wrestler1 ? match.wrestler1 : match.wrestler2
+                        const matchResult = getMatchResultString(matchWinner, match)
                         const fontColor =
                           entry.nights[nightIndex].matches[matchIndex].winner === matchWinner
                             ? 'text-green-600'
                             : 'text-red-600'
                         return (
-                          <p
-                            className={`${fontColor}`}
-                            key={`n${nightIndex}m${matchIndex}`}
-                          >{`${matchWinner} defeats ${loser}`}</p>
+                          <p className={`${fontColor}`} key={`n${nightIndex}m${matchIndex}`}>
+                            {matchResult}
+                          </p>
                         )
                       })}
                     </CollapseSection>

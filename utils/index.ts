@@ -89,6 +89,14 @@ export const getBracketMatchDetails = ({
   })
 }
 
+export const getMatchResultString = (winner: string, match: { wrestler1: string; wrestler2: string }) => {
+  const { wrestler1, wrestler2 } = match
+  if (winner === 'draw') return `${match.wrestler1} draws ${wrestler2}`
+  if (!winner) return `${wrestler1} vs ${wrestler2}`
+  const loser = winner === wrestler1 ? wrestler2 : wrestler1
+  return `${winner} defeats ${loser}`
+}
+
 export const exampleTournament: Tournament = {
   format: {
     perBlock: '4',
