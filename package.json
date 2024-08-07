@@ -26,12 +26,13 @@
     ]
   },
   "dependencies": {
-    "eslint-config-next": "13.2.4",
+    "@types/react-dom": "18.3.0",
+    "eslint-config-next": "14.2.5",
     "formik": "2.2.9",
-    "next": "13.2.4",
-    "react": "18.2.0",
+    "next": "14.2.5",
+    "react": "18.3.1",
     "react-collapse": "5.1.1",
-    "react-dom": "18.2.0",
+    "react-dom": "18.3.1",
     "react-hook-form": "7.52.0",
     "react-select": "5.1.0",
     "yup": "0.32.11"
@@ -40,7 +41,7 @@
     "@testing-library/react": "12.1.2",
     "@types/jest": "27.0.2",
     "@types/node": "16.11.0",
-    "@types/react": "^17.0.1",
+    "@types/react": "18.3.3",
     "@typescript-eslint/eslint-plugin": "5.0.0",
     "@typescript-eslint/parser": "5.0.0",
     "autoprefixer": "10.4.14",
