@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Head from 'next/head'
 import { Collapse } from 'react-collapse'
 import CollapseSection from '../../components/CollapseSection'
-import { getInitialPickEmVals, getMatchResultString } from '../../utils'
+import { getInitialPickEmVals, getMatchResultString, getBracketMatchDetails } from '../../utils'
 import { PickemFormVals, Pick, CompleteTournament } from '../../types'
 import UpdateForm from '../../components/UpdateForm'
 
@@ -57,6 +57,11 @@ const PickSummary = ({ entry, results, tournament }: PickSummaryProps) => {
   const { tracker } = entry
   const [isOpened, setIsOpened] = useState(false)
   const toggleOpened = () => setIsOpened((s) => !s)
+  const bracketMatchDetails = getBracketMatchDetails({
+    seeds: results.seeds,
+    bracketPicks: entry.bracket,
+    bracket: tournament.bracket,
+  })
   return (
     <div key={entry.id} className="mb-1">
       <div className="p-2 w-1/2 border border-black rounded-lg flex flex-row justify-between" onClick={toggleOpened}>
@@ -67,31 +72,68 @@ const PickSummary = ({ entry, results, tournament }: PickSummaryProps) => {
         <div className="pl-2">
           {entry.nights.map((night, nightIndex) => {
             const nightScore = tracker.nightScores[nightIndex]
+            const sectionTitle = nightScore.complete
+              ? `Night ${nightIndex + 1}: ${nightScore.correct}/${nightScore.complete}`
+              : `Night ${nightIndex + 1} picks`
             return (
               <div key={`night${nightIndex}`}>
-                <span className="font-semibold">{`Night ${nightIndex + 1}`}</span>
-                {nightScore.complete ? (
-                  <div className="ml-2">
-                    <CollapseSection title={`${nightScore.correct} ouf of ${nightScore.complete}`}>
-                      {tournament.schedule.nights[nightIndex].matches.map((match, matchIndex) => {
-                        const matchWinner = results.nights[nightIndex].matches[matchIndex].winner
-                        const matchResult = getMatchResultString(matchWinner, match)
-                        const fontColor =
-                          entry.nights[nightIndex].matches[matchIndex].winner === matchWinner
-                            ? 'text-green-600'
-                            : 'text-red-600'
-                        return (
-                          <p className={`${fontColor}`} key={`n${nightIndex}m${matchIndex}`}>
-                            {matchResult}
-                          </p>
-                        )
-                      })}
-                    </CollapseSection>
-                  </div>
-                ) : null}
+                <CollapseSection title={sectionTitle}>
+                  <>
+                    {tournament.schedule.nights[nightIndex].matches.map((match, matchIndex) => {
+                      const matchWinner = results.nights[nightIndex].matches[matchIndex].winner
+                      const pickedWinner = entry.nights[nightIndex].matches[matchIndex].winner
+                      const matchResult = getMatchResultString(matchWinner, match)
+                      const fontColor = nightScore.complete
+                        ? pickedWinner === matchWinner
+                          ? 'text-green-600'
+                          : 'text-red-600'
+                        : ''
+                      return (
+                        <p className={`${fontColor}`} key={`n${nightIndex}m${matchIndex}`}>
+                          {matchResult}
+                        </p>
+                      )
+                    })}
+                  </>
+                </CollapseSection>
               </div>
             )
           })}
+          <CollapseSection title="Seeds">
+            <div className="flex flex-row">
+              {results.seeds.map((block, blockIndex) => (
+                <div key={block.blockName + 'seeds'} className="ml-3">
+                  <p className="font-semibold">{block.blockName}</p>
+                  {block.seeds.map((seed, seedIndex) => {
+                    const pickedSeed = entry.seeds[blockIndex].seeds[seedIndex].name
+                    const fontColor = pickedSeed === seed.name ? 'text-green-600' : 'text-red-600'
+                    return (
+                      <div key={`${block.blockName}seed${seedIndex + 1}`}>
+                        <span>{`${seedIndex + 1}.`}</span>
+                        <span className={fontColor}>{` ${seed.name}`}</span>
+                      </div>
+                    )
+                  })}
+                </div>
+              ))}
+            </div>
+          </CollapseSection>
+          <CollapseSection title="Bracket">
+            {tournament.bracket.bracketMatches.map((match, i) => {
+              const matchWinner = results.bracket[i].winner
+              const fontColor = matchWinner
+                ? entry.bracket[i].winner === matchWinner
+                  ? 'text-green-600'
+                  : 'text-red-600'
+                : ''
+              const details = bracketMatchDetails[i]
+              return (
+                <div key={`Bracket${match.matchNumber}`}>
+                  <p className={fontColor}>{details.label}</p>
+                </div>
+              )
+            })}
+          </CollapseSection>
         </div>
       </Collapse>
     </div>
