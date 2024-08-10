@@ -69,6 +69,7 @@ export interface PickemFormVals {
   nights: { matches: { winner: string }[] }[]
   seeds: Seed[]
   bracket: { winner: string; matchNumber: number }[]
+  tiebreaker: string
 }
 
 export interface Pick extends PickemFormVals {

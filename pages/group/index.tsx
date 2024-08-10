@@ -133,6 +133,7 @@ const PickSummary = ({ entry, results, tournament }: PickSummaryProps) => {
                 </div>
               )
             })}
+            <p>{`Tiebreaker: ${entry.tiebreaker}`}</p>
           </CollapseSection>
         </div>
       </Collapse>

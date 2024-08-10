@@ -14,7 +14,7 @@ const PickEmPage = () => {
   // Placeholder until fetching logic is decided
   const activeTournament = G1Climax2024
   const [picks, setPicks] = useState([])
-  const { control, watch, handleSubmit } = useForm<PickemFormVals>({
+  const { control, watch, handleSubmit, register } = useForm<PickemFormVals>({
     defaultValues: getInitialPickEmVals(activeTournament),
   })
   const bracketPicks = watch('bracket')
@@ -45,6 +45,12 @@ const PickEmPage = () => {
             picks={bracketPicks}
             matchDetails={matchDetails}
           />
+          <div className="mt-2">
+            <label htmlFor="tiebreaker" className="mr-1">
+              Tiebreaker, length of finals in MM:SS
+            </label>
+            <input {...register('tiebreaker')} />
+          </div>
         </CollapseSection>
         <button className="p-3 rounded-xl border border-blue-500 mt-3" type="submit">
           Save

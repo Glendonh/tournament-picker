@@ -216,6 +216,7 @@ export const G1Picks24: Pick[] = [
   {
     userName: 'Jim Dave',
     id: '1',
+    tiebreaker: '15:00',
     nights: [
       {
         matches: [
@@ -390,6 +391,7 @@ export const G1Picks24: Pick[] = [
   {
     userName: 'Pippin Took',
     id: '2',
+    tiebreaker: '20:00',
     nights: [
       {
         matches: [
@@ -564,6 +566,7 @@ export const G1Picks24: Pick[] = [
   {
     userName: 'Sebastian Shaw',
     id: '3',
+    tiebreaker: '47:15',
     nights: [
       {
         matches: [

@@ -45,7 +45,7 @@ export const getInitialPickEmVals = (tournament: CompleteTournament): PickemForm
   const seeds = tournament.format.blockNames.map((block) => {
     return { blockName: block.name, seeds: Array(lowestSeed).fill({ name: '' }) }
   })
-  return { nights, bracket, seeds }
+  return { nights, bracket, seeds, tiebreaker: '' }
 }
 
 const getWrestlerLabel = ({
