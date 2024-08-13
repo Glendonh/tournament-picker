@@ -9,8 +9,7 @@ import UpdateForm from '../../components/UpdateForm'
 import { G1Climax2024, G1Picks24 } from '../../types/dummyData'
 
 const getPickAccuracy = (pick: Pick, results: PickemFormVals) => {
-  let correct = 0
-  let completeMatches = 0
+  let score = 0
   const nightScores: Array<{ correct: number; complete: number }> = []
   pick.nights.forEach((night, nightIndex) => {
     let nightMatches = 0
@@ -18,23 +17,35 @@ const getPickAccuracy = (pick: Pick, results: PickemFormVals) => {
     night.matches.forEach((match, matchIndex) => {
       const resultsWinner = results.nights[nightIndex].matches[matchIndex].winner
       if (resultsWinner) {
-        completeMatches++
         nightMatches++
         if (resultsWinner === match.winner) {
-          correct++
+          score += 2
           nightCorrect++
         }
       }
     })
     nightScores.push({ correct: nightCorrect, complete: nightMatches })
   })
-  return { correct, completeMatches, nightScores }
+  pick.seeds.forEach((block, blockIndex) => {
+    block.seeds.forEach((seed, seedIndex) => {
+      const actualSeed = results.seeds[blockIndex].seeds[seedIndex].name
+      if (seed.name === actualSeed) {
+        score += 5
+      }
+    })
+  })
+  pick.bracket.forEach((match, i) => {
+    const resultsWinner = results.bracket[i].winner
+    if (match.winner === resultsWinner) {
+      score += 5
+    }
+  })
+  return { score, nightScores }
 }
 
 interface ScoredPick extends Pick {
   tracker: {
-    correct: number
-    completeMatches: number
+    score: number
     nightScores: {
       complete: number
       correct: number
@@ -44,7 +55,7 @@ interface ScoredPick extends Pick {
 
 const sortedScoredPicks = (picks: Pick[], results: PickemFormVals): ScoredPick[] => {
   const scoredPicks = picks.map((pick) => ({ ...pick, tracker: getPickAccuracy(pick, results) }))
-  return scoredPicks.sort((a, b) => b.tracker.correct - a.tracker.correct)
+  return scoredPicks.sort((a, b) => b.tracker.score - a.tracker.score)
 }
 
 interface PickSummaryProps {
@@ -66,7 +77,7 @@ const PickSummary = ({ entry, results, tournament }: PickSummaryProps) => {
     <div key={entry.id} className="mb-1">
       <div className="p-2 w-1/2 border border-black rounded-lg flex flex-row justify-between" onClick={toggleOpened}>
         <span>{entry.userName}</span>
-        <span>{`${tracker.correct}/${tracker.completeMatches}`}</span>
+        <span>{`${tracker.score} pts.`}</span>
       </div>
       <Collapse isOpened={isOpened}>
         <div className="pl-2">
