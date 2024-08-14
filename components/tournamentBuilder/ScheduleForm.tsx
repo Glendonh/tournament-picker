@@ -72,6 +72,23 @@ const getOptionsFromNights =
     return []
   }
 
+const getValidationGenerator =
+  (nights: Night[]) =>
+  ({ nightIndex, matchIndex }: { nightIndex: number; matchIndex: number }) => {
+    const match = nights[nightIndex].matches[matchIndex]
+    const wrestler1Validation = (val: string) => {
+      if (val === match.wrestler2) {
+        return 'Match requires two distinct wrestlers'
+      }
+    }
+    const wrestler2Validation = (val: string) => {
+      if (val === match.wrestler1) {
+        return 'Match requires two distinct wrestlers'
+      }
+    }
+    return { wrestler1Validation, wrestler2Validation }
+  }
+
 // Saving for validation
 
 // const findRemainingMatches = (nights: Night[], format: FormatValues): number => {
@@ -91,6 +108,10 @@ interface ParticipantsInputProps {
   showRemove: boolean
   removeMatch: (index: number) => void
   getOptionsForMatch: (vals: { nightIndex: number; matchIndex: number; blockName: string }) => Option<string>[]
+  getValidationFunctions: ({ nightIndex, matchIndex }: { nightIndex: number; matchIndex: number }) => {
+    wrestler1Validation: (val: string) => string
+    wrestler2Validation: (val: string) => string
+  }
   errors: FieldErrors<ScheduleValues>
 }
 
@@ -104,12 +125,14 @@ const ParticipantsInput = ({
   removeMatch,
   showRemove,
   getOptionsForMatch,
+  getValidationFunctions,
   errors,
 }: ParticipantsInputProps) => {
   const wrestler1Label = `nights.${nightIndex}.matches.${matchIndex}.wrestler1`
   const wrestler2Label = `nights.${nightIndex}.matches.${matchIndex}.wrestler2`
   const [selectedBlock, setSelectedBlock] = useState('')
   const wrasslers = getOptionsForMatch({ nightIndex, matchIndex, blockName: selectedBlock })
+  const { wrestler1Validation, wrestler2Validation } = getValidationFunctions({ nightIndex, matchIndex })
   return (
     <div className="mx-4">
       <p>{`Match ${matchIndex + 1}`}</p>
@@ -124,6 +147,7 @@ const ParticipantsInput = ({
             name={wrestler1Label}
             options={wrasslers}
             control={control}
+            validate={wrestler1Validation}
             required
             errorMessage={errors.nights?.[nightIndex]?.matches?.[matchIndex]?.wrestler1?.message}
           />
@@ -134,6 +158,7 @@ const ParticipantsInput = ({
             name={wrestler2Label}
             options={wrasslers}
             control={control}
+            validate={wrestler2Validation}
             required
             errorMessage={errors.nights?.[nightIndex]?.matches?.[matchIndex]?.wrestler2?.message}
           />
@@ -154,10 +179,21 @@ interface NightSectionProps {
   control: Control<ScheduleValues>
   participants: ParticipantsFormVals
   getOptionsForMatch: (vals: { nightIndex: number; matchIndex: number; blockName: string }) => Option<string>[]
+  getValidationFunctions: ({ nightIndex, matchIndex }: { nightIndex: number; matchIndex: number }) => {
+    wrestler1Validation: (val: string) => string
+    wrestler2Validation: (val: string) => string
+  }
   errors: FieldErrors<ScheduleValues>
 }
 
-const NightSection = ({ nightIndex, control, participants, getOptionsForMatch, errors }: NightSectionProps) => {
+const NightSection = ({
+  nightIndex,
+  control,
+  participants,
+  getOptionsForMatch,
+  getValidationFunctions,
+  errors,
+}: NightSectionProps) => {
   const { fields, append, remove } = useFieldArray({ control, name: `nights.${nightIndex}.matches` })
   const blockValues = participants.allParticipants.map((pool) => stringToOption(pool.blockName))
   const addMatch = () => append({ wrestler1: '', wrestler2: '' })
@@ -175,6 +211,7 @@ const NightSection = ({ nightIndex, control, participants, getOptionsForMatch, e
               showRemove={fields.length > 1}
               removeMatch={remove}
               getOptionsForMatch={getOptionsForMatch}
+              getValidationFunctions={getValidationFunctions}
               errors={errors}
             />
           </div>
@@ -197,6 +234,7 @@ const ScheduleForm = ({ activeForm, participants, format, saveSchedule }: Schedu
   const { fields, replace } = useFieldArray({ control, name: 'nights' })
   const currentNights = watch('nights')
   const getOptionsForMatch = getOptionsFromNights({ nights: currentNights, participants })
+  const getValidationFunctions = getValidationGenerator(currentNights)
   useEffect(() => {
     if (format?.numberOfNights) {
       replace(getInitialVals(format).nights)
@@ -215,6 +253,7 @@ const ScheduleForm = ({ activeForm, participants, format, saveSchedule }: Schedu
               control={control}
               participants={participants}
               getOptionsForMatch={getOptionsForMatch}
+              getValidationFunctions={getValidationFunctions}
               errors={errors}
             />
           )

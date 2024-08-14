@@ -1,4 +1,4 @@
-import { Controller, Control } from 'react-hook-form'
+import { Controller, Control, Validate } from 'react-hook-form'
 import Select from 'react-select'
 
 interface ControlledSelectProps {
@@ -8,16 +8,25 @@ interface ControlledSelectProps {
   required?: boolean
   disabled?: boolean
   errorMessage?: string
+  validate?: Validate<any, any>
 }
 
-const ControlledSelect = ({ control, name, options, required, disabled, errorMessage }: ControlledSelectProps) => {
+const ControlledSelect = ({
+  control,
+  name,
+  options,
+  required,
+  disabled,
+  errorMessage,
+  validate,
+}: ControlledSelectProps) => {
   return (
     <>
       <Controller
         control={control}
         defaultValue=""
         name={name}
-        rules={{ required: required ? 'Required' : false }}
+        rules={{ required: required ? 'Required' : false, validate }}
         render={({ field: { onChange, value } }) => (
           <Select
             name={name}
