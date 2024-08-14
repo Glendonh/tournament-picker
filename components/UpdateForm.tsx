@@ -35,7 +35,7 @@ const UpdateForm = (props: UpdateFormProps) => {
           </div>
         ))}
         <CollapseSection title="Seeds">
-          <SeedsSection control={control} participants={participants} currentSeeds={currentSeeds} />
+          <SeedsSection control={control} participants={participants} />
           <button className="p-1 border border-black bg-slate-400 rounded-md mt-2 ml-2" type="submit">
             SAVE
           </button>

@@ -1,33 +1,24 @@
 import { useFieldArray, Control } from 'react-hook-form'
-import { PickemFormVals, ParticipantsFormVals, Seed, Option } from '../../types'
+import { PickemFormVals, ParticipantsFormVals, Option } from '../../types'
 import ControlledSelect from '../inputs/ControlledSelect'
 import { stringToOption } from '../../utils'
 
 interface SeedsSectionProps {
   control: Control<PickemFormVals>
   participants: ParticipantsFormVals
-  currentSeeds: Seed[]
 }
 
 const getAvailableBlockOptions = ({
   participants,
   blockIndex,
-  currentSeeds,
 }: {
-  currentSeeds: Seed[]
   blockIndex: number
   participants: ParticipantsFormVals
 }): Option<string>[] => {
-  const selectedBlockParticipants = currentSeeds[blockIndex].seeds.map((p) => p.name)
-  return participants.allParticipants[blockIndex].blockParticipants.reduce<Option<string>[]>((acc, participant) => {
-    if (selectedBlockParticipants.includes(participant.name)) {
-      return acc
-    }
-    return acc.concat(stringToOption(participant.name))
-  }, [])
+  return participants.allParticipants[blockIndex].blockParticipants.map((p) => stringToOption(p.name))
 }
 
-const SeedsSection = ({ control, participants, currentSeeds }: SeedsSectionProps) => {
+const SeedsSection = ({ control, participants }: SeedsSectionProps) => {
   return (
     <div className="border-t border-b pb-4 mt-2">
       <p className="text-lg">Seeds</p>
@@ -42,7 +33,7 @@ const SeedsSection = ({ control, participants, currentSeeds }: SeedsSectionProps
                   <label htmlFor={`seeds.${bIndex}.seeds.${sIndex}`}>{`${block.blockName} #${sIndex + 1}`}</label>
                   <ControlledSelect
                     control={control}
-                    options={getAvailableBlockOptions({ currentSeeds, blockIndex: bIndex, participants })}
+                    options={getAvailableBlockOptions({ blockIndex: bIndex, participants })}
                     name={`seeds.${bIndex}.seeds.${sIndex}.name`}
                   />
                 </div>

@@ -36,7 +36,7 @@ const PickEmPage = () => {
           </div>
         ))}
         <CollapseSection title="Seeds">
-          <SeedsSection control={control} participants={activeTournament.participants} currentSeeds={currentSeeds} />
+          <SeedsSection control={control} participants={activeTournament.participants} />
         </CollapseSection>
         <CollapseSection title="Bracket">
           <BracketSection

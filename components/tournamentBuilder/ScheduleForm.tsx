@@ -36,7 +36,10 @@ const getOptionsFromNights =
         .find((block) => block.blockName === blockName)
         ?.blockParticipants.map((w) => w.name) ?? []
     const activeNight = nights[nightIndex]
-    const wrestlingTonight = activeNight.matches.reduce((acc, match) => {
+    const wrestlingTonight = activeNight.matches.reduce((acc, match, i) => {
+      if (i === matchIndex) {
+        return acc
+      }
       if (match.wrestler1 || match.wrestler2) {
         if (match.wrestler1) {
           acc.push(match.wrestler1)
