@@ -2,6 +2,7 @@ import { Tournament } from '../constants'
 import {
   Option,
   FormatValues,
+  Participants,
   CompleteTournament,
   PickemFormVals,
   Seed,
@@ -24,6 +25,10 @@ export const generateNumberOptions = (min: number, max: number): Option<string>[
 
 export const matchesPerBlock = (count: number): number => {
   return ((count - 1) * count) / 2
+}
+
+export const getWrestlerNameFromId = (id: string, participants: Participants): string => {
+  return participants.lookup[id] ?? ''
 }
 
 const getLowestSeed = (format: FormatValues): number => {

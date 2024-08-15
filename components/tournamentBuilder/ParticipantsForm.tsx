@@ -10,10 +10,14 @@ interface Props {
 
 const getInitialVals = (format?: FormatValues): ParticipantsFormVals => {
   if (!format) return { allParticipants: [] }
-  const allParticipants = format.blockNames.map((blockName) => {
+  const blockIndicators = ['A', 'B', 'C', 'D']
+  const allParticipants = format.blockNames.map((blockName, blockIndex) => {
     return {
       blockName: blockName.name,
-      blockParticipants: Array(Number(format.participantsPer)).fill({ name: '' }),
+      blockParticipants: Array.from({ length: Number(format.participantsPer) }, (v, i) => ({
+        name: '',
+        id: `${blockIndicators[blockIndex]}${i}`,
+      })),
     }
   })
   return { allParticipants }

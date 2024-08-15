@@ -8,7 +8,11 @@ export interface FormatValues {
 }
 
 export interface ParticipantsFormVals {
-  allParticipants: { blockName: string; blockParticipants: { name: string }[] }[]
+  allParticipants: { blockName: string; blockParticipants: { name: string; id: string }[] }[]
+}
+
+export interface Participants extends ParticipantsFormVals {
+  lookup: { [key: string]: string }
 }
 
 export enum Forms {

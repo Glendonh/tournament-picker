@@ -3,12 +3,23 @@ import FormatForm from '../../components/tournamentBuilder/FormatForm'
 import ParticipantsForm from '../../components/tournamentBuilder/ParticipantsForm'
 import ScheduleForm from '../../components/tournamentBuilder/ScheduleForm'
 import BracketForm from '../../components/tournamentBuilder/BracketForm'
-import { FormatValues, ParticipantsFormVals, ScheduleValues, Forms, BracketFormVals } from '../../types'
+import { FormatValues, ParticipantsFormVals, Participants, ScheduleValues, Forms, BracketFormVals } from '../../types'
+import { getWrestlerNameFromId } from '../../utils'
+
+const formatParticipants = (pForm: ParticipantsFormVals): Participants => {
+  const lookup = {}
+  pForm.allParticipants.forEach((block) => {
+    block.blockParticipants.forEach((p) => {
+      lookup[p.id] = p.name
+    })
+  })
+  return { ...pForm, lookup }
+}
 
 const TourmanentBuilder = (): JSX.Element => {
   const [activeForm, setActiveForm] = useState(Forms.Format)
   const [format, setFormat] = useState<FormatValues>()
-  const [participants, setParticipants] = useState<ParticipantsFormVals>()
+  const [participants, setParticipants] = useState<Participants>()
   const [schedule, setSchedule] = useState<ScheduleValues>()
   const [bracket, setBracket] = useState<BracketFormVals>()
   const setFormSection = (section: Forms) => () => {
@@ -20,7 +31,7 @@ const TourmanentBuilder = (): JSX.Element => {
   }
 
   const saveParticipants = (vals: ParticipantsFormVals) => {
-    setParticipants(vals)
+    setParticipants(formatParticipants(vals))
     setActiveForm(Forms.Schedule)
   }
 
@@ -73,7 +84,10 @@ const TourmanentBuilder = (): JSX.Element => {
             <div key={nIndex}>
               <p>{`Night ${nIndex + 1}`}</p>
               {night.matches.map(({ wrestler1, wrestler2 }) => (
-                <div key={`${wrestler1}${wrestler2}`} className="p-1">{`${wrestler1} vs ${wrestler2}`}</div>
+                <div key={`${wrestler1}${wrestler2}`} className="p-1">{`${getWrestlerNameFromId(
+                  wrestler1,
+                  participants
+                )} vs ${getWrestlerNameFromId(wrestler2, participants)}`}</div>
               ))}
             </div>
           ))}
