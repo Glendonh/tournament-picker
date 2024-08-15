@@ -63,7 +63,7 @@ const ParticipantsForm = ({ activeForm, format, saveParticipants }: Props) => {
     if (format?.numberOfBlocks) {
       replace(getInitialVals(format).allParticipants)
     }
-  }, [format?.numberOfBlocks])
+  }, [format?.numberOfBlocks, format?.participantsPer])
 
   if (activeForm !== Forms.Participants || !format) return null
   return (
