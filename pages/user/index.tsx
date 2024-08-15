@@ -1,4 +1,6 @@
 import Head from 'next/head'
+import Link from 'next/link'
+
 const user = {
   name: 'GlendonH',
   groups: [{ name: 'Cageside Seats' }, { name: 'SquaredCircle' }, { name: 'POST Wrestling' }],
@@ -57,7 +59,9 @@ const UserPage = () => {
                 <p className="font-semibold">{t.name}</p>
                 {relevantBrackets.map((bracket) => (
                   <div className="pl-2" key={bracket.name}>
-                    <p className="font-medium text-sky-600 underline">{bracket.name}</p>
+                    <Link href="/group">
+                      <p className="font-medium text-sky-600 underline">{bracket.name}</p>
+                    </Link>
                     <div className="pl-1">
                       <p>{`${bracket.score} out of ${bracket.possible} points`}</p>
                       <p>{`Place: ${bracket.standing}`}</p>
