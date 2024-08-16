@@ -8,7 +8,7 @@ import { getWrestlerNameFromId } from '../../utils'
 
 const formatParticipants = (pForm: ParticipantsFormVals): Participants => {
   const lookup = {}
-  pForm.allParticipants.forEach((block) => {
+  pForm.blocks.forEach((block) => {
     block.blockParticipants.forEach((p) => {
       lookup[p.id] = p.name
     })
@@ -69,7 +69,7 @@ const TourmanentBuilder = (): JSX.Element => {
       {activeForm === Forms.Review ? (
         <div>
           <h2>Blocks</h2>
-          {participants.allParticipants.map((block) => (
+          {participants.blocks.map((block) => (
             <div key={block.blockName}>
               <h3>{block.blockName}</h3>
               <div className="p-1">

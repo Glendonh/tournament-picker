@@ -32,7 +32,7 @@ const getOptionsFromNights =
       return []
     }
     const activeBlockWrestlers =
-      participants.allParticipants.find((block) => block.blockName === blockName)?.blockParticipants ?? []
+      participants.blocks.find((block) => block.blockName === blockName)?.blockParticipants ?? []
     const activeNight = nights[nightIndex]
     const wrestlingTonight = activeNight.matches.reduce<string[]>((acc, match, i) => {
       if (i === matchIndex) {
@@ -195,7 +195,7 @@ const NightSection = ({
   errors,
 }: NightSectionProps) => {
   const { fields, append, remove } = useFieldArray({ control, name: `nights.${nightIndex}.matches` })
-  const blockValues = participants.allParticipants.map((pool) => stringToOption(pool.blockName))
+  const blockValues = participants.blocks.map((pool) => stringToOption(pool.blockName))
   const addMatch = () => append({ wrestler1: '', wrestler2: '' })
   return (
     <div className="mx-4 border">

@@ -7,8 +7,13 @@ export interface FormatValues {
   numberAdvancing: string
 }
 
+export interface Participant {
+  name: string
+  id: string
+}
+
 export interface ParticipantsFormVals {
-  allParticipants: { blockName: string; blockParticipants: { name: string; id: string }[] }[]
+  blocks: { blockName: string; blockParticipants: Participant[] }[]
 }
 
 export interface Participants extends ParticipantsFormVals {
@@ -59,7 +64,7 @@ export interface BracketFormVals {
 
 export interface CompleteTournament {
   format: FormatValues
-  participants: ParticipantsFormVals
+  participants: Participants
   schedule: ScheduleValues
   bracket: BracketFormVals
 }

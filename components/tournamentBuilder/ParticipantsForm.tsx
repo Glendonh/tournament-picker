@@ -9,9 +9,9 @@ interface Props {
 }
 
 const getInitialVals = (format?: FormatValues): ParticipantsFormVals => {
-  if (!format) return { allParticipants: [] }
+  if (!format) return { blocks: [] }
   const blockIndicators = ['A', 'B', 'C', 'D']
-  const allParticipants = format.blockNames.map((blockName, blockIndex) => {
+  const blocks = format.blockNames.map((blockName, blockIndex) => {
     return {
       blockName: blockName.name,
       blockParticipants: Array.from({ length: Number(format.participantsPer) }, (v, i) => ({
@@ -20,7 +20,7 @@ const getInitialVals = (format?: FormatValues): ParticipantsFormVals => {
       })),
     }
   })
-  return { allParticipants }
+  return { blocks }
 }
 
 interface SectionProps {
@@ -32,7 +32,7 @@ interface SectionProps {
 }
 
 const BlockSection = ({ control, register, sectionIndex, blockName, errors }: SectionProps) => {
-  const { fields } = useFieldArray({ control, name: `allParticipants.${sectionIndex}.blockParticipants` })
+  const { fields } = useFieldArray({ control, name: `blocks.${sectionIndex}.blockParticipants` })
   return (
     <div>
       <h2>{blockName}</h2>
@@ -40,13 +40,13 @@ const BlockSection = ({ control, register, sectionIndex, blockName, errors }: Se
       {fields.map((participant, pIndex) => (
         <div key={participant.id}>
           <input
-            {...register(`allParticipants.${sectionIndex}.blockParticipants.${pIndex}.name`, {
+            {...register(`blocks.${sectionIndex}.blockParticipants.${pIndex}.name`, {
               required: 'Required',
             })}
           />
-          {errors.allParticipants?.[sectionIndex]?.blockParticipants?.[pIndex]?.name ? (
+          {errors.blocks?.[sectionIndex]?.blockParticipants?.[pIndex]?.name ? (
             <span className="text-red-700 text-sm">
-              {errors.allParticipants[sectionIndex].blockParticipants?.[pIndex]?.name.message}
+              {errors.blocks[sectionIndex].blockParticipants?.[pIndex]?.name.message}
             </span>
           ) : null}
         </div>
@@ -62,10 +62,10 @@ const ParticipantsForm = ({ activeForm, format, saveParticipants }: Props) => {
     control,
     formState: { errors },
   } = useForm<ParticipantsFormVals>({ defaultValues: getInitialVals(format) })
-  const { fields, replace } = useFieldArray({ control, name: 'allParticipants' })
+  const { fields, replace } = useFieldArray({ control, name: 'blocks' })
   useEffect(() => {
     if (format?.numberOfBlocks) {
-      replace(getInitialVals(format).allParticipants)
+      replace(getInitialVals(format).blocks)
     }
   }, [format?.numberOfBlocks, format?.participantsPer])
 

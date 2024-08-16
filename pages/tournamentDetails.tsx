@@ -9,7 +9,7 @@ import UpdateForm from '../components/UpdateForm'
 import { G1Climax2024 } from '../types/dummyData'
 
 const getScores = (participants: ParticipantsFormVals, results: PickemFormVals) => {
-  const scores = participants.allParticipants.reduce((acc, block) => {
+  const scores = participants.blocks.reduce((acc, block) => {
     block.blockParticipants.forEach((p) => (acc[p.name] = 0))
     return acc
   }, {})
@@ -57,7 +57,7 @@ const TournamentDetails = () => {
           <p className="text-xl text-center">Summary</p>
           <p className="text-xl">Participants</p>
           <div className="flex flex-row">
-            {participants.allParticipants.map((block) => (
+            {participants.blocks.map((block) => (
               <div key={block.blockName} className="mx-2">
                 <p className="text-l font-semibold">{block.blockName}</p>
                 {block.blockParticipants.map((p) => (

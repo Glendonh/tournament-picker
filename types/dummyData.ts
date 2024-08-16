@@ -10,7 +10,29 @@ export const G1Climax2024: CompleteTournament = {
     numberAdvancing: '6',
   },
   participants: {
-    allParticipants: [
+    lookup: {
+      A0: 'Zack Sabre Jr.',
+      A1: 'Evil',
+      A2: 'Shingo Takagi',
+      A3: 'Gabe Kidd',
+      A4: 'Tetsuya Naito',
+      A5: 'Jake Lee',
+      A6: 'Sanada',
+      A7: 'Callum Newman',
+      A8: 'Shota Umino',
+      A9: 'Great-O-Khan',
+      B0: 'Yuya Uemura',
+      B1: 'Henare',
+      B2: 'Konosuke Takeshita',
+      B3: 'Ren Narita',
+      B4: 'Hirooki Goto',
+      B5: 'Boltin Oleg',
+      B6: 'Jeff Cobb',
+      B7: 'El Phantasmo',
+      B8: 'Yota Tsuji',
+      B9: 'David Finlay',
+    },
+    blocks: [
       {
         blockName: 'A Block',
         blockParticipants: [
