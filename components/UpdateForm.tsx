@@ -19,7 +19,12 @@ const UpdateForm = (props: UpdateFormProps) => {
   })
   const bracketPicks = watch('bracket')
   const currentSeeds = watch('seeds')
-  const matchDetails = getBracketMatchDetails({ seeds: currentSeeds, bracketPicks, bracket: bracket })
+  const matchDetails = getBracketMatchDetails({
+    seeds: currentSeeds,
+    bracketPicks,
+    bracket: bracket,
+    lookup: participants.lookup,
+  })
   return (
     <div>
       <p className="text-xl">Update Results</p>
@@ -27,7 +32,7 @@ const UpdateForm = (props: UpdateFormProps) => {
         {schedule.nights.map((n, nIndex) => (
           <div key={nIndex} className="mb-2">
             <CollapseSection title={`Night ${nIndex + 1}`}>
-              <NightMatches control={control} nightIndex={nIndex} schedule={schedule} />
+              <NightMatches control={control} nightIndex={nIndex} schedule={schedule} lookup={participants.lookup} />
               <button className="p-1 border border-black bg-slate-400 rounded-md mt-2 ml-2" type="submit">
                 SAVE
               </button>
@@ -35,7 +40,7 @@ const UpdateForm = (props: UpdateFormProps) => {
           </div>
         ))}
         <CollapseSection title="Seeds">
-          <SeedsSection control={control} participants={participants} />
+          <SeedsSection control={control} participants={participants} currentSeeds={currentSeeds} />
           <button className="p-1 border border-black bg-slate-400 rounded-md mt-2 ml-2" type="submit">
             SAVE
           </button>

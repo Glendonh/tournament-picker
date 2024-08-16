@@ -6,7 +6,7 @@ import CollapseSection from '../components/CollapseSection'
 import UpdateForm from '../components/UpdateForm'
 
 // import { snowPrixSix } from '../test/__mocks__/tournaments'
-import { G1Climax2024 } from '../types/dummyData'
+import { MarvelPrix } from '../types/dummyData'
 
 const getScores = (participants: ParticipantsFormVals, results: PickemFormVals) => {
   const scores = participants.blocks.reduce((acc, block) => {
@@ -25,11 +25,16 @@ const getScores = (participants: ParticipantsFormVals, results: PickemFormVals) 
 }
 
 const TournamentDetails = () => {
-  const { format, participants, schedule, bracket } = G1Climax2024
+  const { format, participants, schedule, bracket } = MarvelPrix
   const [showEdit, setShowEdit] = useState(false)
-  const [results, setResults] = useState<PickemFormVals>(getInitialPickEmVals(G1Climax2024))
+  const [results, setResults] = useState<PickemFormVals>(getInitialPickEmVals(MarvelPrix))
   const toggleShowEdit = () => setShowEdit((s) => !s)
-  const matchDetails = getBracketMatchDetails({ seeds: results.seeds, bracketPicks: results.bracket, bracket: bracket })
+  const matchDetails = getBracketMatchDetails({
+    seeds: results.seeds,
+    bracketPicks: results.bracket,
+    bracket: bracket,
+    lookup: participants.lookup,
+  })
   const scores = getScores(participants, results)
 
   return (
@@ -44,7 +49,7 @@ const TournamentDetails = () => {
       </button>
       {showEdit ? (
         <div>
-          <UpdateForm tournament={G1Climax2024} onSubmit={setResults} results={results} />
+          <UpdateForm tournament={MarvelPrix} onSubmit={setResults} results={results} />
           <ul className="list-inside list-disc">
             <li>update results on a nightly basis</li>
             <li>update seeds and brackets after nights are complete</li>

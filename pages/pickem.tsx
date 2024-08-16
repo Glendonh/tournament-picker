@@ -7,19 +7,24 @@ import SeedsSection from '../components/pickForms/SeedsSection'
 import BracketSection from '../components/pickForms/BracketSection'
 import CollapseSection from '../components/CollapseSection'
 
-// import { snowPrixSix } from '../test/__mocks__/tournaments'
-import { G1Climax2024 } from '../types/dummyData'
+import { MarvelPrix } from '../types/dummyData'
 
 const PickEmPage = () => {
   // Placeholder until fetching logic is decided
-  const activeTournament = G1Climax2024
+  const activeTournament = MarvelPrix
   const [picks, setPicks] = useState([])
   const { control, watch, handleSubmit, register } = useForm<PickemFormVals>({
     defaultValues: getInitialPickEmVals(activeTournament),
   })
   const bracketPicks = watch('bracket')
   const currentSeeds = watch('seeds')
-  const matchDetails = getBracketMatchDetails({ seeds: currentSeeds, bracketPicks, bracket: activeTournament.bracket })
+  const matchDetails = getBracketMatchDetails({
+    seeds: currentSeeds,
+    bracketPicks,
+    bracket: activeTournament.bracket,
+    lookup: activeTournament.participants.lookup,
+  })
+  const wrestlerLookup = activeTournament.participants.lookup
   const addPicksAndPrint = (vals) => {
     const newVals = picks.concat(vals)
     console.log(JSON.stringify(newVals))
@@ -31,12 +36,17 @@ const PickEmPage = () => {
         {activeTournament.schedule.nights.map((night, nIndex) => (
           <div key={`night${nIndex + 1}`}>
             <CollapseSection title={`Night ${nIndex + 1}`}>
-              <NightMatches control={control} nightIndex={nIndex} schedule={activeTournament.schedule} />
+              <NightMatches
+                control={control}
+                nightIndex={nIndex}
+                schedule={activeTournament.schedule}
+                lookup={wrestlerLookup}
+              />
             </CollapseSection>
           </div>
         ))}
         <CollapseSection title="Seeds">
-          <SeedsSection control={control} participants={activeTournament.participants} />
+          <SeedsSection control={control} participants={activeTournament.participants} currentSeeds={currentSeeds} />
         </CollapseSection>
         <CollapseSection title="Bracket">
           <BracketSection

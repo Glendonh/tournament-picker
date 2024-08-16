@@ -34,10 +34,7 @@ const getOptionsFromNights =
     const activeBlockWrestlers =
       participants.blocks.find((block) => block.blockName === blockName)?.blockParticipants ?? []
     const activeNight = nights[nightIndex]
-    const wrestlingTonight = activeNight.matches.reduce<string[]>((acc, match, i) => {
-      if (i === matchIndex) {
-        return acc
-      }
+    const wrestlingTonight = activeNight.matches.reduce<string[]>((acc, match) => {
       if (match.wrestler1 || match.wrestler2) {
         if (match.wrestler1) {
           acc.push(match.wrestler1)
@@ -66,7 +63,7 @@ const getOptionsFromNights =
       return acc
     }, [])
     return notWrestlingTonight
-      .filter((w) => !alreadyBookedAgainst.includes(w))
+      .filter((w) => !alreadyBookedAgainst.includes(w.id))
       .map((w) => ({ label: w.name, value: w.id }))
 
     return []

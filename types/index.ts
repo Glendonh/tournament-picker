@@ -16,8 +16,12 @@ export interface ParticipantsFormVals {
   blocks: { blockName: string; blockParticipants: Participant[] }[]
 }
 
+export interface Lookup {
+  [key: string]: string
+}
+
 export interface Participants extends ParticipantsFormVals {
-  lookup: { [key: string]: string }
+  lookup: Lookup
 }
 
 export enum Forms {

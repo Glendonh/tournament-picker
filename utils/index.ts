@@ -8,6 +8,7 @@ import {
   Seed,
   BracketFormVals,
   BracketWrestler,
+  Lookup,
 } from '../types'
 
 export const stringToOption = (str: string): Option<string> => ({ value: str, label: str })
@@ -53,43 +54,58 @@ export const getInitialPickEmVals = (tournament: CompleteTournament): PickemForm
   return { nights, bracket, seeds, tiebreaker: '' }
 }
 
-const getWrestlerLabel = ({
+const getWrestlerDetails = ({
   wrestler,
   seeds,
   bracketPicks,
+  lookup,
 }: {
   wrestler: BracketWrestler
   seeds: Seed[]
   bracketPicks: { winner: string; matchNumber: number }[]
-}): string => {
+  lookup: Lookup
+}): { label: string; option?: Option<string> } => {
   const { winnerOf, blockIndex, seedIndex } = wrestler
+  let label = ''
+  let option: Option<string>
   if (winnerOf) {
     const selectedWinner = bracketPicks.find((m) => m.matchNumber === winnerOf)?.winner
-    return selectedWinner || `Winner of match #${winnerOf}`
+    if (selectedWinner) {
+      label = lookup[selectedWinner]
+      option = { label: lookup[selectedWinner], value: selectedWinner }
+    } else {
+      label = `Winner of match #${winnerOf}`
+    }
   }
   if (!isNaN(blockIndex) && !isNaN(seedIndex)) {
     const selectedSeed = seeds[blockIndex].seeds[seedIndex]?.name
-    return selectedSeed || `${seeds[blockIndex].blockName} ${seedIndex + 1} seed`
+    if (selectedSeed) {
+      label = lookup[selectedSeed]
+      option = { label: lookup[selectedSeed], value: selectedSeed }
+    } else {
+      label = `${seeds[blockIndex].blockName} ${seedIndex + 1} seed`
+    }
   }
-  return ''
+  return { label, option }
 }
 
-// TODO: Prevent blank options
 export const getBracketMatchDetails = ({
   seeds,
   bracketPicks,
   bracket,
+  lookup,
 }: {
   seeds: Seed[]
   bracketPicks: { winner: string; matchNumber: number }[]
   bracket: BracketFormVals
+  lookup: Lookup
 }) => {
   return bracket.bracketMatches.map((match) => {
     const { p1, p2 } = match
-    const p1Label = getWrestlerLabel({ wrestler: p1, seeds, bracketPicks })
-    const p2Label = getWrestlerLabel({ wrestler: p2, seeds, bracketPicks })
-    const label = `${p1Label} vs ${p2Label}`
-    const options = generateStringOptions([p1Label, p2Label])
+    const p1Details = getWrestlerDetails({ wrestler: p1, seeds, bracketPicks, lookup })
+    const p2Details = getWrestlerDetails({ wrestler: p2, seeds, bracketPicks, lookup })
+    const label = `${p1Details.label} vs ${p2Details.label}`
+    const options = [p1Details.option, p2Details.option].filter((o) => o)
     return { label, options }
   })
 }

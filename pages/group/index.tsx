@@ -6,7 +6,7 @@ import { getInitialPickEmVals, getMatchResultString, getBracketMatchDetails } fr
 import { PickemFormVals, Pick, CompleteTournament } from '../../types'
 import UpdateForm from '../../components/UpdateForm'
 
-import { G1Climax2024, G1Picks24 } from '../../types/dummyData'
+import { MarvelPrix, G1Picks24 } from '../../types/dummyData'
 
 const getPickAccuracy = (pick: Pick, results: PickemFormVals) => {
   let score = 0
@@ -72,6 +72,7 @@ const PickSummary = ({ entry, results, tournament }: PickSummaryProps) => {
     seeds: results.seeds,
     bracketPicks: entry.bracket,
     bracket: tournament.bracket,
+    lookup: tournament.participants.lookup,
   })
   return (
     <div key={entry.id} className="mb-1">
@@ -153,7 +154,7 @@ const PickSummary = ({ entry, results, tournament }: PickSummaryProps) => {
 }
 
 const GroupPage = () => {
-  const tournament = G1Climax2024
+  const tournament = MarvelPrix
   const [showEdit, setShowEdit] = useState(false)
   const [results, setResults] = useState<PickemFormVals>(getInitialPickEmVals(tournament))
   const toggleShowEdit = () => setShowEdit((s) => !s)
