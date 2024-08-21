@@ -1,32 +1,27 @@
-import { ApolloServer, gql } from 'apollo-server-micro'
-
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`
-
-const resolvers = {
-  Query: {
-    hello: () => 'here I am',
-  },
-}
-
-const apolloServer = new ApolloServer({ typeDefs, resolvers })
+// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { createSchema, createYoga } from 'graphql-yoga'
 
 export const config = {
   api: {
+    // Disable body parsing (required for file uploads)
     bodyParser: false,
   },
 }
 
-let hasStarted = false
+const schema = createSchema({
+  typeDefs: /* GraphQL */ `
+    type Query {
+      greetings: String
+    }
+  `,
+  resolvers: {
+    Query: {
+      greetings: () => 'This is the `greetings` field of the root `Query` type',
+    },
+  },
+})
 
-export default async function handler(req, res) {
-  if (!hasStarted) {
-    await apolloServer.start() // Start the Apollo Server
-    hasStarted = true
-  }
-  const handler = apolloServer.createHandler({ path: '/api/graphql' })
-  return handler(req, res)
-}
+export default createYoga({
+  schema,
+  graphqlEndpoint: '/api/graphql',
+})
