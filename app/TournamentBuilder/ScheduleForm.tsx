@@ -1,7 +1,7 @@
 import { useForm, useFieldArray, Control, FieldArrayWithId, FieldErrors } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 import Select from 'react-select'
-import ControlledSelect from '../inputs/ControlledSelect'
+import ControlledSelect from '../../components/inputs/ControlledSelect'
 import { Forms, ParticipantsFormVals, FormatValues, ScheduleValues, Night, Option } from '../../types'
 import { stringToOption } from '../../utils'
 

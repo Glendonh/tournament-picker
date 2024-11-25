@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useForm, useFieldArray, useWatch } from 'react-hook-form'
-import ControlledSelect from '../inputs/ControlledSelect'
+import ControlledSelect from '../../components/inputs/ControlledSelect'
 import { FormatValues, Forms } from '../../types'
 import { generateNumberOptions, matchesPerBlock, generateStringOptions } from '../../utils'
 

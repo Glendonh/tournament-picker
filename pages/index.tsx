@@ -26,7 +26,7 @@ export const Home = (): JSX.Element => (
         </div>
         <div className="flex-col">
           <p className="text-lg">Admin</p>
-          <Link href="/tournamentBuilder" className="text-sky-600 underline">
+          <Link href="/TournamentBuilder" className="text-sky-600 underline">
             Design Tournament
           </Link>
           <Link href="/tournamentDetails" className="text-sky-600 underline">

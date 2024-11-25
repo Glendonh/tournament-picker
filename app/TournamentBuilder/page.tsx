@@ -1,8 +1,9 @@
+'use client'
 import { useState } from 'react'
-import FormatForm from '../../components/tournamentBuilder/FormatForm'
-import ParticipantsForm from '../../components/tournamentBuilder/ParticipantsForm'
-import ScheduleForm from '../../components/tournamentBuilder/ScheduleForm'
-import BracketForm from '../../components/tournamentBuilder/BracketForm'
+import FormatForm from './FormatForm'
+import ParticipantsForm from './ParticipantsForm'
+import ScheduleForm from './ScheduleForm'
+import BracketForm from './BracketForm'
 import { FormatValues, ParticipantsFormVals, Participants, ScheduleValues, Forms, BracketFormVals } from '../../types'
 import { getWrestlerNameFromId } from '../../utils'
 
