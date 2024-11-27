@@ -110,12 +110,19 @@ export const getBracketMatchDetails = ({
   })
 }
 
-export const getMatchResultString = (winner: string, match: { wrestler1: string; wrestler2: string }) => {
+export const getMatchResultString = (
+  winner: string,
+  match: { wrestler1: string; wrestler2: string },
+  participants: Participants
+) => {
   const { wrestler1, wrestler2 } = match
-  if (winner === 'draw') return `${match.wrestler1} draws ${wrestler2}`
-  if (!winner) return `${wrestler1} vs ${wrestler2}`
+  const wrestler1Name = participants.lookup[wrestler1]
+  const wrestler2Name = participants.lookup[wrestler2]
+  const winnerName = participants.lookup[winner]
+  if (winner === 'draw') return `${wrestler1Name} draws ${wrestler2Name}`
+  if (!winner) return `${wrestler1Name} vs ${wrestler2Name}`
   const loser = winner === wrestler1 ? wrestler2 : wrestler1
-  return `${winner} defeats ${loser}`
+  return `${winnerName} defeats ${participants.lookup[loser]}`
 }
 
 export const exampleTournament: Tournament = {

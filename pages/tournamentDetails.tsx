@@ -79,7 +79,7 @@ const TournamentDetails = () => {
                 <div className="ml-2">
                   {n.matches.map((match, mIndex) => {
                     const matchWinner = results?.nights[nIndex]?.matches[mIndex]?.winner
-                    const resultString = getMatchResultString(matchWinner, match)
+                    const resultString = getMatchResultString(matchWinner, match, participants)
                     return <div key={`N${nIndex}M${mIndex}`}>{`${mIndex + 1}. ${resultString}`}</div>
                   })}
                 </div>

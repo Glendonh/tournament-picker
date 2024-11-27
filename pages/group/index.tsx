@@ -94,7 +94,7 @@ const PickSummary = ({ entry, results, tournament }: PickSummaryProps) => {
                     {tournament.schedule.nights[nightIndex].matches.map((match, matchIndex) => {
                       const matchWinner = results.nights[nightIndex].matches[matchIndex].winner
                       const pickedWinner = entry.nights[nightIndex].matches[matchIndex].winner
-                      const matchResult = getMatchResultString(matchWinner, match)
+                      const matchResult = getMatchResultString(matchWinner, match, tournament.participants)
                       const fontColor = nightScore.complete
                         ? pickedWinner === matchWinner
                           ? 'text-green-600'

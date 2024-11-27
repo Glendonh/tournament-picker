@@ -24,6 +24,7 @@ const getRoundRobinMatchOptions = (
   return [
     { value: wrestler1, label: lookup[wrestler1] },
     { value: wrestler2, label: lookup[wrestler2] },
+    { value: 'draw', label: 'Draw' },
   ]
 }
 
