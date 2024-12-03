@@ -27,7 +27,7 @@ const PickEmPage = () => {
   const wrestlerLookup = activeTournament.participants.lookup
   const addPicksAndPrint = (vals) => {
     const newVals = picks.concat(vals)
-    console.log(JSON.stringify(newVals))
+    // console.log(JSON.stringify(newVals))
     setPicks(newVals)
   }
   return (

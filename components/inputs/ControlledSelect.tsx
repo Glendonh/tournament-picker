@@ -43,7 +43,7 @@ const ControlledSelect = ({
           />
         )}
       />
-      {errorMessage ? <div className="text-red-700 text-sm">{errorMessage}</div> : null}
+      {errorMessage ? <div className="text-error text-sm">{errorMessage}</div> : null}
     </>
   )
 }

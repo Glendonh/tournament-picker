@@ -60,7 +60,7 @@ const UserPage = () => {
                 {relevantBrackets.map((bracket) => (
                   <div className="pl-2" key={bracket.name}>
                     <Link href="/group">
-                      <p className="font-medium text-sky-600 underline">{bracket.name}</p>
+                      <p className="font-medium text-link underline">{bracket.name}</p>
                     </Link>
                     <div className="pl-1">
                       <p>{`${bracket.score} out of ${bracket.possible} points`}</p>

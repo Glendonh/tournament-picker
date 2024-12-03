@@ -22,7 +22,7 @@ const PickerButtons = ({ control, name, options, required, errorMessage }: Picke
         render={({ field: { onChange, value } }) => (
           <div role="radiogroup">
             {options.map((opt) => {
-              const bgActive = value === opt.value ? 'bg-emerald-800 text-white' : 'border-black'
+              const bgActive = value === opt.value ? 'bg-primary text-white' : 'border-black'
               return (
                 <button
                   type="button"
@@ -38,7 +38,7 @@ const PickerButtons = ({ control, name, options, required, errorMessage }: Picke
           </div>
         )}
       />
-      {errorMessage ? <div className="text-red-700 text-sm">{errorMessage}</div> : null}
+      {errorMessage ? <div className="text-error text-sm">{errorMessage}</div> : null}
     </div>
   )
 }

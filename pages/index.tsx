@@ -13,23 +13,23 @@ export const Home = (): JSX.Element => (
       <div className="flex flex-row justify-center">
         <div className="flex-col mr-6">
           <Link href="/user">
-            <p className="text-lg text-sky-600 underline">User</p>
+            <p className="text-lg text-link underline">User</p>
           </Link>
-          <Link href="/pickem" className="text-sky-600 underline">{`Pick 'em form`}</Link>
+          <Link href="/pickem" className="text-link underline">{`Pick 'em form`}</Link>
           <p />
           <small className="ml-1">Handle tiebreaker</small>
           <p>Create/Manage Group</p>
           <small className="ml-1">custom scoring?</small>
           <Link href="/group">
-            <p className="text-lg text-sky-600 underline">Track Group Results</p>
+            <p className="text-lg text-link underline">Track Group Results</p>
           </Link>
         </div>
         <div className="flex-col">
           <p className="text-lg">Admin</p>
-          <Link href="/TournamentBuilder" className="text-sky-600 underline">
+          <Link href="/TournamentBuilder" className="text-link underline">
             Design Tournament
           </Link>
-          <Link href="/tournamentDetails" className="text-sky-600 underline">
+          <Link href="/tournamentDetails" className="text-link underline">
             <p>Enter Results</p>
           </Link>
           <p>General Admin</p>

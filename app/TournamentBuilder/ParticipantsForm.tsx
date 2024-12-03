@@ -45,7 +45,7 @@ const BlockSection = ({ control, register, sectionIndex, blockName, errors }: Se
             })}
           />
           {errors.blocks?.[sectionIndex]?.blockParticipants?.[pIndex]?.name ? (
-            <span className="text-red-700 text-sm">
+            <span className="text-error text-sm">
               {errors.blocks[sectionIndex].blockParticipants?.[pIndex]?.name.message}
             </span>
           ) : null}

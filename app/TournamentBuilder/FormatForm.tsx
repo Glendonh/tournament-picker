@@ -50,7 +50,7 @@ const FormatForm = ({ activeForm, saveFormat, currentFormat }: Props) => {
       <form onSubmit={handleSubmit(saveFormat)}>
         <label htmlFor="tournamentName">Tournament Name</label>
         <input type="text" {...register('tournamentName', { required: 'Required' })} />
-        {errors.tournamentName ? <span className="text-red-700 text-sm">{errors.tournamentName.message}</span> : null}
+        {errors.tournamentName ? <span className="text-error text-sm">{errors.tournamentName.message}</span> : null}
         <p />
         <label htmlFor="numberOfBlocks">Number of blocks</label>
         <ControlledSelect name="numberOfBlocks" control={control} options={numberOfBlocksOptions} required />
@@ -66,7 +66,7 @@ const FormatForm = ({ activeForm, saveFormat, currentFormat }: Props) => {
           <>
             <input key={item.id} {...register(`blockNames.${index}.name`, { required: 'Required' })} />
             {errors.blockNames?.[index]?.name ? (
-              <span className="text-red-700 text-sm">{errors.blockNames?.[index]?.name.message}</span>
+              <span className="text-error text-sm">{errors.blockNames?.[index]?.name.message}</span>
             ) : null}
           </>
         ))}
