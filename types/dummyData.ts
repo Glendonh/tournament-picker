@@ -91,3 +91,94 @@ export const MarvelPrix: CompleteTournament = {
 }
 
 export const G1Picks24: Pick[] = []
+
+export const MarvelPrixPicks: Pick[] = [
+  {
+    id: '1',
+    userName: 'Left',
+    nights: [
+      { matches: [{ winner: 'A0' }, { winner: 'A3' }] },
+      { matches: [{ winner: 'B0' }, { winner: 'B2' }] },
+      { matches: [{ winner: 'A0' }, { winner: 'A3' }] },
+      { matches: [{ winner: 'B2' }, { winner: 'B1' }] },
+      { matches: [{ winner: 'A0' }, { winner: 'A1' }] },
+      { matches: [{ winner: 'B3' }, { winner: 'B1' }] },
+    ],
+    bracket: [
+      { winner: 'A0', matchNumber: 1 },
+      { winner: 'B2', matchNumber: 2 },
+      { winner: 'A0', matchNumber: 3 },
+    ],
+    seeds: [
+      { blockName: 'Heroes', seeds: [{ name: 'A0' }, { name: 'A3' }] },
+      { blockName: 'Villains', seeds: [{ name: 'B2' }, { name: 'B1' }] },
+    ],
+    tiebreaker: '12:15',
+  },
+  {
+    id: '2',
+    userName: 'Chalk',
+    nights: [
+      { matches: [{ winner: 'A0' }, { winner: 'A3' }] },
+      { matches: [{ winner: 'B1' }, { winner: 'B2' }] },
+      { matches: [{ winner: 'A0' }, { winner: 'A3' }] },
+      { matches: [{ winner: 'B2' }, { winner: 'B1' }] },
+      { matches: [{ winner: 'A3' }, { winner: 'A2' }] },
+      { matches: [{ winner: 'B3' }, { winner: 'B1' }] },
+    ],
+    bracket: [
+      { winner: 'A3', matchNumber: 1 },
+      { winner: 'B1', matchNumber: 2 },
+      { winner: 'A3', matchNumber: 3 },
+    ],
+    seeds: [
+      { blockName: 'Heroes', seeds: [{ name: 'A3' }, { name: 'A0' }] },
+      { blockName: 'Villains', seeds: [{ name: 'B1' }, { name: 'B2' }] },
+    ],
+    tiebreaker: '15:30',
+  },
+  {
+    id: '3',
+    userName: 'Upsets',
+    nights: [
+      { matches: [{ winner: 'A1' }, { winner: 'A2' }] },
+      { matches: [{ winner: 'B0' }, { winner: 'B3' }] },
+      { matches: [{ winner: 'A2' }, { winner: 'A1' }] },
+      { matches: [{ winner: 'B0' }, { winner: 'B3' }] },
+      { matches: [{ winner: 'A0' }, { winner: 'A1' }] },
+      { matches: [{ winner: 'B0' }, { winner: 'B2' }] },
+    ],
+    bracket: [
+      { winner: 'A1', matchNumber: 1 },
+      { winner: 'B3', matchNumber: 2 },
+      { winner: 'A1', matchNumber: 3 },
+    ],
+    seeds: [
+      { blockName: 'Heroes', seeds: [{ name: 'A1' }, { name: 'A2' }] },
+      { blockName: 'Villains', seeds: [{ name: 'B0' }, { name: 'B3' }] },
+    ],
+    tiebreaker: '4:20',
+  },
+  {
+    id: '4',
+    userName: 'Right',
+    nights: [
+      { matches: [{ winner: 'A1' }, { winner: 'A3' }] },
+      { matches: [{ winner: 'B1' }, { winner: 'B3' }] },
+      { matches: [{ winner: 'A2' }, { winner: 'A3' }] },
+      { matches: [{ winner: 'B2' }, { winner: 'B3' }] },
+      { matches: [{ winner: 'A3' }, { winner: 'A2' }] },
+      { matches: [{ winner: 'B3' }, { winner: 'B2' }] },
+    ],
+    bracket: [
+      { winner: 'A2', matchNumber: 1 },
+      { winner: 'B2', matchNumber: 2 },
+      { winner: 'B2', matchNumber: 3 },
+    ],
+    seeds: [
+      { blockName: 'Heroes', seeds: [{ name: 'A3' }, { name: 'A2' }] },
+      { blockName: 'Villains', seeds: [{ name: 'B3' }, { name: 'B2' }] },
+    ],
+    tiebreaker: '20:20',
+  },
+]

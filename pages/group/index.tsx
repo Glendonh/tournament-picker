@@ -6,7 +6,7 @@ import { getInitialPickEmVals, getMatchResultString, getBracketMatchDetails } fr
 import { PickemFormVals, Pick, CompleteTournament } from '../../types'
 import UpdateForm from '../../components/UpdateForm'
 
-import { MarvelPrix, G1Picks24 } from '../../types/dummyData'
+import { MarvelPrix, MarvelPrixPicks } from '../../types/dummyData'
 
 const getPickAccuracy = (pick: Pick, results: PickemFormVals) => {
   let score = 0
@@ -122,7 +122,7 @@ const PickSummary = ({ entry, results, tournament }: PickSummaryProps) => {
                     return (
                       <div key={`${block.blockName}seed${seedIndex + 1}`}>
                         <span>{`${seedIndex + 1}.`}</span>
-                        <span className={fontColor}>{` ${seed.name}`}</span>
+                        <span className={fontColor}>{` ${tournament.participants.lookup[seed.name]}`}</span>
                       </div>
                     )
                   })}
@@ -158,7 +158,7 @@ const GroupPage = () => {
   const [showEdit, setShowEdit] = useState(false)
   const [results, setResults] = useState<PickemFormVals>(getInitialPickEmVals(tournament))
   const toggleShowEdit = () => setShowEdit((s) => !s)
-  const sortedPicks = sortedScoredPicks(G1Picks24, results)
+  const sortedPicks = sortedScoredPicks(MarvelPrixPicks, results)
   return (
     <div className="container p-2">
       <Head>

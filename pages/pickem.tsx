@@ -27,9 +27,11 @@ const PickEmPage = () => {
   const wrestlerLookup = activeTournament.participants.lookup
   const addPicksAndPrint = (vals) => {
     const newVals = picks.concat(vals)
-    // console.log(JSON.stringify(newVals))
     setPicks(newVals)
   }
+
+  // TODO: Add tracking to summarize win totals when picking seeds
+
   return (
     <div className="container mx-3 mb-4 pt-8">
       <form onSubmit={handleSubmit(addPicksAndPrint)}>
